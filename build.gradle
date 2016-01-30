@@ -1,0 +1,49 @@
+///////////////////////////////////////////////////////////////////////////////////////
+//
+// ETF Adapters and extensions
+//
+///////////////////////////////////////////////////////////////////////////////////////
+
+buildscript {
+	repositories {
+		maven {
+			url "http://services.interactive-instruments.de/etfdev-af/plugins-releases-local"
+			credentials {
+				username 'ii-bda'
+				password '6ozhS683'
+			}}
+		maven {
+			url "https://plugins.gradle.org/m2/"
+		}
+		jcenter()
+	}
+	dependencies {
+		classpath group: 'de.interactive_instruments.bda', name: 'etf-bda', version:'1.0.+'
+		classpath 'net.researchgate:gradle-release:2.3.4'
+		classpath "gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.12.1"
+	}
+	dependencies {
+		ant.unjar src: configurations.classpath.files.find {it.path.contains('etf')}, dest: 'build/gradle'
+	}
+}
+apply from: 'build/gradle/ii-bda.gradle'
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+group = 'de.interactive_instruments.etf.suim'
+description = "ETF adapters and extensions for SoapUI"
+
+
+subprojects {
+
+	dependencies {
+		compile group: 'de.interactive_instruments', name: 'ii-commons-util', version:'1.2.6'+project.snapshotSuffix
+	}
+
+	apply plugin: 'java'
+	apply plugin: 'maven'
+	apply from: "$rootProject.projectDir/gradle/soapuiDependencies.gradle"
+
+  version = rootProject.version
+
+}

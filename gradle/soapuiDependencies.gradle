@@ -1,0 +1,25 @@
+// Repositories and dependencies for SoapUI
+
+repositories {
+	mavenCentral()
+	jcenter()
+}
+
+dependencies {
+
+	compile ('com.smartbear.soapui:soapui:4.6.4') {
+		exclude module: 'commons-logging'
+		exclude( module: 'log4j' )
+		exclude module: 'jtidy'
+		exclude module: 'cajo'
+
+		exclude group: 'org.codehaus.groovy'
+	}
+	compile 'org.codehaus.groovy:groovy-all:2.4.3'
+}
+
+configurations {
+	// jms is pulled in via several soapui dependencies but gradle denies to fetch
+	// it. So just block it.
+	all*.exclude group: 'javax.jms', module: 'jms'
+}

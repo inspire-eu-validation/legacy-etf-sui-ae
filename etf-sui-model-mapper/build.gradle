@@ -1,0 +1,28 @@
+///////////////////////////////////////////////////////////////////////////////////////
+//
+// etf-sui-model-mapper
+//
+///////////////////////////////////////////////////////////////////////////////////////
+
+
+group = 'de.interactive_instruments.etf.suim'
+description = 'ETF SoapUI Model mapping library'
+
+
+dependencies {
+	compile group: 'de.interactive_instruments.etf', name: 'etf-model', version:'0.5.7'+project.snapshotSuffix
+	compile group: 'de.interactive_instruments.etf', name: 'etf-bsxds', version:'1.0.7.1'+project.snapshotSuffix
+}
+
+task copySoapUiLibs << {
+	copy {
+		description = 'Copies the model mapper to the configured SoapUI home lib folder'
+		from configurations.compile + project(':etf-sui-model-mapper').files('build/libs')
+		into "$soapuiHome/lib"
+	}
+	println "Copied libraries to $soapuiHome/lib"
+}
+
+install {
+	dependsOn = ["jar", "copySoapUiLibs"]
+}

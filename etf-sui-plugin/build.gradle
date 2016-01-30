@@ -1,0 +1,34 @@
+///////////////////////////////////////////////////////////////////////////////////////
+//
+// etf-sui-plugin
+//
+///////////////////////////////////////////////////////////////////////////////////////
+
+
+group = 'de.interactive_instruments.etf.suim'
+description = 'ETF SoapUI Extension Library'
+
+dependencies {
+	compile project(':etf-sui-model-mapper')
+}
+
+configurations {
+	runtime.exclude group: "org.codehaus.groovy"
+}
+
+jar {
+	classifier = 'plugin'
+}
+
+task copySoapUiPlugins << {
+	copy {
+		description = 'Copies the sui-plugin to the configured SoapUI home plugin folder'
+		from project(':etf-sui-plugin').files('build/libs')
+		into "$soapuiHome/bin/plugins"
+	}
+	println "Copied plugin to $soapuiHome/bin/plugins"
+}
+
+install {
+	dependsOn = ["jar", "copySoapUiPlugins"]
+}
