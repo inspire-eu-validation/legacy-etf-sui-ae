@@ -1,0 +1,64 @@
+///////////////////////////////////////////////////////////////////////////////////////
+//
+// etf-sui-owsgtl
+//
+///////////////////////////////////////////////////////////////////////////////////////
+
+
+group = 'de.interactive_instruments.etf.suim'
+description = 'ETF Open Webservice Groovy Test Library'
+
+apply from: "$rootProject.projectDir/gradle/soapuiDependencies.gradle"
+
+apply plugin: 'groovy'
+
+dependencies {
+
+	compile 'org.codehaus.groovy:groovy-all:2.4.3' // == SoapUI groovy-all-Version
+	compile('org.codehaus.groovy.modules.http-builder:http-builder:0.5.2') {
+        exclude group: 'org.codehaus.groovy'
+    }
+
+    // testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
+    // testCompile 'junit:junit:4.11'
+}
+
+task copyOwsgtl << {
+    copy {
+        description = 'Copies the owsgtl to the configured SoapUI home lib folder'
+        from configurations.compile + project(':etf-sui-owsgtl').files('build/libs')
+        into "$soapuiHome/lib"
+    }
+    println "Copied owsgtl to $soapuiHome/lib"
+}
+
+install {
+    dependsOn = ["jar", "copyOwsgtl"]
+}
+
+task zip(dependsOn: jar, type: Zip) {
+    from { from project(':etf-sel').configurations.runtime.allArtifacts.files }
+    into(project.name + '-' + project.version)
+}
+
+task owsgtlBin << {
+    copy {
+        from project(':etf-owsgtl').configurations.compile
+        into "owsgtl-out"
+    }
+}
+
+task owsgtlLib << {
+    copy {
+        from project(':etf-owsgtl').files('build/libs')
+        into "owsgtl-out"
+    }
+}
+
+sourceSets {
+    main {
+        groovy {
+            srcDirs = ['src']
+        }
+    }
+}
