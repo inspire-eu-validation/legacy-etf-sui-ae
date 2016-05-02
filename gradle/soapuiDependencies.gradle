@@ -12,10 +12,13 @@ dependencies {
 		exclude( module: 'log4j' )
 		exclude module: 'jtidy'
 		exclude module: 'cajo'
-
 		exclude group: 'org.codehaus.groovy'
+		exclude group: 'com.jgoodies'
 	}
-	compile 'org.codehaus.groovy:groovy-all:2.4.3'
+	compileOnly 'com.jgoodies:jgoodies-forms:1.9.0'
+	compileOnly 'org.codehaus.groovy:groovy-all:2.4.6'
+	compile 'joda-time:joda-time:2.9.3'
+
 }
 
 configurations {

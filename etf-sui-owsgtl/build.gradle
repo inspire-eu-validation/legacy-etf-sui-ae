@@ -14,13 +14,10 @@ apply plugin: 'groovy'
 
 dependencies {
 
-	compile 'org.codehaus.groovy:groovy-all:2.4.3' // == SoapUI groovy-all-Version
-	compile('org.codehaus.groovy.modules.http-builder:http-builder:0.5.2') {
+	compile 'org.codehaus.groovy:groovy-all:2.4.6'
+	compile('org.codehaus.groovy.modules.http-builder:http-builder:0.7.1') {
         exclude group: 'org.codehaus.groovy'
     }
-
-    // testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
-    // testCompile 'junit:junit:4.11'
 }
 
 task copyOwsgtl << {
