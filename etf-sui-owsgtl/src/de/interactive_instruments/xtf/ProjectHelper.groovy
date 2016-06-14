@@ -291,6 +291,15 @@ class ProjectHelper extends SOAPUI_I {
 				targetTestStep.getHttpRequest().getEndpoint())
 		);
 
+		// Remove authorization header if endpoint is not in same domain
+		final String serviceEndpoint = sourceTestStep.testCase.testSuite.project.getPropertyValue('serviceEndpoint');
+		assert serviceEndpoint != null
+		final String domainName = Util.getDomainName(serviceEndpoint);
+		final String testStepEndpoint = targetTestStep.getHttpRequest().getEndpoint();
+		if(!domainName.equalsIgnoreCase(Util.getDomainName(testStepEndpoint))) {
+			Util.removeAuthorization(targetTestStep);
+		}
+
 		// Set the parameters in the URL explicit as request parameters or
 		// the encoding might fail on the server side (double decoding of '+' signs = '')
 		System.out.println RestUtils.extractParams(targetTestStep.getHttpRequest().getEndpoint(),

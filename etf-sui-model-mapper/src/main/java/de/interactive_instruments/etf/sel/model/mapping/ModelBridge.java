@@ -84,7 +84,7 @@ public class ModelBridge implements Environment, IReportDep {
 	 *  IReportDep interface
 	 */
 	private SuiTestReport report;
-    
+
 	/**
 	 * Only lazy loaded if accessed via getSuiRepository() method.
 	 */
@@ -361,15 +361,6 @@ public class ModelBridge implements Environment, IReportDep {
 	@Override
 	public Project getProject() {
 		return project;
-	}
-
-	/**
-	 * Returns always false!
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		// Might be better to be not equal to anything..
-		return false;
 	}
 
 	/**

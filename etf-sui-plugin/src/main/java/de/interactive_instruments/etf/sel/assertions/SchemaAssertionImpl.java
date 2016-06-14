@@ -312,34 +312,6 @@ public class SchemaAssertionImpl extends WsdlMessageAssertion implements SchemaA
 		}
 	}
 
-	/*
-	public static class Factory extends AbstractTestAssertionFactory
-	{
-		public Factory()
-		{
-			super( SchemaAssertion.ID, SchemaAssertion.LABEL, SchemaAssertion.class );
-		}
-
-		@Override
-		public Class<? extends WsdlMessageAssertion> getAssertionClassType()
-		{
-			return SchemaAssertion.class;
-		}
-
-		@Override
-		public AssertionListEntry getAssertionListEntry() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public String getCategory() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-	}
-	*/
-
 	@Override
 	protected String internalAssertProperty(TestPropertyHolder arg0,
 			String arg1, MessageExchange arg2, SubmitContext arg3)

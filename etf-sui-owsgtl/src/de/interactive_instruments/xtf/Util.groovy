@@ -43,19 +43,22 @@ class Util {
      */
     public static void updateCredentials(def testRunner) {
 
-        String authUser = testRunner.testCase.testSuite.project.getPropertyValue('authUser');
-        String authPwd = testRunner.testCase.testSuite.project.getPropertyValue('authPwd');
-        String authMethod = testRunner.testCase.testSuite.project.getPropertyValue('authMethod');
+        final String authUser = testRunner.testCase.testSuite.project.getPropertyValue('authUser');
+        final String authPwd = testRunner.testCase.testSuite.project.getPropertyValue('authPwd');
+        final String authMethod = testRunner.testCase.testSuite.project.getPropertyValue('authMethod');
+		final String serviceEndpoint = testRunner.testCase.testSuite.project.getPropertyValue('serviceEndpoint');
+        assert serviceEndpoint != null
+        final String domainName = getDomainName(serviceEndpoint);
+        assert domainName != null
 
         for( testSuite in testRunner.testCase.testSuite.project.getTestSuiteList() ) {
             for( testCase in testSuite.getTestCaseList() ) {
                 for( testStep in testCase.getTestStepList() ) {
-
-                    // Append Credentials
                     if( testStep instanceof HttpTestRequestStep || testStep instanceof RestTestRequestStep) {
                         removeAuthorization(testStep);
-						// FIXME: check endpoint
-						// if(testStep.getHttpRequest()) {
+                        final String testStepEndpoint = testStep.getHttpRequest().getEndpoint();
+						if(testStepEndpoint != null && (testStepEndpoint.startsWith('${') || domainName.equalsIgnoreCase(getDomainName(testStepEndpoint)))) {
+                            // Append Credentials
 							if (authMethod != null && authMethod.equals("appendCredentials")) {
 								if (testStep.getHttpRequest().getMethod() == RequestMethod.POST) {
 									// Add username and password to the root element
@@ -113,7 +116,7 @@ class Util {
 							}
 						}
                     }
-                //}
+                }
             }
         }
     }
@@ -129,6 +132,11 @@ class Util {
         if(testStep.getHttpRequest().hasProperty("password")) {
             testStep.getHttpRequest().removeProperty("password");
         }
+    }
+
+    public static String getDomainName(final String url) throws URISyntaxException {
+        final String domain = new URI(url).getHost();
+        return (domain!=null && domain.startsWith("www.")) ? domain.substring(4) : domain;
     }
 
 	public static void setProjectProperty(def testRunner, String name, String value) {

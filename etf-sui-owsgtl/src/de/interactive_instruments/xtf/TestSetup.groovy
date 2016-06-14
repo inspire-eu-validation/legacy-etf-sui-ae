@@ -121,7 +121,7 @@ class TestSetup {
 
 		Util.updateCredentials( SOAPUI_I.getInstance().getTestRunner() );
 		deleteGeneratedTestCases( SOAPUI_I.getInstance().getTestRunner() );
-		setTimeoutAssertions( SOAPUI_I.getInstance().getTestRunner() );
+		// setTimeoutAssertions( SOAPUI_I.getInstance().getTestRunner() );
 	}
 
 	public static void initGroovyLogAppender() {
