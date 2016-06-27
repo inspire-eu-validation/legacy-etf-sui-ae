@@ -3,7 +3,7 @@
 [![Apache License 2.0](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
 [![owsgtl groovydoc](http://img.shields.io/badge/groovydoc-owsgtl-green.svg)](http://interactive-instruments.github.io/etf-sui-ae/etf-sui-owsgtl/doc/)
 [![Build Status](https://services.interactive-instruments.de/etfdev-ci/buildStatus/icon?job=etf-bsx-ae)](https://services.interactive-instruments.de/etfdev-ci/job/etf-bsx-ae/)
-[![Latest version](http://img.shields.io/badge/latest%20version-1.3.2-blue.svg)](https://services.interactive-instruments.de/etfdev-af/etf-public-releases/de/interactive-instruments/etf/etf-owsgtl-1.3.2.zip)
+[![Latest version](http://img.shields.io/badge/latest%20version-1.3.7-blue.svg)](https://services.interactive-instruments.de/etfdev-af/etf-public-releases/de/interactive-instruments/etf/etf-owsgtl-1.3.7.zip)
 
 The etf-sui-owsgtl bundles some simple groovy scripts for testing geo services
 and manipulating the SoapUI project and the testing sequence - from within
