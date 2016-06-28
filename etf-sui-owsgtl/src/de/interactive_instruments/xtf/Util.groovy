@@ -13,7 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.interactive_instruments.xtf;
+package de.interactive_instruments.xtf
+
+import com.eviware.soapui.impl.support.http.HttpRequestTestStep
+import com.eviware.soapui.model.propertyexpansion.PropertyExpander;
 
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
@@ -38,6 +41,7 @@ class Util {
     /**
      * Set basic authentication headers for all HTTP test requests or just append the
      * username and password to all requests, depending on the authentication method.
+     * For all requests with variable endpoints the authentication is set!
      * Requires that the project variables authUser, authPwd and authMethod are set.
      * Possible values for xtf.authMethod: appendCredentials, httpBasic
      */
@@ -46,10 +50,8 @@ class Util {
         final String authUser = testRunner.testCase.testSuite.project.getPropertyValue('authUser');
         final String authPwd = testRunner.testCase.testSuite.project.getPropertyValue('authPwd');
         final String authMethod = testRunner.testCase.testSuite.project.getPropertyValue('authMethod');
-		final String serviceEndpoint = testRunner.testCase.testSuite.project.getPropertyValue('serviceEndpoint');
-        assert serviceEndpoint != null
-        final String domainName = getDomainName(serviceEndpoint);
-        assert domainName != null
+		final String authServiceEndpoint = testRunner.testCase.testSuite.project.getPropertyValue('serviceEndpoint');
+        assert authServiceEndpoint != null
 
         for( testSuite in testRunner.testCase.testSuite.project.getTestSuiteList() ) {
             for( testCase in testSuite.getTestCaseList() ) {
@@ -57,68 +59,108 @@ class Util {
                     if( testStep instanceof HttpTestRequestStep || testStep instanceof RestTestRequestStep) {
                         removeAuthorization(testStep);
                         final String testStepEndpoint = testStep.getHttpRequest().getEndpoint();
-						if(testStepEndpoint != null && (testStepEndpoint.startsWith('${') || domainName.equalsIgnoreCase(getDomainName(testStepEndpoint)))) {
-                            // Append Credentials
-							if (authMethod != null && authMethod.equals("appendCredentials")) {
-								if (testStep.getHttpRequest().getMethod() == RequestMethod.POST) {
-									// Add username and password to the root element
-									String requestBody = testStep.getProperty("Request").value;
-									if (requestBody != null && !requestBody.trim().equals("")) {
-										// Xml Parser is useless here, because request may contain properties
-										// which do not validate
-										int tagStart = requestBody.indexOf("<");
-										int tagEnd = requestBody.lastIndexOf(">");
-										String rootElement = requestBody.substring(tagStart, tagEnd);
-										int freePos = rootElement.indexOf(" ");
-
-										int authUserPos = rootElement.indexOf(" username=");
-										String usernameAttrib = " username=\"" + authUser + "\"";
-										if (authUserPos == -1) {
-											rootElement = rootElement.substring(0, freePos) +
-													usernameAttrib +
-													rootElement.substring(freePos, rootElement.length());
-										} else {
-											int usernameEndPos = rootElement.indexOf(" ", authUserPos + 7);
-											rootElement = rootElement.substring(0, authUserPos) +
-													usernameAttrib + rootElement.substring(
-													usernameEndPos, rootElement.length());
-										}
-
-										String pwdAttrib = " password=\"" + authPwd + "\"";
-										int authPwdBegPos = rootElement.indexOf(" password=");
-										if (authPwdBegPos == -1) {
-											rootElement = rootElement.substring(0, freePos) +
-													pwdAttrib +
-													rootElement.substring(freePos, rootElement.length());
-										} else {
-											int pwdEndPos = rootElement.indexOf(" ", authPwdBegPos + 7);
-											rootElement = rootElement.substring(0, authPwdBegPos) +
-													pwdAttrib + rootElement.substring(
-													pwdEndPos, rootElement.length());
-										}
-										testStep.getHttpRequest().setRequestContent(
-												rootElement + requestBody.substring(tagEnd, requestBody.length()));
-									}
-								} else {
-									// Just set the GET-Parameters
-									testStep.getHttpRequest().setPropertyValue("username", authUser);
-									testStep.getHttpRequest().setPropertyValue("password", authPwd);
-								}
-							} else if (authMethod != null && authMethod.equals("basic")
-									&& authUser != null && authUser.size() > 0
-									&& authPwd != null && authPwd.size() > 0) {
-								// Set Authorization header
-								def headers = new StringToStringsMap();
-								def auth = authUser + ':' + authPwd;
-								def encodedAuth = auth.bytes.encodeBase64().toString();
-								headers.put('Authorization', 'Basic ' + encodedAuth);
-								testStep.getHttpRequest().setRequestHeaders(headers);
-							}
-						}
+                        if (testStepEndpoint != null && (testStepEndpoint.startsWith('${') || domainAndPathEqual(authServiceEndpoint, testStepEndpoint))) {
+                            updateHttpTestStepCredentials(testStep, authUser, authPwd, authMethod)
+                        }
                     }
                 }
             }
         }
+    }
+
+	/**
+	 * Set basic authentication headers for one single HTTP test requests or just append the
+	 * username and password to the request, depending on the authentication method.
+     * Endpoint variables are expanded and checked!
+	 * Requires that the project variables authUser, authPwd and authMethod are set.
+	 * Possible values for xtf.authMethod: appendCredentials, httpBasic
+	 */
+	public static void updateTestStepCredentials(
+            HttpRequestTestStep testStep,
+            def context,
+            String authUser = testStep.testCase.testSuite.project.getPropertyValue('authUser'),
+            String authPwd = testStep.testCase.testSuite.project.getPropertyValue('authPwd'),
+            String authMethod = testStep.testCase.testSuite.project.getPropertyValue('authMethod'),
+            String authServiceEndpoint = testStep.testCase.testSuite.project.getPropertyValue('serviceEndpoint')
+    ) {
+		assert authServiceEndpoint != null
+
+		if( testStep instanceof HttpTestRequestStep || testStep instanceof RestTestRequestStep) {
+
+            def propertyExpander = new PropertyExpander(true);
+            final String testStepEndpoint = propertyExpander.expandProperties( context,
+                    testStep.getHttpRequest().getEndpoint())
+            if(testStepEndpoint != null && domainAndPathEqual(authServiceEndpoint, testStepEndpoint)) {
+                updateHttpTestStepCredentials(testStep, authUser, authPwd, authMethod);
+            }else{
+                removeAuthorization(testStep);
+            }
+		}
+	}
+
+    private static void updateHttpTestStepCredentials(
+            HttpRequestTestStep testStep,
+            String authUser = testStep.testCase.testSuite.project.getPropertyValue('authUser'),
+            String authPwd = testStep.testCase.testSuite.project.getPropertyValue('authPwd'),
+            String authMethod = testStep.testCase.testSuite.project.getPropertyValue('authMethod')
+    ) {
+        // Append Credentials
+        if (authMethod != null && authMethod.equals("appendCredentials")) {
+            if (testStep.getHttpRequest().getMethod() == RequestMethod.POST) {
+                // Add username and password to the root element
+                String requestBody = testStep.getProperty("Request").value;
+                if (requestBody != null && !requestBody.trim().equals("")) {
+                    // Xml Parser is useless here, because request may contain properties
+                    // which do not validate
+                    int tagStart = requestBody.indexOf("<");
+                    int tagEnd = requestBody.lastIndexOf(">");
+                    String rootElement = requestBody.substring(tagStart, tagEnd);
+                    int freePos = rootElement.indexOf(" ");
+
+                    int authUserPos = rootElement.indexOf(" username=");
+                    String usernameAttrib = " username=\"" + authUser + "\"";
+                    if (authUserPos == -1) {
+                        rootElement = rootElement.substring(0, freePos) +
+                                usernameAttrib +
+                                rootElement.substring(freePos, rootElement.length());
+                    } else {
+                        int usernameEndPos = rootElement.indexOf(" ", authUserPos + 7);
+                        rootElement = rootElement.substring(0, authUserPos) +
+                                usernameAttrib + rootElement.substring(
+                                usernameEndPos, rootElement.length());
+                    }
+
+                    String pwdAttrib = " password=\"" + authPwd + "\"";
+                    int authPwdBegPos = rootElement.indexOf(" password=");
+                    if (authPwdBegPos == -1) {
+                        rootElement = rootElement.substring(0, freePos) +
+                                pwdAttrib +
+                                rootElement.substring(freePos, rootElement.length());
+                    } else {
+                        int pwdEndPos = rootElement.indexOf(" ", authPwdBegPos + 7);
+                        rootElement = rootElement.substring(0, authPwdBegPos) +
+                                pwdAttrib + rootElement.substring(
+                                pwdEndPos, rootElement.length());
+                    }
+                    testStep.getHttpRequest().setRequestContent(
+                            rootElement + requestBody.substring(tagEnd, requestBody.length()));
+                }
+            } else {
+                // Just set the GET-Parameters
+                testStep.getHttpRequest().setPropertyValue("username", authUser);
+                testStep.getHttpRequest().setPropertyValue("password", authPwd);
+            }
+        } else if (authMethod != null && authMethod.equals("basic")
+                && authUser != null && authUser.size() > 0
+                && authPwd != null && authPwd.size() > 0) {
+            // Set Authorization header
+            def headers = new StringToStringsMap();
+            def auth = authUser + ':' + authPwd;
+            def encodedAuth = auth.bytes.encodeBase64().toString();
+            headers.put('Authorization', 'Basic ' + encodedAuth);
+            testStep.getHttpRequest().setRequestHeaders(headers);
+        }
+
     }
 
     public static void removeAuthorization(def testStep) {
@@ -132,6 +174,14 @@ class Util {
         if(testStep.getHttpRequest().hasProperty("password")) {
             testStep.getHttpRequest().removeProperty("password");
         }
+    }
+
+    public static boolean domainAndPathEqual(final String url1, final String url2) {
+        final String domain1=getDomainName(url1)
+        final String path1=new URI(url1).getPath();
+        final String path2=new URI(url2).getPath();
+        return domain1!=null && getDomainName(url1)?.equalsIgnoreCase(getDomainName(url2)) &&
+                path1!=null && path1.equalsIgnoreCase(path2)
     }
 
     public static String getDomainName(final String url) throws URISyntaxException {

@@ -31,7 +31,7 @@ description = "ETF adapters and extensions for SoapUI"
 subprojects {
 
 	dependencies {
-		compile group: 'de.interactive_instruments', name: 'ii-commons-util', version:'1.2.6'+project.snapshotSuffix
+		compile group: 'de.interactive_instruments', name: 'ii-commons-util', version:'1.2.7'+project.snapshotSuffix
 		compile group: 'org.slf4j', name: 'slf4j-api', version: etf_slf4jApiVersion
 	}
 

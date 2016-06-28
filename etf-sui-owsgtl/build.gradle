@@ -34,20 +34,20 @@ install {
 }
 
 task zip(dependsOn: jar, type: Zip) {
-    from { from project(':etf-sel').configurations.runtime.allArtifacts.files }
+    from { from project(':etf-sui-plugin').configurations.runtime.allArtifacts.files }
     into(project.name + '-' + project.version)
 }
 
 task owsgtlBin << {
     copy {
-        from project(':etf-owsgtl').configurations.compile
+        from project(':etf-sui-owsgtl').configurations.compile
         into "owsgtl-out"
     }
 }
 
 task owsgtlLib << {
     copy {
-        from project(':etf-owsgtl').files('build/libs')
+        from project(':etf-sui-owsgtl').files('build/libs')
         into "owsgtl-out"
     }
 }

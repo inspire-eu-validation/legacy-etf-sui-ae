@@ -173,10 +173,7 @@ class ProjectHelper extends SOAPUI_I {
 			}else if(!target.testCase.contains("(generated)")) {
 				target.testCase+=" (generated)";
 			}
-			System.out.println(target.testCase )
 			target.testCase = target.testCase.minus(' (disabled)');
-			System.out.println(target.testCase )
-
 
 			if(target.testStep==null) {
 				target.testStep=testStepName+" (generated)";
@@ -292,17 +289,11 @@ class ProjectHelper extends SOAPUI_I {
 		);
 
 		// Remove authorization header if endpoint is not in same domain
-		final String serviceEndpoint = sourceTestStep.testCase.testSuite.project.getPropertyValue('serviceEndpoint');
-		assert serviceEndpoint != null
-		final String domainName = Util.getDomainName(serviceEndpoint);
-		final String testStepEndpoint = targetTestStep.getHttpRequest().getEndpoint();
-		if(!domainName.equalsIgnoreCase(Util.getDomainName(testStepEndpoint))) {
-			Util.removeAuthorization(targetTestStep);
-		}
+		Util.updateTestStepCredentials(targetTestStep, this.context);
 
 		// Set the parameters in the URL explicit as request parameters or
 		// the encoding might fail on the server side (double decoding of '+' signs = '')
-		System.out.println RestUtils.extractParams(targetTestStep.getHttpRequest().getEndpoint(),
+		RestUtils.extractParams(targetTestStep.getHttpRequest().getEndpoint(),
 				targetTestStep.getHttpRequest().getParams(), true);
 
 
@@ -337,8 +328,20 @@ class ProjectHelper extends SOAPUI_I {
 
 	public def runTestStep(String testStepName, boolean abortOnError=true) {
 		def testStep = getTestStep(testStepName);
+
 		log.info("Running test step \""+testStepName+"\" requested by test step \""+
 			context.getCurrentStep().getLabel()+"\"");
+
+		if (testStep instanceof HttpTestRequestStep) {
+			// Remove authorization header if endpoint is not in same domain
+			Util.updateTestStepCredentials(testStep, this.context);
+
+			// Set the parameters in the URL explicit as request parameters or
+			// the encoding might fail on the server side (double decoding of '+' signs = '')
+			RestUtils.extractParams(testStep.getHttpRequest().getEndpoint(),
+					testStep.getHttpRequest().getParams(), true);
+		}
+
 		def result = testStep.run(testRunner, context);
 		if(result.getStatus()!=TestStepResult.TestStepStatus.OK) {
 
