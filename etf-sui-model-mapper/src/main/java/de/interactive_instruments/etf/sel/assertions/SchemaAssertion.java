@@ -15,7 +15,6 @@
  */
 package de.interactive_instruments.etf.sel.assertions;
 
-
 public interface SchemaAssertion {
 	String getPathToXSD();
 }

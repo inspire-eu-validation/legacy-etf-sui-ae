@@ -35,17 +35,17 @@ public class ModelMapperPL implements ProjectListener {
 
 	public ModelMapperPL() {}
 
-    /**
-     * Initialize
-     */
+	/**
+	 * Initialize
+	 */
 	@Override
 	public void afterLoad(final Project project) {
 		if (Utils.DISABLE_REPORTING) {
 			project.removeProjectListener(this);
-        }else{
-            Utils.initLogger();
-            ModelBridge.getOrCreateEnvBridge(project);
-        }
+		} else {
+			Utils.initLogger();
+			ModelBridge.getOrCreateEnvBridge(project);
+		}
 	}
 
 	/**

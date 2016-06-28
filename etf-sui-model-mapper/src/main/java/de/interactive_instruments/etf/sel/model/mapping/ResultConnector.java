@@ -33,7 +33,7 @@ import de.interactive_instruments.exceptions.ImmutableLockException;
 import de.interactive_instruments.exceptions.StoreException;
 
 /**
- * Creates SuiTestCaseResult objects after each TestRun which are afterwards 
+ * Creates SuiTestCaseResult objects after each TestRun which are afterwards
  * connected with static model items
  *
  * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
