@@ -15,12 +15,7 @@
  */
 package de.interactive_instruments.etf.sel;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.Enumeration;
 import java.util.List;
-import java.util.jar.Attributes;
-import java.util.jar.Manifest;
 
 import com.eviware.soapui.SoapUI;
 import com.eviware.soapui.model.testsuite.TestProperty;
@@ -32,8 +27,6 @@ import org.apache.log4j.Logger;
 import de.interactive_instruments.IFile;
 import de.interactive_instruments.II_Constants;
 import de.interactive_instruments.SUtils;
-import de.interactive_instruments.SysEnv;
-import de.interactive_instruments.exceptions.ExcUtils;
 
 /**
  * Utility functions used in the SEL
@@ -52,11 +45,11 @@ final public class Utils {
 
 	public static final String SEL_VERSION = Utils.class.getPackage().getImplementationVersion();
 
-	public final static IFile SEL_DS_DIR = SysEnv.getPropertyDirOrNull("etf_sel_ds_dir");
+	public final static IFile SEL_DS_DIR = System.getProperty("etf_sel_ds_dir") != null ? new IFile(System.getProperty("etf_sel_ds_dir")) : null;
 
-	public final static IFile SEL_REPORT_DIR = SysEnv.getPropertyDirOrNull("etf_sel_report_dir");
+	public final static IFile SEL_REPORT_DIR = System.getProperty("etf_sel_report_dir") != null ? new IFile(System.getProperty("etf_sel_report_dir")) : null;
 
-	public final static IFile SEL_STYLING_DIR = SysEnv.getPropertyDirOrNull("etf_sel_styling_dir");
+	public final static IFile SEL_STYLING_DIR = System.getProperty("etf_sel_styling_dir") != null ? new IFile(System.getProperty("etf_sel_styling_dir")) : null;
 
 	private final static String GROOVY_DIR_ENV_VAR = "ETF_SEL_GROOVY";
 
