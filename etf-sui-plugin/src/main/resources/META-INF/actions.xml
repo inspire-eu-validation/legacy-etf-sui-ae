@@ -3,7 +3,7 @@
 
 
 <tns:action id="RebuildAction" actionClass="de.interactive_instruments.etf.sel.groovyengine.GroovyScriptEngineLoader"/>
-<tns:action id="GenerateReport" actionClass="de.interactive_instruments.etf.sel.ReportGeneratorAction"/>
+<!--tns:action id="GenerateReport" actionClass="de.interactive_instruments.etf.sel.ReportGeneratorAction"/-->
 
 
 <!--tns:actionGroup id="WorkspaceImplSoapUIActionGroup"-->
@@ -11,8 +11,8 @@
 	<tns:actionMapping actionId="RebuildAction"/>
 </tns:actionGroup>
 
-<tns:actionGroup id="EnabledWsdlProjectActions">
+<!--tns:actionGroup id="EnabledWsdlProjectActions">
 	<tns:actionMapping actionId="GenerateReport"/>
-</tns:actionGroup>
+</tns:actionGroup-->
 
 </tns:soapui-actions>

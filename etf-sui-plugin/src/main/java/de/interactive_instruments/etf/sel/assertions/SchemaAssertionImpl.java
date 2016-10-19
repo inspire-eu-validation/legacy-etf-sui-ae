@@ -51,7 +51,7 @@ import com.eviware.soapui.support.xml.XmlObjectConfigurationBuilder;
 import com.eviware.soapui.support.xml.XmlObjectConfigurationReader;
 import com.jgoodies.forms.builder.ButtonBarBuilder;
 
-import org.apache.log4j.Logger;
+import de.interactive_instruments.etf.sel.Utils;
 import org.apache.xmlbeans.XmlObject;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -96,7 +96,6 @@ public class SchemaAssertionImpl extends WsdlMessageAssertion implements SchemaA
 		}
 	}
 
-	private final static Logger LOG = Logger.getLogger(SchemaAssertion.class);
 	private static LRUCache<String, Schema> schemaCache = null;
 	private String pathToXSD;
 	private boolean configureResult;
@@ -149,12 +148,12 @@ public class SchemaAssertionImpl extends WsdlMessageAssertion implements SchemaA
 			public errHandler() {}
 
 			public void error(SAXParseException e) throws SAXException {
-				LOG.error("ERROR in line " + e.getLineNumber() + " column " + e.getColumnNumber() + " : " + e.toString());
+				Utils.logError(e, "ERROR in line " + e.getLineNumber() + " column " + e.getColumnNumber() + " : " + e.toString());
 				throw new SAXException("Fatal error: " + e.toString());
 			}
 
 			public void fatalError(SAXParseException e) throws SAXException {
-				LOG.error("FATAL ERROR in line " + e.getLineNumber() + " column " + e.getColumnNumber() + " : " + e.toString());
+				Utils.logError(e, "FATAL ERROR in line " + e.getLineNumber() + " column " + e.getColumnNumber() + " : " + e.toString());
 				throw new SAXException("Fatal error: " + e.toString());
 			}
 

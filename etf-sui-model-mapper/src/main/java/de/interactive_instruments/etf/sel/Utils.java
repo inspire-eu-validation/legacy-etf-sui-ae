@@ -1,11 +1,11 @@
-/**
- * Copyright 2010-2016 interactive instruments GmbH
+/*
+ * Copyright ${year} interactive instruments GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,20 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package de.interactive_instruments.etf.sel;
 
-import java.util.List;
-
 import com.eviware.soapui.SoapUI;
+import com.eviware.soapui.model.testsuite.Assertable;
 import com.eviware.soapui.model.testsuite.TestProperty;
+import com.eviware.soapui.model.testsuite.TestRunner;
+import com.eviware.soapui.model.testsuite.TestStepResult;
 import com.eviware.soapui.support.log.Log4JMonitor;
-
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-
 import de.interactive_instruments.IFile;
 import de.interactive_instruments.II_Constants;
 import de.interactive_instruments.SUtils;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
+import java.util.List;
 
 /**
  * Utility functions used in the SEL
@@ -40,7 +42,39 @@ final public class Utils {
 
 	}
 
-	// FIXME multi threaded logging
+	public static int translateStatus(final TestRunner.Status status) {
+		switch (status) {
+			case FINISHED:
+				// PASSED
+				return 0;
+			case WARNING:
+				// WARNING
+				return 5;
+		}
+		// FAILED
+		return 1;
+	}
+
+	public static int translateStatus(final TestStepResult.TestStepStatus status) {
+		switch (status) {
+		case OK:
+			// PASSED
+			return 0;
+		}
+		// FAILED
+		return 1;
+	}
+
+	public static int translateStatus(final Assertable.AssertionStatus status) {
+		switch (status) {
+		case VALID:
+			// PASSED
+			return 0;
+		}
+		// FAILED
+		return 1;
+	}
+
 	private static Logger log = SoapUI.log;
 
 	public static final String SEL_VERSION = Utils.class.getPackage().getImplementationVersion();
@@ -54,6 +88,7 @@ final public class Utils {
 	private final static String GROOVY_DIR_ENV_VAR = "ETF_SEL_GROOVY";
 
 	public final static IFile SEL_GROOVY_DIR = initGroovyDir();
+
 
 	private static IFile initGroovyDir() {
 		String groovyDir = System.getenv(GROOVY_DIR_ENV_VAR);
