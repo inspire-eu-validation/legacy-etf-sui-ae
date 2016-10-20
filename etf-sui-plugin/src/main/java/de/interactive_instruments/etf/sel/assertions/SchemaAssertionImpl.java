@@ -36,8 +36,11 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.ValidatorHandler;
 
+import com.eviware.soapui.SoapUI;
+import com.eviware.soapui.SoapUIExtensionClassLoader;
 import com.eviware.soapui.config.TestAssertionConfig;
 import com.eviware.soapui.impl.support.actions.ShowOnlineHelpAction;
+import com.eviware.soapui.impl.wsdl.panels.assertions.AssertionCategoryMapping;
 import com.eviware.soapui.impl.wsdl.teststeps.WsdlMessageAssertion;
 import com.eviware.soapui.model.TestPropertyHolder;
 import com.eviware.soapui.model.iface.MessageExchange;
@@ -46,12 +49,20 @@ import com.eviware.soapui.model.testsuite.Assertable;
 import com.eviware.soapui.model.testsuite.AssertionError;
 import com.eviware.soapui.model.testsuite.AssertionException;
 import com.eviware.soapui.model.testsuite.ResponseAssertion;
+import com.eviware.soapui.plugins.auto.PluginTestAssertion;
 import com.eviware.soapui.support.UISupport;
+import com.eviware.soapui.support.types.StringToStringMap;
 import com.eviware.soapui.support.xml.XmlObjectConfigurationBuilder;
 import com.eviware.soapui.support.xml.XmlObjectConfigurationReader;
+import com.eviware.x.form.XForm;
+import com.eviware.x.form.XFormDialog;
+import com.eviware.x.form.XFormDialogBuilder;
+import com.eviware.x.form.XFormFactory;
+import com.eviware.x.form.support.ADialogBuilder;
+import com.eviware.x.form.support.AField;
+import com.eviware.x.form.support.AForm;
 import com.jgoodies.forms.builder.ButtonBarBuilder;
 
-import de.interactive_instruments.etf.sel.Utils;
 import org.apache.xmlbeans.XmlObject;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -59,6 +70,11 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 
 import de.interactive_instruments.SUtils;
+import de.interactive_instruments.etf.sel.Utils;
+
+import static de.interactive_instruments.etf.sel.assertions.SchemaAssertionImpl.DESCRIPTION;
+import static de.interactive_instruments.etf.sel.assertions.SchemaAssertionImpl.ID;
+import static de.interactive_instruments.etf.sel.assertions.SchemaAssertionImpl.LABEL;
 
 /**
  * A simple Assertion for validating xml responses agains schemas
@@ -66,7 +82,16 @@ import de.interactive_instruments.SUtils;
  * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
  */
 
+@PluginTestAssertion(id = ID, label = LABEL, description = DESCRIPTION, category = AssertionCategoryMapping.VALIDATE_RESPONSE_CONTENT_CATEGORY)
 public class SchemaAssertionImpl extends WsdlMessageAssertion implements SchemaAssertion, ResponseAssertion {
+	public static final String ID = "Simple Schema Validator";
+	public static final String LABEL = "Simple Schema Validator";
+	public static final String DESCRIPTION = "XSD Validator";
+	private static final String SCHEMA_LOCATION = "pathToXSD";
+	private static final String SCHEMA_LOCATION_FIELD = "Schema Location";
+
+
+
 	public class LRUCache<K, V> {
 
 		private static final float HASH_TABLE_LOAD_FACTOR = 0.75f;
@@ -100,23 +125,8 @@ public class SchemaAssertionImpl extends WsdlMessageAssertion implements SchemaA
 	private String pathToXSD;
 	private boolean configureResult;
 
-	private JDialog configurationDialog;
-	private JComboBox schemaList;
+	private XFormDialog configurationDialog;
 
-	public static final String ID = "Simple Schema Validator";
-	public static final String LABEL = "Simple Schema Validator";
-	public static final String DESCRIPTION = "XSD Validator";
-
-	public static final String[] SCHEMA_SUGGESTIONS = {
-			"xsi:schemaLocation",
-			"http://schemas.opengis.net/wfs/1.0.0/WFS-basic.xsd",
-			"http://schemas.opengis.net/wfs/1.0.0/OGC-exception.xsd",
-			"http://schemas.opengis.net/wfs/1.0.0/WFS-capabilities.xsd",
-			"http://schemas.opengis.net/wfs/1.0.0/WFS-transaction.xsd",
-			"http://schemas.opengis.net/wfs/1.1.0/wfs.xsd",
-			"http://schemas.opengis.net/wms/1.3.0/exceptions_1_3_0.xsd",
-			"http://schemas.opengis.net/wms/1.3.0/capabilities_1_3_0.xsd"
-	};
 
 	public String getPathToXSD() {
 		return pathToXSD;
@@ -131,7 +141,7 @@ public class SchemaAssertionImpl extends WsdlMessageAssertion implements SchemaA
 		if (schemaCache == null)
 			schemaCache = new LRUCache<>(10);
 		XmlObjectConfigurationReader reader = new XmlObjectConfigurationReader(getConfiguration());
-		pathToXSD = reader.readString("pathToXSD", "");
+		pathToXSD = reader.readString(SCHEMA_LOCATION, "");
 	}
 
 	protected String internalAssertRequest(MessageExchange messageExchange, SubmitContext context) throws AssertionException {
@@ -157,7 +167,9 @@ public class SchemaAssertionImpl extends WsdlMessageAssertion implements SchemaA
 				throw new SAXException("Fatal error: " + e.toString());
 			}
 
-			public void warning(SAXParseException e) throws SAXException {}
+			public void warning(SAXParseException e) throws SAXException {
+
+			}
 		}
 
 		String schemaLocation = pathToXSD;
@@ -168,7 +180,7 @@ public class SchemaAssertionImpl extends WsdlMessageAssertion implements SchemaA
 			}
 
 			if (SUtils.isNullOrEmpty(pathToXSD)) {
-				throw new IllegalStateException("No schemaLocation set");
+				schemaLocation="xsi:schemaLocation";
 			}
 
 			boolean dtd = messageExchange.getResponseContentAsXml().length() > 9 &&
@@ -176,18 +188,22 @@ public class SchemaAssertionImpl extends WsdlMessageAssertion implements SchemaA
 
 			// Get Schamelocation and namespace as identifier for the cache if present
 			if (schemaLocation.equals("xsi:schemaLocation")) {
-				final XmlObject xml = XmlObject.Factory.parse(messageExchange.getResponseContentAsXml());
-				XmlObject[] schemaLocFragment = xml
-						.selectPath(
-								"declare namespace xsi="
-										+ "'http://www.w3.org/2001/XMLSchema-instance'"
-										+ " /*/@xsi:schemaLocation");
-				// Namespace + schemaLocation holen
-				if (schemaLocFragment != null && schemaLocFragment[0] != null &&
-						schemaLocFragment[0].getDomNode() != null && !SUtils.isNullOrEmpty(schemaLocFragment[0].getDomNode().getNodeValue())) {
-					schemaLocation = schemaLocFragment[0].getDomNode().getNodeValue().trim();
-				} else {
-					throw new IllegalArgumentException("The xsi:schemaLocation attribute is missing in the response");
+				try {
+					final XmlObject xml = XmlObject.Factory.parse(messageExchange.getResponseContentAsXml());
+					XmlObject[] schemaLocFragment = xml
+							.selectPath(
+									"declare namespace xsi="
+											+ "'http://www.w3.org/2001/XMLSchema-instance'"
+											+ " /*/@xsi:schemaLocation");
+					// Namespace + schemaLocation holen
+					if (schemaLocFragment != null && schemaLocFragment[0] != null &&
+							schemaLocFragment[0].getDomNode() != null && !SUtils.isNullOrEmpty(schemaLocFragment[0].getDomNode().getNodeValue())) {
+						schemaLocation = schemaLocFragment[0].getDomNode().getNodeValue().trim();
+					} else {
+						throw new IllegalArgumentException("Missing xsi:schemaLocation attribute in the response");
+					}
+				}catch (Exception e) {
+					throw new IllegalArgumentException("Missing xsi:schemaLocation attribute in response");
 				}
 			}
 
@@ -220,7 +236,7 @@ public class SchemaAssertionImpl extends WsdlMessageAssertion implements SchemaA
 			throw new AssertionException(new AssertionError(e.toString() + " Response did not meet schema \'"
 					+ schemaLocation + "\'."));
 		} catch (Exception e) {
-			throw new AssertionException(new AssertionError(e.toString()));
+			throw new AssertionException(new AssertionError("Could not validate response: "+ e.toString()));
 		}
 
 		return "Response meets schema.";
@@ -231,84 +247,31 @@ public class SchemaAssertionImpl extends WsdlMessageAssertion implements SchemaA
 		if (configurationDialog == null)
 			buildConfigurationDialog();
 
-		schemaList.setSelectedItem(pathToXSD);
+		StringToStringMap values = new StringToStringMap();
+		values.put(SCHEMA_LOCATION_FIELD, pathToXSD);
 
-		UISupport.showDialog(configurationDialog);
-		return configureResult;
+		values = configurationDialog.show(values);
+		if (configurationDialog.getReturnValue() == XFormDialog.OK_OPTION) {
+			setPathToXSD(values.get(SCHEMA_LOCATION_FIELD));
+		}
+		setConfiguration(createConfiguration());
+		return true;
 	}
 
 	protected void buildConfigurationDialog() {
-		configurationDialog = new JDialog(UISupport.getMainFrame());
-		configurationDialog.setTitle(LABEL);
-		configurationDialog.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowOpened(WindowEvent event) {
-				SwingUtilities.invokeLater(() -> schemaList.requestFocusInWindow());
-			}
-		});
+		XFormDialogBuilder builder = XFormFactory.createDialogBuilder("Schema Validation");
+		XForm mainForm = builder.createForm("Basic");
 
-		JPanel contentPanel = new JPanel(new BorderLayout());
-		contentPanel.add(UISupport.buildDescription("Specify schema location",
-				"\"xsi:schemaLocation\" will use the schema declared in response", null),
-				BorderLayout.NORTH);
+		mainForm.addTextField(SCHEMA_LOCATION_FIELD, "Schema Location", XForm.FieldType.URL).setWidth(40);
 
-		// SchemaList
-		schemaList = new JComboBox(SCHEMA_SUGGESTIONS);
-		schemaList.setSelectedIndex(1);
-		schemaList.setEditable(true);
-		contentPanel.add(schemaList, BorderLayout.CENTER);
-
-		// OK & Cancel Buttons
-		ButtonBarBuilder builder = new ButtonBarBuilder();
-		ShowOnlineHelpAction showOnlineHelpAction = new ShowOnlineHelpAction("http://interactive-instruments.de/etf");
-		builder.addFixed(UISupport.createToolbarButton(showOnlineHelpAction));
-		builder.addGlue();
-		JButton okButton = new JButton(new OkAction());
-		builder.addFixed(okButton);
-		builder.addRelatedGap();
-		builder.addFixed(new JButton(new CancelAction()));
-		builder.setBorder(BorderFactory.createEmptyBorder(1, 5, 5, 5));
-		contentPanel.add(builder.getPanel(), BorderLayout.SOUTH);
-
-		configurationDialog.setContentPane(contentPanel);
-		configurationDialog.setSize(400, 200);
-		configurationDialog.setModal(true);
-		UISupport.initDialogActions(configurationDialog, showOnlineHelpAction, okButton);
+		configurationDialog = builder.buildDialog(builder.buildOkCancelActions(),
+				"Set a custom schema location or leave empty to use the xsi:schemaLocation attribute found in the response", UISupport.OPTIONS_ICON);
 	}
 
 	public XmlObject createConfiguration() {
 		XmlObjectConfigurationBuilder builder = new XmlObjectConfigurationBuilder();
 		builder.add("pathToXSD", pathToXSD);
 		return builder.finish();
-	}
-
-	public class OkAction extends AbstractAction {
-		private static final long serialVersionUID = 1284978646697272311L;
-
-		public OkAction() {
-			super("Save");
-		}
-
-		public void actionPerformed(ActionEvent arg0) {
-
-			setPathToXSD(((String) schemaList.getSelectedItem()).trim());
-			setConfiguration(createConfiguration());
-			configureResult = true;
-			configurationDialog.setVisible(false);
-		}
-	}
-
-	public class CancelAction extends AbstractAction {
-		private static final long serialVersionUID = -6889601028651382507L;
-
-		public CancelAction() {
-			super("Cancel");
-		}
-
-		public void actionPerformed(ActionEvent arg0) {
-			configureResult = false;
-			configurationDialog.setVisible(false);
-		}
 	}
 
 	@Override

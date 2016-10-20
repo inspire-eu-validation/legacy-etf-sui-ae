@@ -7,7 +7,7 @@ repositories {
 
 dependencies {
 
-	compile ('com.smartbear.soapui:soapui:4.6.4') {
+	compileOnly ('com.smartbear.soapui:soapui:5.2.1') {
 		exclude module: 'commons-logging'
 		exclude( module: 'log4j' )
 		exclude module: 'jtidy'
@@ -15,9 +15,13 @@ dependencies {
 		exclude group: 'org.codehaus.groovy'
 		exclude group: 'com.jgoodies'
 	}
+	// 2.5.0 is invalid: http://smartbearsoftware.com/repository/maven2/com/fifesoft/rsyntaxtextarea/
+	compileOnly 'com.fifesoft:rsyntaxtextarea:2.5.3'
+
+	// invalid dependency
 	compileOnly 'com.jgoodies:jgoodies-forms:1.9.0'
-	compileOnly 'org.codehaus.groovy:groovy-all:2.4.6'
-	compile 'joda-time:joda-time:2.9.3'
+	compileOnly 'org.codehaus.groovy:groovy-all:2.1.7'
+	compileOnly 'joda-time:joda-time:2.9.3'
 
 }
 

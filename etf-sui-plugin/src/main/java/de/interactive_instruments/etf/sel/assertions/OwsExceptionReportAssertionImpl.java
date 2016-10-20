@@ -16,6 +16,7 @@
 package de.interactive_instruments.etf.sel.assertions;
 
 import com.eviware.soapui.config.TestAssertionConfig;
+import com.eviware.soapui.impl.wsdl.panels.assertions.AssertionCategoryMapping;
 import com.eviware.soapui.impl.wsdl.teststeps.WsdlMessageAssertion;
 import com.eviware.soapui.model.TestPropertyHolder;
 import com.eviware.soapui.model.iface.MessageExchange;
@@ -24,21 +25,27 @@ import com.eviware.soapui.model.testsuite.Assertable;
 import com.eviware.soapui.model.testsuite.AssertionError;
 import com.eviware.soapui.model.testsuite.AssertionException;
 import com.eviware.soapui.model.testsuite.ResponseAssertion;
+import com.eviware.soapui.plugins.auto.PluginTestAssertion;
 import com.eviware.soapui.support.UISupport;
 import com.eviware.soapui.support.XmlHolder;
 
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlObject;
 
+import static de.interactive_instruments.etf.sel.assertions.OwsExceptionReportAssertionImpl.DESCRIPTION;
+import static de.interactive_instruments.etf.sel.assertions.OwsExceptionReportAssertionImpl.ID;
+import static de.interactive_instruments.etf.sel.assertions.OwsExceptionReportAssertionImpl.LABEL;
+
 /**
  * Checks if a response contains an OWS exception report
  *
  * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
  */
+@PluginTestAssertion(id = ID, label = LABEL, description = DESCRIPTION, category = AssertionCategoryMapping.VALIDATE_RESPONSE_CONTENT_CATEGORY)
 public class OwsExceptionReportAssertionImpl extends WsdlMessageAssertion implements OwsExceptionReportAssertion, ResponseAssertion {
 	public static final String ID = "OwsExceptionReportAssertion";
-	public static final String LABEL = "OwsExceptionReportAssertion";
-	public static final String DESCRIPTION = "Check for exceptions returned by an OWS";
+	public static final String LABEL = "Fail if service returns OWS Exception Report";
+	public static final String DESCRIPTION = "Check for exceptions returned by an Open Web Service";
 
 	public OwsExceptionReportAssertionImpl(TestAssertionConfig assertionConfig, Assertable modelItem) {
 		super(assertionConfig, modelItem, false, true, false, false);
@@ -58,14 +65,14 @@ public class OwsExceptionReportAssertionImpl extends WsdlMessageAssertion implem
 			throw new AssertionException(new AssertionError("Unable to parse empty xml response"));
 		}
 
-		XmlObject xml;
+		final XmlObject xml;
 		try {
 			xml = XmlObject.Factory.parse(messageExchange.getResponseContentAsXml());
 		} catch (XmlException e) {
 			throw new AssertionException(new AssertionError("Unable to parse response as xml: " + e.toString()));
 		}
 
-		XmlObject[] fragment = xml.selectPath(XPATH_EXPRESSION);
+		final XmlObject[] fragment = xml.selectPath(XPATH_EXPRESSION);
 		if (fragment != null && fragment[0] != null) {
 			String exceptionFound = fragment[0].xmlText();
 			if (exceptionFound.equals("<xml-fragment>true</xml-fragment>")) {

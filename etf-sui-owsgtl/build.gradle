@@ -13,43 +13,25 @@ apply from: "$rootProject.projectDir/gradle/soapuiDependencies.gradle"
 apply plugin: 'groovy'
 
 dependencies {
-
-	compile 'org.codehaus.groovy:groovy-all:2.4.6'
+	// compile 'org.codehaus.groovy:groovy-all:2.4.6'
+    compileOnly 'org.codehaus.groovy:groovy-all:2.1.7'
 	compile('org.codehaus.groovy.modules.http-builder:http-builder:0.7.1') {
         exclude group: 'org.codehaus.groovy'
     }
 }
 
-task copyOwsgtl << {
+task installExtensions << {
     copy {
-        description = 'Copies the owsgtl to the configured SoapUI home lib folder'
-        from configurations.compile + project(':etf-sui-owsgtl').files('build/libs')
-        into "$soapuiHome/lib"
+        description = 'Copies the sui-plugin to the configured SoapUI home plugin folder'
+        // from project(':etf-sui-plugin').files('build/libs')
+        from jar
+        into "${System.env.HOME}/.soapuios/plugins"
     }
-    println "Copied owsgtl to $soapuiHome/lib"
+    println "Copied plugin to ${System.env.HOME}/.soapuios/plugins"
 }
 
 install {
-    dependsOn = ["jar", "copyOwsgtl"]
-}
-
-task zip(dependsOn: jar, type: Zip) {
-    from { from project(':etf-sui-plugin').configurations.runtime.allArtifacts.files }
-    into(project.name + '-' + project.version)
-}
-
-task owsgtlBin << {
-    copy {
-        from project(':etf-sui-owsgtl').configurations.compile
-        into "owsgtl-out"
-    }
-}
-
-task owsgtlLib << {
-    copy {
-        from project(':etf-sui-owsgtl').files('build/libs')
-        into "owsgtl-out"
-    }
+    dependsOn = ["jar"]
 }
 
 sourceSets {
