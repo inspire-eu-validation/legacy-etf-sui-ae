@@ -8,27 +8,33 @@
 group = 'de.interactive_instruments.etf.suim'
 description = 'ETF SoapUI Extension Library'
 
-dependencies {
-	compile project(':etf-sui-model-mapper')
-}
-
 configurations {
 	runtime.exclude group: "org.codehaus.groovy"
+	extraLibs
+}
+
+dependencies {
+	compile group: 'de.interactive_instruments.etf', name: 'etf-core', version: '1.0.0' + project.snapshotSuffix
+	compileOnly group: 'log4j', name: 'log4j', version: '1.2.17'
 }
 
 jar {
 	classifier = 'plugin'
 }
 
-task copySoapUiPlugins << {
+task installSoapUiPlugin << {
+	delete fileTree("${System.env.HOME}/.soapuios/plugins") {
+		include 'etf-sel*plugin-*.jar'
+	}
 	copy {
 		description = 'Copies the sui-plugin to the configured SoapUI home plugin folder'
-		from project(':etf-sui-plugin').files('build/libs')
-		into "$soapuiHome/bin/plugins"
+		// from project(':etf-sui-plugin').files('build/libs')
+		from jar
+		into "${System.env.HOME}/.soapuios/plugins"
 	}
-	println "Copied plugin to $soapuiHome/bin/plugins"
+	println "Copied plugin to ${System.env.HOME}/.soapuios/plugins"
 }
 
 install {
-	dependsOn = ["jar", "copySoapUiPlugins"]
+	dependsOn = ["jar", "installSoapUiPlugin"]
 }
