@@ -1,11 +1,11 @@
-/*
- * Copyright ${year} interactive instruments GmbH
+/**
+ * Copyright 2010-2016 interactive instruments GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,8 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package de.interactive_instruments.etf.sel.mapping;
 
-package de.interactive_instruments.etf.sel.model.mapping;
+import static de.interactive_instruments.etf.dal.dto.result.TestResultStatus.UNDEFINED;
+
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.List;
 
 import com.eviware.soapui.impl.support.AbstractHttpRequest;
 import com.eviware.soapui.impl.support.http.HttpRequestTestStep;
@@ -25,21 +30,18 @@ import com.eviware.soapui.model.project.Project;
 import com.eviware.soapui.model.propertyexpansion.PropertyExpander;
 import com.eviware.soapui.model.testsuite.*;
 import com.eviware.soapui.model.testsuite.AssertionError;
+import com.eviware.soapui.plugins.ListenerConfiguration;
+
+import org.apache.commons.io.IOUtils;
+
 import de.interactive_instruments.IFile;
 import de.interactive_instruments.etf.sel.Utils;
 import de.interactive_instruments.etf.testdriver.TestResultCollector;
-import org.apache.commons.io.IOUtils;
-
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.List;
-import java.util.UUID;
-
-import static de.interactive_instruments.etf.dal.dto.result.TestResultStatus.UNDEFINED;
 
 /**
  * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
  */
+@ListenerConfiguration
 public class TestRunCollector implements TestRunListener {
 
 	private TestResultCollector collector;
@@ -50,43 +52,48 @@ public class TestRunCollector implements TestRunListener {
 		this.tmpDir = new IFile(collector.getTempDir());
 	}
 
-	@Override public void beforeRun(final TestCaseRunner testCaseRunner, final TestCaseRunContext testCaseRunContext) {
-		if(collector==null) {
+	@Override
+	public void beforeRun(final TestCaseRunner testCaseRunner, final TestCaseRunContext testCaseRunContext) {
+		if (collector == null) {
 			final Project project = testCaseRunner.getTestCase().getTestSuite().getProject();
-			if(project instanceof WsdlProject && ((WsdlProject)project).getActiveEnvironment() instanceof CollectorInjectionAdapter) {
-				collector = ((CollectorInjectionAdapter)((WsdlProject)project).getActiveEnvironment()).getTestResultCollector();
+			if (project instanceof WsdlProject && ((WsdlProject) project).getActiveEnvironment() instanceof CollectorInjectionAdapter) {
+				collector = ((CollectorInjectionAdapter) ((WsdlProject) project).getActiveEnvironment()).getTestResultCollector();
 				this.tmpDir = new IFile(collector.getTempDir());
 				try {
 					this.tmpDir = IFile.createTempDir("sel");
 				} catch (IOException e) {
 					collector.internalError(e);
 				}
-			}else{
+			} else {
 				collector = new DummyCollector();
 			}
 		}
 		collector.startTestCase(testCaseRunner.getTestCase().getId());
 	}
 
-	@Override public void afterRun(final TestCaseRunner testCaseRunner, final TestCaseRunContext testCaseRunContext) {
+	@Override
+	public void afterRun(final TestCaseRunner testCaseRunner, final TestCaseRunContext testCaseRunContext) {
 		// Check if the collector is still in the writing test step state
-		if(collector.currentModelType()==4) {
-			collector.error("Exception occurred in Test Step: "+testCaseRunner.getReason());
+		if (collector.currentModelType() == 4) {
+			collector.error("Exception occurred in Test Step: " + testCaseRunner.getReason());
 			// end step (we need the id if we are in a sub collector context
 			collector.end(testCaseRunner.getRunContext().getCurrentStep().getId(), UNDEFINED.value());
 		}
 		collector.end(testCaseRunner.getTestCase().getId(), Utils.translateStatus(testCaseRunner.getStatus()));
 	}
 
-	@Override public void beforeStep(final TestCaseRunner testCaseRunner, final TestCaseRunContext testCaseRunContext) {
+	@Override
+	public void beforeStep(final TestCaseRunner testCaseRunner, final TestCaseRunContext testCaseRunContext) {
 		// deprecated
 	}
 
-	@Override public void beforeStep(final TestCaseRunner testCaseRunner, final TestCaseRunContext testCaseRunContext, final TestStep testStep) {
+	@Override
+	public void beforeStep(final TestCaseRunner testCaseRunner, final TestCaseRunContext testCaseRunContext, final TestStep testStep) {
 		collector.startTestStep(testStep.getId());
 	}
 
-	@Override public void afterStep(final TestCaseRunner testCaseRunner, final TestCaseRunContext testCaseRunContext, final TestStepResult testStepResult) {
+	@Override
+	public void afterStep(final TestCaseRunner testCaseRunner, final TestCaseRunContext testCaseRunContext, final TestStepResult testStepResult) {
 		// collector.startTestStep(testStepResult.getTestStep().getId(), testStepResult.getTimeStamp());
 
 		if (testStepResult.getTestStep() instanceof HttpTestRequestStep || testStepResult.getTestStep() instanceof RestTestRequestStep) {
@@ -95,7 +102,7 @@ public class TestRunCollector implements TestRunListener {
 			final AbstractHttpRequest httpRequest;
 			if (testRequest.getHttpRequest() instanceof AbstractHttpRequest) {
 				httpRequest = (AbstractHttpRequest) testRequest.getHttpRequest();
-			}else{
+			} else {
 				httpRequest = null;
 			}
 
@@ -110,9 +117,9 @@ public class TestRunCollector implements TestRunListener {
 				}
 			}
 
-			if (httpRequest != null && httpRequest.getDumpFile()!=null) {
+			if (httpRequest != null && httpRequest.getDumpFile() != null) {
 				final IFile file = new IFile(httpRequest.getDumpFile());
-				if(file.exists() && file.length()>0) {
+				if (file.exists() && file.length() > 0) {
 					try {
 						final IFile copied = file.copyTo(tmpDir.secureExpandPathDown(testStepResult.getTestStep().getId()).toString());
 						collector.markAttachment(copied.getPath(), "Http Request", "UTF-8", null, "HttpRequest");
@@ -149,13 +156,13 @@ public class TestRunCollector implements TestRunListener {
 			for (int i = 0, messagesLength = messages.length; i < messagesLength; i++) {
 				final String message = messages[i];
 				try {
-					collector.saveAttachment(IOUtils.toInputStream(message, "UTF-8"), "Message." + i+1, "text/plain", "Message");
+					collector.saveAttachment(IOUtils.toInputStream(message, "UTF-8"), "Message." + i + 1, "text/plain", "Message");
 				} catch (IOException e) {
 					collector.internalError(e);
 				}
 			}
 		}
 
-		collector.end(testStepResult.getTestStep().getId(), Utils.translateStatus(testStepResult.getStatus()), testStepResult.getTimeStamp()+testStepResult.getTimeTaken());
+		collector.end(testStepResult.getTestStep().getId(), Utils.translateStatus(testStepResult.getStatus()), testStepResult.getTimeStamp() + testStepResult.getTimeTaken());
 	}
 }

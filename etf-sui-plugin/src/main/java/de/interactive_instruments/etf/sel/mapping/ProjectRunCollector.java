@@ -13,22 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.interactive_instruments.etf.sel.model.mapping;
+package de.interactive_instruments.etf.sel.mapping;
 
 import com.eviware.soapui.impl.wsdl.WsdlProject;
 import com.eviware.soapui.model.testsuite.*;
+import com.eviware.soapui.plugins.ListenerConfiguration;
+
 import de.interactive_instruments.etf.sel.Utils;
 import de.interactive_instruments.etf.testdriver.TestResultCollector;
 
 /**
  * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
  */
+
+@ListenerConfiguration
 public class ProjectRunCollector implements ProjectRunListener {
 
 	private TestResultCollector collector;
 
-	@Override public void beforeRun(final ProjectRunner projectRunner, final ProjectRunContext projectRunContext) {
-		if(collector==null) {
+	@Override
+	public void beforeRun(final ProjectRunner projectRunner, final ProjectRunContext projectRunContext) {
+		if (collector == null) {
 			if (projectRunner.getProject() instanceof WsdlProject && ((WsdlProject) projectRunner.getProject()).getActiveEnvironment() instanceof CollectorInjectionAdapter) {
 				collector = ((CollectorInjectionAdapter) ((WsdlProject) projectRunner.getProject()).getActiveEnvironment()).getTestResultCollector();
 			} else {
@@ -38,15 +43,18 @@ public class ProjectRunCollector implements ProjectRunListener {
 		collector.startTestTask(projectRunner.getProject().getId());
 	}
 
-	@Override public void afterRun(final ProjectRunner projectRunner, final ProjectRunContext projectRunContext) {
+	@Override
+	public void afterRun(final ProjectRunner projectRunner, final ProjectRunContext projectRunContext) {
 		collector.end(projectRunner.getProject().getId(), Utils.translateStatus(projectRunContext.getProjectRunner().getStatus()));
 	}
 
-	@Override public void beforeTestSuite(final ProjectRunner projectRunner, final ProjectRunContext projectRunContext, final TestSuite testSuite) {
+	@Override
+	public void beforeTestSuite(final ProjectRunner projectRunner, final ProjectRunContext projectRunContext, final TestSuite testSuite) {
 		collector.startTestModule(testSuite.getId());
 	}
 
-	@Override public void afterTestSuite(final ProjectRunner projectRunner, final ProjectRunContext projectRunContext, final TestSuiteRunner testSuiteRunner) {
+	@Override
+	public void afterTestSuite(final ProjectRunner projectRunner, final ProjectRunContext projectRunContext, final TestSuiteRunner testSuiteRunner) {
 		collector.end(testSuiteRunner.getTestSuite().getId(), Utils.translateStatus(testSuiteRunner.getStatus()));
 	}
 }

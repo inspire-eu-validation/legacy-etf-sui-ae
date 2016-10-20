@@ -1,11 +1,11 @@
-/*
- * Copyright ${year} interactive instruments GmbH
+/**
+ * Copyright 2010-2016 interactive instruments GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package de.interactive_instruments.etf.sel;
+
+import java.util.List;
 
 import com.eviware.soapui.SoapUI;
 import com.eviware.soapui.model.testsuite.Assertable;
@@ -22,13 +23,13 @@ import com.eviware.soapui.model.testsuite.TestProperty;
 import com.eviware.soapui.model.testsuite.TestRunner;
 import com.eviware.soapui.model.testsuite.TestStepResult;
 import com.eviware.soapui.support.log.Log4JMonitor;
-import de.interactive_instruments.IFile;
-import de.interactive_instruments.II_Constants;
-import de.interactive_instruments.SUtils;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-import java.util.List;
+import de.interactive_instruments.IFile;
+import de.interactive_instruments.II_Constants;
+import de.interactive_instruments.SUtils;
 
 /**
  * Utility functions used in the SEL
@@ -44,12 +45,12 @@ final public class Utils {
 
 	public static int translateStatus(final TestRunner.Status status) {
 		switch (status) {
-			case FINISHED:
-				// PASSED
-				return 0;
-			case WARNING:
-				// WARNING
-				return 5;
+		case FINISHED:
+			// PASSED
+			return 0;
+		case WARNING:
+			// WARNING
+			return 5;
 		}
 		// FAILED
 		return 1;
@@ -88,7 +89,6 @@ final public class Utils {
 	private final static String GROOVY_DIR_ENV_VAR = "ETF_SEL_GROOVY";
 
 	public final static IFile SEL_GROOVY_DIR = initGroovyDir();
-
 
 	private static IFile initGroovyDir() {
 		String groovyDir = System.getenv(GROOVY_DIR_ENV_VAR);
@@ -153,7 +153,7 @@ final public class Utils {
 							Logger.getLogger(selLogName).info(
 									"Log messages during the initialisation phase were logged into the default SoapUI log.");
 							log = Logger.getLogger(selLogName);
-							log.info("ETF-SEL " + SEL_VERSION + " " +
+							log.info("ETF-SEL" + SEL_VERSION + " " +
 									II_Constants.II_COPYRIGHT);
 							break;
 						}
