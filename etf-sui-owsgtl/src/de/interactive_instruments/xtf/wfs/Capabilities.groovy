@@ -242,7 +242,7 @@ public class Capabilities {
 		String ftXpath = featureTypeXPath+"["+i+"]";
 		
 		String name = capabilitiesXML.getNodeValue(ftXpath+"/*:Name");
-		log.info("Configureing FeatureType \""+name+"\"");
+		log.info("Configuring FeatureType \""+name+"\"");
 		
 		String localPart = name.substring(name.indexOf(':')+1, name.length());
 		String prefix = name.substring(0, name.indexOf(':'));
@@ -263,7 +263,7 @@ public class Capabilities {
 				OutputFormat oFormat = new OutputFormat(of); 
 				boolean found=false;
 				for( a in this.schemaAnalyzers) {
-					if(a.getOutputFormat().equals(oFormat)) {
+					if(a.getOutputFormat() == oFormat) {
 						schAnalyzers.add(a);
 						found=true;
 						break;
@@ -279,7 +279,7 @@ public class Capabilities {
 		
 		String defaultSRS = capabilitiesXML.getNodeValue(ftXpath+"/*:DefaultSRS");
 		String[] ortherSRS = capabilitiesXML.getNodeValues(ftXpath+"/*:OtherSRS");
-		if(defaultSRS==null || defaultSRS.equals("")) {
+		if(defaultSRS==null || defaultSRS == "") {
 			defaultSRS = capabilitiesXML.getNodeValue(ftXpath+"/*:DefaultCRS");
 			ortherSRS = capabilitiesXML.getNodeValues(ftXpath+"/*:OtherSRS");
 		}

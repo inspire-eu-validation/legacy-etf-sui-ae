@@ -20,19 +20,14 @@ import com.eviware.soapui.model.propertyexpansion.PropertyExpander;
 
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
-import java.awt.Color;
-import org.w3c.dom.Node;
 
-import com.eviware.soapui.impl.support.AbstractHttpRequest
 import com.eviware.soapui.impl.wsdl.testcase.WsdlTestCase
 import com.eviware.soapui.impl.wsdl.teststeps.*;
 import com.eviware.soapui.model.iface.MessageExchange
-import com.eviware.soapui.support.XmlHolder
 import com.eviware.soapui.support.types.StringToStringMap
 import com.eviware.soapui.support.types.StringToStringsMap;
-import com.eviware.soapui.impl.rest.RestRequestInterface.RequestMethod;
+import com.eviware.soapui.impl.rest.RestRequestInterface.HttpMethod;
 
-import de.interactive_instruments.xtf.*;
 import de.interactive_instruments.xtf.exceptions.*;
 
 class Util {
@@ -106,7 +101,7 @@ class Util {
     ) {
         // Append Credentials
         if (authMethod != null && authMethod.equals("appendCredentials")) {
-            if (testStep.getHttpRequest().getMethod() == RequestMethod.POST) {
+            if (testStep.getHttpRequest().getMethod() == HttpMethod.POST) {
                 // Add username and password to the root element
                 String requestBody = testStep.getProperty("Request").value;
                 if (requestBody != null && !requestBody.trim().equals("")) {

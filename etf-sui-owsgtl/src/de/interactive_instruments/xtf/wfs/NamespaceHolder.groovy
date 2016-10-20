@@ -43,18 +43,11 @@ public class NamespaceHolder {
 	String id;
 	Map<String, String> namespacePrefixMap;
 	
-	private final static HashSet<String> forbiddenPrefixes = new HashSet<String>() {
-		private static final long serialVersionUID = 1948450191048571550L;
-		{
-			add("wfs");
-			add("ows");
-			add("ogc");
-			add("xsi");
-		}
-	};
+	final static Set<String> forbiddenPrefixes = ['wfs', 'ows', 'ogc', 'xsi'] as Set<String>;
 		
-	private NamespaceHolder() {
-		// no-arg default ctor for JAXB
+	public NamespaceHolder() {
+		this.id="hc_"+this.hashCode();
+		namespacePrefixMap = new TreeMap<String, String>();
 	}
 		
 	public NamespaceHolder(StringList namespaceList) throws NamespaceHolderException {

@@ -15,11 +15,6 @@
  */
 package de.interactive_instruments.xtf.wfs;
 
-import org.apache.xpath.XPathAPI
-
-import com.eviware.soapui.model.testsuite.TestRunContext;
-import com.eviware.soapui.model.testsuite.TestStepResult;
-import com.eviware.soapui.impl.rest.RestRequestInterface.RequestMethod;
 import de.interactive_instruments.xtf.ObjectSaver
 import de.interactive_instruments.xtf.ProjectHelper
 import de.interactive_instruments.xtf.SIterator
@@ -68,7 +63,7 @@ class FeatureTypeIterator extends SIterator {
 				projectHelper.setTransferProperty("typeName", featureTypes[pos].getName());
 		}else{
 			for(testStep in this.testSteps) {
-						if(testStep.getTestRequest().getMethod()==RequestMethod.GET) {
+						if(testStep.getTestRequest().getMethod()==HttpMethod.GET) {
 							if( testStep.getPropertyValue("namespace")==null || 
 								testStep.getPropertyValue("typeName")==null ) {
 								throw new Exception("Missing \"namespace\" or \"typeName\" property in teststep "+

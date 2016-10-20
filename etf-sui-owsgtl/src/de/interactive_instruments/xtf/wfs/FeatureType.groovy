@@ -13,15 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.interactive_instruments.xtf.wfs;
-
-import java.util.List;
+package de.interactive_instruments.xtf.wfs
 
 import javax.xml.bind.annotation.*;
 import javax.xml.namespace.QName
-import org.w3c.dom.Node;
-
-import com.eviware.soapui.support.XmlHolder;
 
 import de.interactive_instruments.xtf.*;
 import de.interactive_instruments.xtf.exceptions.*;
@@ -43,7 +38,7 @@ public class FeatureType implements TransferableRequestParameter {
 	private int currentOutputFormatIndex;
 
 	// NamespaceHolders for ever OutputFormat
-	private List<NamespaceHolder> nsHolder = new ArrayList<NamespaceHolder>();
+	private List<NamespaceHolder> nsHolders = new ArrayList<NamespaceHolder>();
 	
 	public FeatureType() { 
 		// no-arg default ctor for JAXB
@@ -52,6 +47,9 @@ public class FeatureType implements TransferableRequestParameter {
 	
 	public FeatureType(String namespaceURI, String localPart, String prefix) {
 		this.qname = new QName(namespaceURI, localPart, prefix);
+		NamespaceHolder holder = new NamespaceHolder();
+		holder.setNamespaceUriAndPrefix(namespaceURI, prefix);
+		this.nsHolders.add(holder);
 		currentOutputFormatIndex=0;
 	}
 	
@@ -150,51 +148,56 @@ public class FeatureType implements TransferableRequestParameter {
 			this.qname.getPrefix()
 		);
 		ph.setTransferProperty(
-			"FT.NAMESPACE", 
+			"FT.NAMESPACE",
 			this.qname.getNamespaceURI()
 		);
 
-		assert this.nsHolder[currentOutputFormatIndex] != null
+		assert this.nsHolders[currentOutputFormatIndex] != null
 		ph.setTransferProperty(
 			"FT.NAMESPACES",
-			this.nsHolder[currentOutputFormatIndex].getDeclarations()
+			this.nsHolders[currentOutputFormatIndex].getDeclarations()
 		);
 		ph.setTransferProperty(
 			"FT.NAMESPACES.X",
-			this.nsHolder[currentOutputFormatIndex].getDeclarationsForXExpressions()
+			this.nsHolders[currentOutputFormatIndex].getDeclarationsForXExpressions()
 		);
 		ph.setTransferProperty(
 			"FT.NAMESPACES.GET",
-			this.nsHolder[currentOutputFormatIndex].getDeclarationsForGetMethod()
+			this.nsHolders[currentOutputFormatIndex].getDeclarationsForGetMethod()
 		);
 		ph.setTransferProperty(
 			"FT.NAMESPACES.GET.WFS2",
-			this.nsHolder[currentOutputFormatIndex].getDeclarationsForGetMethodWfs2()
+			this.nsHolders[currentOutputFormatIndex].getDeclarationsForGetMethodWfs2()
 		);
-		ph.setTransferProperty(
-			"FT.OUTPUTFORMAT",
-			this.outputFormats[currentOutputFormatIndex].getFormat()
-		);
+
+		if(this.outputFormats!=null && this.outputFormats[currentOutputFormatIndex]!=null) {
+			ph.setTransferProperty(
+					"FT.OUTPUTFORMAT",
+					this.outputFormats[currentOutputFormatIndex].getFormat()
+			);
+		}
 	}
 	
 	public NamespaceHolder getNamespaceHolder() {
-		return this.nsHolder[currentOutputFormatIndex];
+		return this.nsHolders[currentOutputFormatIndex];
 	}
 	
 	public void analyzeAndSetProperties(List<PropertySchemaAnalyzer> propertySchemaAnalyzer) {
+		this.nsHolders.clear();
 		for(analyzer in propertySchemaAnalyzer) {
 			outputFormats.add(analyzer.getOutputFormat());
-			
+
 			// TODO: Skip analysis on unknown outputFormat
-			try {				
+			Util.getPropertyValueOrDefault(project, "testIntensive","false").equals("true");
+			try {
 				List<FeatureTypeProperty> tmpProperties = analyzer.analyze(getQName());
 				this.properties.add( tmpProperties.toArray(new FeatureTypeProperty[0]) );
-				
+
 				// Properties and FeatureType share the same NamespaceHolder
 				NamespaceHolder h = this.properties[currentOutputFormatIndex][0].getNamespaceHolder();
 				h.setNamespaceUriAndPrefix(qname.getNamespaceURI(), qname.getPrefix());
-				this.nsHolder.add(h);
-					
+				this.nsHolders.add(h);
+
 				for(p in this.properties[currentOutputFormatIndex]) {
 					p.resolvePrefixes();
 				}
@@ -202,6 +205,8 @@ public class FeatureType implements TransferableRequestParameter {
 				throw new SchemaAnalysisException(analyzer, "Analysis of FeatureType "+this.getPrefixAndName()+
 					" failed! "+e.getMessage());
 			}
+
+
 			currentOutputFormatIndex++;
 		}
 		Collections.sort(outputFormats);

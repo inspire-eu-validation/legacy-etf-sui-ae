@@ -15,11 +15,7 @@
  */
 package de.interactive_instruments.xtf;
 
-import org.apache.xpath.XPathAPI
-
-import com.eviware.soapui.model.testsuite.TestRunContext;
-import com.eviware.soapui.model.testsuite.TestStepResult;
-import com.eviware.soapui.impl.rest.RestRequestInterface.RequestMethod;
+import com.eviware.soapui.impl.rest.RestRequestInterface.HttpMethod;
 
 @Deprecated
 class OutputFormatIterator extends SIterator {
@@ -71,7 +67,7 @@ class OutputFormatIterator extends SIterator {
 				testStep = projectHelper.setTransferProperty("outputFormat", outputFormats[pos]);
 			}else{
 				for(testStep in this.testSteps) {			
-					if( testStep.getTestRequest().getMethod()==RequestMethod.POST && (
+					if( testStep.getTestRequest().getMethod()==HttpMethod.POST && (
 						testStep.getPropertyValue("namespace")==null || 
 						testStep.getPropertyValue("typeName")==null )) {
 						throw new Exception("Missing \"namespace\" or \"typeName\" property in teststep "+
