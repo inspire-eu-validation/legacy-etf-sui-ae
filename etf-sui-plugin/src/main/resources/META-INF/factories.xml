@@ -1,9 +1,0 @@
-<soapui-factories xmlns="http://eviware.com/soapui/config">
-
-   <factory id="SchemaValidatorAssertionImpl" factoryType="com.eviware.soapui.impl.wsdl.teststeps.assertions.TestAssertionFactory" 
-		factoryClass="de.interactive_instruments.etf.sel.assertions.SchemaValidationFactory"/>
-
-	<factory id="OwsExceptionReportAssertionImpl" factoryType="com.eviware.soapui.impl.wsdl.teststeps.assertions.TestAssertionFactory"
-		factoryClass="de.interactive_instruments.etf.sel.assertions.OwsExceptionReportFactory"/>
-
-</soapui-factories>
