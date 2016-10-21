@@ -16,7 +16,8 @@
 package de.interactive_instruments.xtf
 
 import com.eviware.soapui.impl.support.http.HttpRequestTestStep
-import com.eviware.soapui.model.propertyexpansion.PropertyExpander;
+import com.eviware.soapui.model.propertyexpansion.PropertyExpander
+import de.interactive_instruments.UriUtils;
 
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
@@ -173,14 +174,14 @@ class Util {
 
     public static boolean domainAndPathEqual(final String url1, final String url2) {
         final String domain1=getDomainName(url1)
-        final String path1=new URI(url1).getPath();
-        final String path2=new URI(url2).getPath();
+        final String path1=UriUtils.encodedUri(url1).getPath();
+        final String path2=UriUtils.encodedUri(url2).getPath();
         return domain1!=null && getDomainName(url1)?.equalsIgnoreCase(getDomainName(url2)) &&
                 path1!=null && path1.equalsIgnoreCase(path2)
     }
 
     public static String getDomainName(final String url) throws URISyntaxException {
-        final String domain = new URI(url).getHost();
+        final String domain = UriUtils.encodedUri(url).getHost();
         return (domain!=null && domain.startsWith("www.")) ? domain.substring(4) : domain;
     }
 
@@ -327,6 +328,10 @@ class Util {
 	}
 
 	public static String getOnlineResourceForOperation(def capabilitesXml, String operationName) {
+		return getHttpGetOnlineResourceForOperation(capabilitesXml, operationName);
+	}
+
+	public static String getHttpGetOnlineResourceForOperation(def capabilitesXml, String operationName) {
 		// WMS 1.1.0
 		String endpt = capabilitesXml.getNodeValue(
 			"/*/*:Capability/*:Request/*:"+operationName+"/*:DCPType/*:HTTP/*:Get/*:OnlineResource/@*:href");
@@ -336,9 +341,26 @@ class Util {
 			"/*/*:Capability/*:Request/*:"+operationName+"/*:DCPType/*:HTTP/*:Get/@*:onlineResource");
 		}
 		if(endpt==null) {
-			// WFS 1.1.0
+			// WFS 2.0.0
 			endpt = capabilitesXml.getNodeValue(
 				"/*/*:OperationsMetadata/*:Operation[@name='"+operationName+"']/*:DCP/*:HTTP/*:Get/@*:href");
+		}
+		return endpt;
+	}
+
+	public static String getHttpPostOnlineResourceForOperation(def capabilitesXml, String operationName) {
+		// WMS 1.1.0
+		String endpt = capabilitesXml.getNodeValue(
+				"/*/*:Capability/*:Request/*:"+operationName+"/*:DCPType/*:HTTP/*:Post/*:OnlineResource/@*:href");
+		if(endpt==null) {
+			// WFS 1.0.0
+			endpt = capabilitesXml.getNodeValue(
+					"/*/*:Capability/*:Request/*:"+operationName+"/*:DCPType/*:HTTP/*:Post/@*:onlineResource");
+		}
+		if(endpt==null) {
+			// WFS 2.0.0
+			endpt = capabilitesXml.getNodeValue(
+					"/*/*:OperationsMetadata/*:Operation[@name='"+operationName+"']/*:DCP/*:HTTP/*:Post/@*:href");
 		}
 		return endpt;
 	}
