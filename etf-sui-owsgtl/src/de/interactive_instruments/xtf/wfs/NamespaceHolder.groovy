@@ -42,7 +42,7 @@ public class NamespaceHolder {
 	@XmlAttribute(required=true)
 	String id;
 	Map<String, String> namespacePrefixMap;
-	
+
 	private final static HashSet<String> forbiddenPrefixes = new HashSet<String>() {
 		private static final long serialVersionUID = 1948450191048571550L;
 		{
@@ -52,24 +52,24 @@ public class NamespaceHolder {
 			add("xsi");
 		}
 	};
-		
+
 	private NamespaceHolder() {
 		// no-arg default ctor for JAXB
 	}
-		
+
 	public NamespaceHolder(StringList namespaceList) throws NamespaceHolderException {
 		this.id="hc_"+this.hashCode();
 		namespacePrefixMap = new TreeMap<String, String>();
-		
+
 		// Parse the namespace and build usable
 		for(int i=0; i<=namespaceList.getLength(); i++) {
-			
+
 			String namespaceUri = namespaceList.item(i);
 			// final String ignoredNamespaceUri="http://www.w3.org/";
 			if(namespaceUri==null) {
 				continue;
 			}
-			
+
 			// Ignore w3.org namespace declarations
 			if(namespaceUri.startsWith("http://www.w3.org") ) {
 				if(namespaceUri.contains("namespace") ||
@@ -79,7 +79,7 @@ public class NamespaceHolder {
 					continue;
 				}
 			}
-			
+
 			// Try to find a usable prefix from the namespace uri
 			final int lastSlashPos = namespaceUri.lastIndexOf("/");
 			if(lastSlashPos!=-1) {
@@ -87,8 +87,8 @@ public class NamespaceHolder {
 				// 3 characters long and not a version
 				final String lastSegment = namespaceUri.substring(
 						lastSlashPos+1, namespaceUri.length());
-								
-				if(!lastSegment.contains(".") && 
+
+				if(!lastSegment.contains(".") &&
 						lastSegment.length()>=3 &&
 						!forbiddenPrefixes.contains(lastSegment)
 					)
@@ -100,8 +100,8 @@ public class NamespaceHolder {
 					final int nextToLastSlash =  namespaceUri.substring(0, lastSlashPos).lastIndexOf("/");
 					final String nextToLastSegment = namespaceUri.substring(
 							nextToLastSlash+1, lastSlashPos);
-					if(!nextToLastSegment.contains(".") && 
-							nextToLastSegment.length()>=3 && 
+					if(!nextToLastSegment.contains(".") &&
+							nextToLastSegment.length()>=3 &&
 							!forbiddenPrefixes.contains(nextToLastSegment)
 						)
 					{
@@ -111,13 +111,13 @@ public class NamespaceHolder {
 					}
 				}
 			}
-			
+
 			// Not usable, just name it nsx
 			String prefix="ns"+(namespacePrefixMap.size()+1);
 			setNamespaceUriAndPrefix(namespaceUri, prefix);
 		}
 	}
-	
+
 	public String getPrefixForNamespaceUri(String namespaceUri) throws NamespaceHolderException {
 		if(namespaceUri==null) {
 			throw new NullPointerException("NamespaceURI is NULL");
@@ -128,7 +128,7 @@ public class NamespaceHolder {
 		}
 		return prefix;
 	}
-	
+
 	public String getNamespaceUriForPrefix(String prefix) throws NamespaceHolderException {
 		if(prefix==null) {
 			throw new NullPointerException("prefix is NULL");
@@ -140,8 +140,8 @@ public class NamespaceHolder {
 		}
 		throw new NamespaceHolderException("Prefix not found for namespaceUri: "+prefix);
 	}
-	
-	
+
+
 	public void setNamespaceUriAndPrefix(String namespaceUri, String prefix) throws NamespaceHolderException {
 		if(namespaceUri==null || prefix==null) {
 			throw new NullPointerException("NamespaceURI or Prefix is NULL");
@@ -153,7 +153,7 @@ public class NamespaceHolder {
 		}
 		namespacePrefixMap.put(namespaceUri, prefix);
 	}
-	
+
 	/*
 	* Namespaces are returned in the format:
 	* xmlns:<namespacePrefix>='<namespaceURL>'
@@ -165,7 +165,7 @@ public class NamespaceHolder {
 		}
 		return namespaceDeclaration;
 	}
-	
+
 	/*
 	 * Namespaces are returned in the format:
 	 * declare namespace <namespacePrefix>='<namespaceURL>';
@@ -178,14 +178,14 @@ public class NamespaceHolder {
 		}
 		return namespaceDeclaration;
 	}
-	
+
 	/*
 	* Namespaces are returned in the format:
 	* xmlns(<namespacePrefix>=<namespaceURL>)
 	*/
 	public String getDeclarationsForGetMethod() {
 		String namespaceDeclaration="";
-		for(Iterator<Map.Entry<String, String>> it = 
+		for(Iterator<Map.Entry<String, String>> it =
 			namespacePrefixMap.entrySet().iterator(); it.hasNext(); )
 		{
 			Map.Entry<String, String> item = it.next();
@@ -196,14 +196,14 @@ public class NamespaceHolder {
 		}
 		return namespaceDeclaration;
 	}
-	
+
 	/*
 	* Namespaces are returned in the format:
 	* xmlns(<namespacePrefix>,<namespaceURL>)
 	*/
 	public String getDeclarationsForGetMethodWfs2() {
 		String namespaceDeclaration="";
-		for(Iterator<Map.Entry<String, String>> it = 
+		for(Iterator<Map.Entry<String, String>> it =
 			namespacePrefixMap.entrySet().iterator(); it.hasNext(); )
 		{
 			Map.Entry<String, String> item = it.next();
@@ -216,16 +216,16 @@ public class NamespaceHolder {
 		}
 		return namespaceDeclaration;
 	}
-	
+
 	public Set<Map.Entry<String, String>> getEntrySet() {
 		return namespacePrefixMap.entrySet();
 	}
-	
+
 	/*
 	 * Declare Namespaces for a XmlHolder object
 	 */
 	public void declareNamespaces(XmlHolder holder) {
-		for(Iterator<Map.Entry<String, String>> it = 
+		for(Iterator<Map.Entry<String, String>> it =
 			namespacePrefixMap.entrySet().iterator(); it.hasNext(); )
 		{
 			Map.Entry<String, String> item = it.next();
