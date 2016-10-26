@@ -184,7 +184,7 @@ public class NamespaceHolder {
 	* xmlns(<namespacePrefix>=<namespaceURL>)
 	*/
 	public String getDeclarationsForGetMethod() {
-		String namespaceDeclaration=" ";
+		String namespaceDeclaration="";
 		for(Iterator<Map.Entry<String, String>> it = 
 			namespacePrefixMap.entrySet().iterator(); it.hasNext(); )
 		{
@@ -202,7 +202,7 @@ public class NamespaceHolder {
 	* xmlns(<namespacePrefix>,<namespaceURL>)
 	*/
 	public String getDeclarationsForGetMethodWfs2() {
-		String namespaceDeclaration=" ";
+		String namespaceDeclaration="";
 		for(Iterator<Map.Entry<String, String>> it = 
 			namespacePrefixMap.entrySet().iterator(); it.hasNext(); )
 		{
