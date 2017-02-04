@@ -1,3 +1,4 @@
 rootProject.name = 'etf-sui-ae'
+include 'etf-sui-mapper'
 include 'etf-sui-plugin'
 include 'etf-sui-owsgtl'

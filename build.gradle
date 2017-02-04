@@ -34,6 +34,7 @@ subprojects {
 		compile group: 'de.interactive_instruments', name: 'ii-commons-util', version:'2.0.0'+project.snapshotSuffix
 		compileOnly group: 'org.slf4j', name: 'slf4j-api', version: etf_slf4jApiVersion
 		compileOnly group: 'log4j', name: 'log4j', version: '1.2.17'
+		compileOnly group: 'de.interactive_instruments.etf', name: 'etf-core', version:'1.0.0'+project.snapshotSuffix
 	}
 
 	apply plugin: 'java'
