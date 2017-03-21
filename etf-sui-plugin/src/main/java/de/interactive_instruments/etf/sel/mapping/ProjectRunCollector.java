@@ -15,6 +15,8 @@
  */
 package de.interactive_instruments.etf.sel.mapping;
 
+import java.util.Objects;
+
 import com.eviware.soapui.impl.wsdl.WsdlProject;
 import com.eviware.soapui.model.testsuite.*;
 import com.eviware.soapui.plugins.ListenerConfiguration;
@@ -31,8 +33,17 @@ public class ProjectRunCollector implements ProjectRunListener {
 
 	private TestResultCollector collector;
 
+	// called by SoapUI GUI
+	public ProjectRunCollector() {}
+
+	// called by Test Driver
+	public ProjectRunCollector(final TestResultCollector collector) {
+		this.collector = collector;
+	}
+
 	@Override
 	public void beforeRun(final ProjectRunner projectRunner, final ProjectRunContext projectRunContext) {
+		// init if created by SoapUI GUI
 		if (collector == null) {
 			if (projectRunner.getProject() instanceof WsdlProject && ((WsdlProject) projectRunner.getProject()).getActiveEnvironment() instanceof CollectorInjectionAdapter) {
 				collector = ((CollectorInjectionAdapter) ((WsdlProject) projectRunner.getProject()).getActiveEnvironment()).getTestResultCollector();
@@ -45,16 +56,16 @@ public class ProjectRunCollector implements ProjectRunListener {
 
 	@Override
 	public void afterRun(final ProjectRunner projectRunner, final ProjectRunContext projectRunContext) {
-		collector.end(projectRunner.getProject().getId(), Utils.translateStatus(projectRunContext.getProjectRunner().getStatus()));
+		Objects.requireNonNull(collector, "Collector not initialized after project run").end(projectRunner.getProject().getId());
 	}
 
 	@Override
 	public void beforeTestSuite(final ProjectRunner projectRunner, final ProjectRunContext projectRunContext, final TestSuite testSuite) {
-		collector.startTestModule(testSuite.getId());
+		Objects.requireNonNull(collector, "Collector not initialized before test suite run").startTestModule(testSuite.getId());
 	}
 
 	@Override
 	public void afterTestSuite(final ProjectRunner projectRunner, final ProjectRunContext projectRunContext, final TestSuiteRunner testSuiteRunner) {
-		collector.end(testSuiteRunner.getTestSuite().getId(), Utils.translateStatus(testSuiteRunner.getStatus()));
+		Objects.requireNonNull(collector, "Collector not initialized after test suite run").end(testSuiteRunner.getTestSuite().getId());
 	}
 }
