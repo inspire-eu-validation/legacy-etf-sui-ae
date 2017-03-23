@@ -27,6 +27,8 @@ import java.util.jar.JarFile;
 
 import com.eviware.soapui.SoapUIExtensionClassLoader;
 
+import de.interactive_instruments.CLUtils;
+
 /**
  * An SoapUIExtensionClassLoader which can reload objects from external achieves
  *
@@ -53,7 +55,7 @@ public final class ReloadableSoapUIExtensionClassLoader extends SoapUIExtensionC
 
 		try {
 			iCL.close();
-			forceCloseUcp(iCL);
+			CLUtils.forceCloseUcp(iCL);
 		} catch (Exception e) {}
 		iCL = null;
 		final SoapUIExtensionClassLoader newCL = new SoapUIExtensionClassLoader(urls, parent);
@@ -64,7 +66,7 @@ public final class ReloadableSoapUIExtensionClassLoader extends SoapUIExtensionC
 	public void resetAndLoad(final URL[] urls) {
 		try {
 			iCL.close();
-			forceCloseUcp(iCL);
+			CLUtils.forceCloseUcp(iCL);
 		} catch (Exception e) {}
 		final SoapUIExtensionClassLoader newCL = new SoapUIExtensionClassLoader(urls, this.getParent());
 		System.out.println("Replacing ClassLoader " + iCL + " with " + newCL);
@@ -75,33 +77,12 @@ public final class ReloadableSoapUIExtensionClassLoader extends SoapUIExtensionC
 	public void reset() {
 		try {
 			iCL.close();
-			forceCloseUcp(iCL);
+			CLUtils.forceCloseUcp(iCL);
 		} catch (Exception e) {}
 		final SoapUIExtensionClassLoader newCL = new SoapUIExtensionClassLoader(this.urls, this.getParent());
 		System.out.println("Replacing ClassLoader " + iCL + " with " + newCL);
 		iCL = null;
 		iCL = newCL;
-	}
-
-	// Workaround for Windows: close all jar file handles
-	private void forceCloseUcp(final ClassLoader classLoader) {
-		try {
-			Class<? extends SoapUIExtensionClassLoader> clazz = this.getClass();
-			Field ucp = clazz.getDeclaredField("ucp");
-			ucp.setAccessible(true);
-			Object sunMiscURLClassPath = ucp.get(classLoader);
-			Field loaders = sunMiscURLClassPath.getClass().getDeclaredField("loaders");
-			loaders.setAccessible(true);
-			final Collection<?> collection = (Collection<?>) loaders.get(sunMiscURLClassPath);
-			for (Object sunMiscURLClassPathJarLoader : collection.toArray()) {
-				try {
-					Field loader = sunMiscURLClassPathJarLoader.getClass().getDeclaredField("jar");
-					loader.setAccessible(true);
-					Object jarFile = loader.get(sunMiscURLClassPathJarLoader);
-					((JarFile) jarFile).close();
-				} catch (Throwable t) {}
-			}
-		} catch (Throwable t) {}
 	}
 
 	@Override
