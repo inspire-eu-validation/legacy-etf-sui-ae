@@ -10,7 +10,7 @@ dependencies {
 	compileOnly ('com.smartbear.soapui:soapui:5.2.1') {
 		exclude module: 'commons-logging'
 		exclude( module: 'log4j' )
-		exclude module: 'jtidy'
+		// exclude module: 'jtidy'
 		exclude module: 'cajo'
 		exclude group: 'org.codehaus.groovy'
 		exclude group: 'com.jgoodies'

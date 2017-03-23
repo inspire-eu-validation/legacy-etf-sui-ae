@@ -14,7 +14,7 @@ configurations {
 }
 
 dependencies {
-	compile group: 'de.interactive_instruments.etf', name: 'etf-core', version: '1.0.0' + project.snapshotSuffix
+	compileOnly project(':etf-sui-mapper')
 	compileOnly group: 'log4j', name: 'log4j', version: '1.2.17'
 }
 
