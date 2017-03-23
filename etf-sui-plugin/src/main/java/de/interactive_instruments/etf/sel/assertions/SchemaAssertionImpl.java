@@ -15,6 +15,10 @@
  */
 package de.interactive_instruments.etf.sel.assertions;
 
+import static de.interactive_instruments.etf.sel.assertions.SchemaAssertionImpl.DESCRIPTION;
+import static de.interactive_instruments.etf.sel.assertions.SchemaAssertionImpl.ID;
+import static de.interactive_instruments.etf.sel.assertions.SchemaAssertionImpl.LABEL;
+
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
@@ -23,6 +27,7 @@ import java.io.StringReader;
 import java.net.URL;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -72,10 +77,6 @@ import org.xml.sax.XMLReader;
 import de.interactive_instruments.SUtils;
 import de.interactive_instruments.etf.sel.Utils;
 
-import static de.interactive_instruments.etf.sel.assertions.SchemaAssertionImpl.DESCRIPTION;
-import static de.interactive_instruments.etf.sel.assertions.SchemaAssertionImpl.ID;
-import static de.interactive_instruments.etf.sel.assertions.SchemaAssertionImpl.LABEL;
-
 /**
  * A simple Assertion for validating xml responses agains schemas
  *
@@ -89,8 +90,7 @@ public class SchemaAssertionImpl extends WsdlMessageAssertion implements SchemaA
 	public static final String DESCRIPTION = "XSD Validator";
 	private static final String SCHEMA_LOCATION = "pathToXSD";
 	private static final String SCHEMA_LOCATION_FIELD = "Schema Location";
-
-
+	private static final String SCHEMA_LOCATION_REWRITE_FILE = System.getProperty("ets.sel.schemalocation.rewrite.file", null);
 
 	public class LRUCache<K, V> {
 
@@ -123,10 +123,8 @@ public class SchemaAssertionImpl extends WsdlMessageAssertion implements SchemaA
 
 	private static LRUCache<String, Schema> schemaCache = null;
 	private String pathToXSD;
-	private boolean configureResult;
 
 	private XFormDialog configurationDialog;
-
 
 	public String getPathToXSD() {
 		return pathToXSD;
@@ -180,7 +178,7 @@ public class SchemaAssertionImpl extends WsdlMessageAssertion implements SchemaA
 			}
 
 			if (SUtils.isNullOrEmpty(pathToXSD)) {
-				schemaLocation="xsi:schemaLocation";
+				schemaLocation = "xsi:schemaLocation";
 			}
 
 			boolean dtd = messageExchange.getResponseContentAsXml().length() > 9 &&
@@ -202,7 +200,7 @@ public class SchemaAssertionImpl extends WsdlMessageAssertion implements SchemaA
 					} else {
 						throw new IllegalArgumentException("Missing xsi:schemaLocation attribute in the response");
 					}
-				}catch (Exception e) {
+				} catch (Exception e) {
 					throw new IllegalArgumentException("Missing xsi:schemaLocation attribute in response");
 				}
 			}
@@ -233,10 +231,10 @@ public class SchemaAssertionImpl extends WsdlMessageAssertion implements SchemaA
 			}
 			reader.parse(new InputSource(new StringReader(messageExchange.getResponseContentAsXml())));
 		} catch (SAXException e) {
-			throw new AssertionException(new AssertionError(e.toString() + " Response did not meet schema \'"
+			throw new AssertionException(new AssertionError(e.toString() + " Response did not validate against schema \'"
 					+ schemaLocation + "\'."));
 		} catch (Exception e) {
-			throw new AssertionException(new AssertionError("Could not validate response: "+ e.toString()));
+			throw new AssertionException(new AssertionError("Could not validate response: " + e.getMessage()));
 		}
 
 		return "Response meets schema.";
