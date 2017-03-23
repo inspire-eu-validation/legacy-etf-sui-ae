@@ -34,7 +34,7 @@ class ObjectSaver extends SOAPUI_I {
 		
 	public ObjectSaver(boolean useTransientStore=true) {
 		ProjectHelper h = new ProjectHelper();
-		def testCase = h.getTestCase("ObjectSaver",h.getTestSuite("TestSetup", true), true);
+		def testCase = h.getTestCase("ObjectSaver",h.getTestSuite("Initialization and basic checks", true), true);
 		if(useTransientStore) {
 			this.storeTestStep = h.getTestStep("TransientObjects", testCase, "properties");
 			this.storeTestStep.setDiscardValuesOnSave(true);
@@ -105,7 +105,7 @@ class ObjectSaver extends SOAPUI_I {
 			throw new NullObjectLoadingException(this,
 					"attempt to load null object! "
 							+"Requested object of type " + clasz + " with name " + name+". "
-							+"This error might be a subsequent error due to failures in the TestSetup phase!");
+							+"This error might be a subsequent error due to failures in the 'Initialization and basic checks' test case!");
 		}
 		ByteArrayInputStream xmlBytes = new ByteArrayInputStream(
 			value.getBytes());	
