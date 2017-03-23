@@ -25,6 +25,7 @@ import java.util.*;
 import com.eviware.soapui.impl.support.AbstractHttpRequest;
 import com.eviware.soapui.impl.support.http.HttpRequestTestStep;
 import com.eviware.soapui.impl.wsdl.WsdlProject;
+import com.eviware.soapui.impl.wsdl.support.PathUtils;
 import com.eviware.soapui.impl.wsdl.teststeps.HttpTestRequestStep;
 import com.eviware.soapui.impl.wsdl.teststeps.RestTestRequestStep;
 import com.eviware.soapui.impl.wsdl.teststeps.WsdlRunTestCaseTestStep;
@@ -138,8 +139,10 @@ public class TestRunCollector implements TestRunListener {
 			final HttpRequestTestStep testRequest = (HttpRequestTestStep) testStep;
 			if (testRequest.getHttpRequest() instanceof AbstractHttpRequest) {
 				final AbstractHttpRequest httpRequest = testRequest.getHttpRequest();
-				final File dumpFile = new File(collector.getTempDir(), UUID.randomUUID().toString());
+				final IFile dumpFile = new IFile(collector.getTempDir(), "dumpFile-"+UUID.randomUUID().toString());
 				httpRequest.setDumpFile(dumpFile.getAbsolutePath());
+				// 2GB
+				httpRequest.setMaxSize(2147483648L);
 			}
 		}
 	}
@@ -286,17 +289,24 @@ public class TestRunCollector implements TestRunListener {
 
 			if (httpRequest != null) {
 				if(httpRequest.getDumpFile() != null) {
-					final IFile file = new IFile(httpRequest.getDumpFile());
+					final IFile file = new IFile(PathUtils.resolveResourcePath(httpRequest.getDumpFile(), httpRequest));
 					if (file.exists() && file.length() > 0) {
 						try {
-							final IFile copied = file.copyTo(tmpDir.secureExpandPathDown(testStepResult.getTestStep().getId()).toString());
+							final IFile copied = file.copyTo(
+									tmpDir.secureExpandPathDown("response-"+testStepResult.getTestStep().getId()).toString());
 							collector.markAttachment(copied.getName(), "Service Response", "UTF-8", null, "ServiceResponse");
 						} catch (IOException e) {
 							collector.internalError(e);
 						}
+					}else{
+						// collector.getLogger().info("Received empty response");
 					}
 				}else{
-					httpRequest.getRequestContent();
+					try {
+						collector.saveAttachment(httpRequest.getResponse().getContentAsString(), "Service Response", null, "ServiceResponse");
+					} catch (final IOException e) {
+						collector.internalError(e);
+					}
 				}
 			}
 
