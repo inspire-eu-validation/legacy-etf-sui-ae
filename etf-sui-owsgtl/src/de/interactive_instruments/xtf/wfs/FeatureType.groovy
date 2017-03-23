@@ -30,10 +30,11 @@ public class FeatureType implements TransferableRequestParameter {
 	private String[] otherSRS;
 	private int numberOfFeaturesInDatabase;
 	private Bbox bbox;
-	
-	
+
 	private List <FeatureTypeProperty[]> properties = new ArrayList<FeatureTypeProperty[]>();
+
 	private List<OutputFormat> outputFormats = new ArrayList<OutputFormat>();
+
 	@XmlTransient
 	private int currentOutputFormatIndex;
 
@@ -188,7 +189,6 @@ public class FeatureType implements TransferableRequestParameter {
 			outputFormats.add(analyzer.getOutputFormat());
 
 			// TODO: Skip analysis on unknown outputFormat
-			Util.getPropertyValueOrDefault(project, "testIntensive","false").equals("true");
 			try {
 				List<FeatureTypeProperty> tmpProperties = analyzer.analyze(getQName());
 				this.properties.add( tmpProperties.toArray(new FeatureTypeProperty[0]) );

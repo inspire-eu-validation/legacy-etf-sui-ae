@@ -15,12 +15,6 @@
  */
 package de.interactive_instruments.xtf.wfs;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeSet;
-
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -81,60 +75,49 @@ public class FeatureTypeProperty implements TransferableRequestParameter {
 	/*
 	 * XSD types that will be mapped to the internal GEOMETRY type
 	 */
-    private final static HashSet<String> GEOMETRY_TYPES = new HashSet<String>() {
-		private static final long serialVersionUID = -3393275743075337128L;
-		{
-            add("PointPropertyType");
-            add("CurvePropertyType");
-            add("SurfacePropertyType");
-            add("GeometryPropertyType");
-            add("MultiPointPropertyType");
-            add("MultiCurvePropertyType");
-            add("MultiSurfacePropertyType");
-            add("MultiGeometryPropertyType");
-        }
-    };
+	final static Set<String> GEOMETRY_TYPES = [
+			'PointPropertyType',
+			'CurvePropertyType',
+			'SurfacePropertyType',
+			'GeometryPropertyType',
+			'MultiPointPropertyType',
+			'MultiCurvePropertyType',
+			'MultiSurfacePropertyType',
+			'MultiGeometryPropertyType'] as Set<String>;
+
 
     /*
 	 * XSD types that will be mapped to the internal LITERAL type
 	 */
-    private final static HashSet<String> LITERAL_TYPES = new HashSet<String>() {
-		private static final long serialVersionUID = -4280146696870927440L;
-		{
-			add("anyURI");
-			add("ID");
-            add("string");
-            add("integer");
-            add("int");
-            add("long");
-            add("short");
-            add("decimal");
-            add("float");
-            add("double");
-            add("boolean");
-            add("byte");
-            add("QName");
-            add("base64Binary");
-            add("hexBinary");
-            add("unsignedInt");
-            add("unsignedShort");
-            add("unsignedByte");
-        }
-    };
+	final static Set<String> LITERAL_TYPES = [
+			'anyURI',
+			'ID',
+            'string',
+            'integer',
+            'int',
+            'long',
+            'short',
+            'decimal',
+            'float',
+            'double',
+            'boolean',
+            'byte',
+            'QName',
+            'base64Binary',
+            'hexBinary',
+            'unsignedInt',
+            'unsignedShort',
+            'unsignedByte'] as Set<String>;
 
     /*
 	 * XSD types that will be mapped to the internal DATE type
 	 */
-    private final static HashSet<String> DATE_TYPES = new HashSet<String>() {
-		private static final long serialVersionUID = -2420549657452874411L;
-		{
-            add("date");
-            add("time");
-            add("g");
-            add("dateTime");
-            add("duration");
-        }
-    };
+    final static Set<String> DATE_TYPES = [
+			'date',
+            'time',
+            'g',
+            'dateTime',
+            'duration' ] as Set<String>;
 
 	/*
 	 * Needed for serialization

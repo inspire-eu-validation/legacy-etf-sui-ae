@@ -83,11 +83,15 @@ public class Capabilities {
 		}
 		return this.featureTypes;
 	}
+
+	public def getFirstFeatureType() {
+		return getFeatureTypes().get(0);
+	}
 	
 
 	public def getFeatureTypeByName(final String name) {
 		for(featureType in this.featureTypes) {
-			if(featureType.getName().equals(name))
+			if(featureType.getPrefixAndName() == name)
 				return featureType;
 		}
 		throw new FatalInternalException(this, 
@@ -121,8 +125,12 @@ public class Capabilities {
 					
 					final List<OutputFormat> ofList = new ArrayList<OutputFormat>();
 					for(String o in allOutputFormats.sort()) {
-						ofList.add(new OutputFormat(o));
+						def blacklistedOutputFormats = Util.getProjectPropertyOrNull("blacklisted.outputFormats")
+						if(blacklistedOutputFormats==null || !blacklistedOutputFormats.contains(o)) {
+							ofList.add(new OutputFormat(o));
+						}
 					}
+
 					this.outputFormats.put(operationName, ofList.toArray(new OutputFormat[0]));
 				}catch(RequiredDomNodeNotFoundException e){
 					//Operation does not Provide an outputFormat

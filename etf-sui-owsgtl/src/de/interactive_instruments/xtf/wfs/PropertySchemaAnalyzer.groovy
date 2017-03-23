@@ -53,13 +53,9 @@ public class PropertySchemaAnalyzer {
 	private final Logger log;
 	private List<FeatureTypeProperty> ftPropertyExps;
 	private OutputFormat outputFormat;
-	
-	private final static HashSet<String> BLACKLISTED_ATTRIBUTES = new HashSet<String>() {
-		{
-			add("type");
-		}
-	};
-	
+
+	final static Set<String> BLACKLISTED_ATTRIBUTES = ['type'] as Set<String>;
+
 	/*
 	 * Create a SchemaAnalyzer for a specified schema xml and the output format.
 	 * External schema definitions that are imported in the passed schema xml string,
