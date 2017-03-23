@@ -13,63 +13,67 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.interactive_instruments.xtf;
+package de.interactive_instruments.xtf
 
-import org.apache.log4j.Logger;
-import com.eviware.soapui.model.iface.MessageExchange;
+import com.eviware.soapui.model.testsuite.TestRunContext
+import org.apache.log4j.Logger
+import com.eviware.soapui.model.iface.MessageExchange
 
-import de.interactive_instruments.xtf.exceptions.FatalInternalException;
+import de.interactive_instruments.xtf.exceptions.FatalInternalException
 
 class SOAPUI_I {
-	protected Logger log;
-	protected def context;
-	protected def testRunner;
-	protected def messageExchange;
-	
+	protected Logger log
+	protected context
+	protected testRunner
+	protected messageExchange
+
 	// public Logger getLog() { return log; }
-	public Logger getLog() { return Logger.getLogger("etf-sui-owsgtl"); }
-	public def getContext() { return context; }
-	public def getTestRunner() { return testRunner; }
-		
-	
-	private static SOAPUI_I instance;
-	
-	private static SOAPUI_I getInstance() { return instance; }
-	
-	public static init(Logger log, def context, def testRunner) {
-		this.instance = new SOAPUI_I(log, context, testRunner);
+	Logger getLog() { return Logger.getLogger("etf-sui-owsgtl") }
+
+	private static SOAPUI_I instance
+
+	private static SOAPUI_I getInstance() { return instance }
+
+	def getContext() { return context }
+
+	def getTestRunner() { return testRunner }
+
+	def getMessageExchange() { return messageExchange }
+
+	static init(Logger log, context, testRunner) {
+		instance = new SOAPUI_I(log, context, testRunner)
 	}
-	
-	public static init(Logger log, def context, MessageExchange messageExchange) {
-		this.instance = new SOAPUI_I(log, context, null , messageExchange);
+
+	static init(Logger log, TestRunContext context, MessageExchange messageExchange) {
+		instance = new SOAPUI_I(log, context, null , messageExchange)
 	}
-	
-	public SOAPUI_I(Logger log, def context, def testRunner, 
-		MessageExchange messageExchange=null)
+
+	SOAPUI_I(Logger log, context, testRunner, MessageExchange messageExchange=null)
 	{
-		this.log=log;
-		this.context=context;
+		this.log=log
+		this.context=context
 		if(testRunner!=null) {
-			this.testRunner=testRunner;
+			this.testRunner=testRunner
 		}
-		this.messageExchange=messageExchange;
+		this.messageExchange=messageExchange
 	}
-			
-	public def getGroovyUtils() {
+
+	def getGroovyUtils() {
 		if(!context)
-			new FatalInternalException("Context in SOAPUI_I is not initialized!");
-		
-		def groovyUtils = new com.eviware.soapui.support.GroovyUtils(context);
-		return groovyUtils;
+			new FatalInternalException("Context in SOAPUI_I is not initialized!")
+
+		def groovyUtils = new com.eviware.soapui.support.GroovyUtils(context)
+		return groovyUtils
 	}
-	
-	public SOAPUI_I() {
+
+	SOAPUI_I() {
 		if(!instance) {
 			throw new FatalInternalException(this, 
-				"SOAPUI_I not initialized! Invoke \"SOAPUI_I.init(log, context, testRunner);\" first!");
+				"SOAPUI_I not initialized! Invoke \"SOAPUI_I.init(log, context, testRunner);\" first!")
 		}
-		this.log = this.instance.getLog();
-		this.context = this.instance.getContext();
-		this.testRunner = this.instance.getTestRunner();
+		this.log = this.instance.getLog()
+		this.context = this.instance.context
+		this.testRunner = this.instance.testRunner
+		this.messageExchange=this.instance.messageExchange
 	}
-};
+}

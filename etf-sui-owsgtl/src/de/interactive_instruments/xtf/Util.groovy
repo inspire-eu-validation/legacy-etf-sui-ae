@@ -394,6 +394,27 @@ class Util {
 		return testList;
 	}
 
+	public static String xpathWithWildcardNamespaces(String xpath) {
+		final String newPath='*:'
+		int i = xpath.indexOf(':')+1
+		if(i!=-1) {
+			int nextPos = xpath.indexOf('/', i+1)
+			for(; i!=-1 && nextPos!=-1;) {
+				println i + " " + nextPos;
+				println xpath.substring(i, nextPos)
+				newPath += xpath.substring(i, nextPos) + '/*:';
+				i = xpath.indexOf(':', i)+1;
+				nextPos = xpath.indexOf('/', nextPos+1);
+			}
+			if(nextPos==-1 && i!=-1) {
+				newPath += xpath.substring(i)
+			}
+			return newPath;
+		}else{
+			return xpath;
+		}
+	}
+
 
 	private static int testStringId=1;
 
