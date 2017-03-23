@@ -15,6 +15,10 @@
  */
 package de.interactive_instruments.etf.sel.assertions;
 
+import static de.interactive_instruments.etf.sel.assertions.OwsExceptionReportAssertionImpl.DESCRIPTION;
+import static de.interactive_instruments.etf.sel.assertions.OwsExceptionReportAssertionImpl.ID;
+import static de.interactive_instruments.etf.sel.assertions.OwsExceptionReportAssertionImpl.LABEL;
+
 import com.eviware.soapui.config.TestAssertionConfig;
 import com.eviware.soapui.impl.wsdl.panels.assertions.AssertionCategoryMapping;
 import com.eviware.soapui.impl.wsdl.teststeps.WsdlMessageAssertion;
@@ -31,10 +35,6 @@ import com.eviware.soapui.support.XmlHolder;
 
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlObject;
-
-import static de.interactive_instruments.etf.sel.assertions.OwsExceptionReportAssertionImpl.DESCRIPTION;
-import static de.interactive_instruments.etf.sel.assertions.OwsExceptionReportAssertionImpl.ID;
-import static de.interactive_instruments.etf.sel.assertions.OwsExceptionReportAssertionImpl.LABEL;
 
 /**
  * Checks if a response contains an OWS exception report
