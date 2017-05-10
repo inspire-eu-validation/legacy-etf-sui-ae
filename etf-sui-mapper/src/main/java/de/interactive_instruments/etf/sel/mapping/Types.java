@@ -17,6 +17,7 @@ package de.interactive_instruments.etf.sel.mapping;
 
 import de.interactive_instruments.etf.dal.dto.capabilities.TestObjectTypeDto;
 import de.interactive_instruments.etf.dal.dto.test.TestItemTypeDto;
+import de.interactive_instruments.etf.detector.TestObjectTypeDetectorManager;
 import de.interactive_instruments.etf.model.DefaultEidMap;
 import de.interactive_instruments.etf.model.EID;
 import de.interactive_instruments.etf.model.EidFactory;
@@ -117,58 +118,15 @@ public class Types {
 	};
 
 	// Supported Test Object Types
-	public static TestObjectTypeDto SIMPLE_WEB_SERVICE_TOT = new TestObjectTypeDto();
-	public static EID SIMPLE_WEB_SERVICE_ID = EidFactory.getDefault().createAndPreserveStr("88311f83-818c-46ed-8a9a-cec4f3707365");
-
-	public static TestObjectTypeDto WFS_2_0_TOT = new TestObjectTypeDto();
-	public static EID WFS_2_0_ID = EidFactory.getDefault().createAndPreserveStr("9b6ef734-981e-4d60-aa81-d6730a1c6389");
-
-	public static TestObjectTypeDto INSPIRE_DOWNLOAD_DIRECT_TOT = new TestObjectTypeDto();
-	public static EID INSPIRE_DOWNLOAD_DIRECT_ID = EidFactory.getDefault().createAndPreserveStr("dd83316d-7c30-49ad-8cc9-e5b73e501faa");
-
-	public static TestObjectTypeDto ATOM_TOT = new TestObjectTypeDto();
-	public static EID ATOM_ID = EidFactory.getDefault().createAndPreserveStr("49d881ae-b115-4b91-aabe-31d5791bce52");
-
-	public static TestObjectTypeDto INSPIRE_DOWNLOAD_ATOM_TOT = new TestObjectTypeDto();
-	public static EID INSPIRE_DOWNLOAD_ATOM_ID = EidFactory.getDefault().createAndPreserveStr("9c5bd10c-8311-4f0b-9633-b867028cacd6");
-
-	public static final EidMap<TestObjectTypeDto> TEST_OBJECT_TYPES = new DefaultEidMap<TestObjectTypeDto>() {
-		{
-			SIMPLE_WEB_SERVICE_TOT.setLabel("Web Service");
-			SIMPLE_WEB_SERVICE_TOT.setId(SIMPLE_WEB_SERVICE_ID);
-			SIMPLE_WEB_SERVICE_TOT.setDescription("A web Service with a HTTP interface that is not described in more detail.");
-			put(SIMPLE_WEB_SERVICE_ID, SIMPLE_WEB_SERVICE_TOT);
-		}
-
-		{
-			WFS_2_0_TOT.setLabel("Web Feature Service 2.0");
-			WFS_2_0_TOT.setId(WFS_2_0_ID);
-			WFS_2_0_TOT.setDescription("A Web Service implementing ISO 19142 Web Feature Service and ISO 19143 Filter Encoding");
-			WFS_2_0_TOT.setParent(SIMPLE_WEB_SERVICE_TOT);
-			put(WFS_2_0_ID, WFS_2_0_TOT);
-		}
-
-		{
-			INSPIRE_DOWNLOAD_DIRECT_TOT.setLabel("INSPIRE Download Service 3.1 - Direct Access WFS 2.0");
-			INSPIRE_DOWNLOAD_DIRECT_TOT.setId(INSPIRE_DOWNLOAD_DIRECT_ID);
-			INSPIRE_DOWNLOAD_DIRECT_TOT.setDescription("INSPIRE Download Service 3.1 - Direct Access WFS 2.0");
-			INSPIRE_DOWNLOAD_DIRECT_TOT.setParent(WFS_2_0_TOT);
-			put(INSPIRE_DOWNLOAD_DIRECT_ID, INSPIRE_DOWNLOAD_DIRECT_TOT);
-		}
-
-		{
-			ATOM_TOT.setLabel("Web Feed");
-			ATOM_TOT.setId(ATOM_ID);
-			ATOM_TOT.setDescription("A Web Feed implementing the Atom Syndication Format, describing update information about published data.");
-			put(ATOM_ID, ATOM_TOT);
-		}
-
-		{
-			INSPIRE_DOWNLOAD_ATOM_TOT.setLabel("INSPIRE Download Service 3.1 - Download Service Feed");
-			INSPIRE_DOWNLOAD_ATOM_TOT.setId(INSPIRE_DOWNLOAD_ATOM_ID);
-			INSPIRE_DOWNLOAD_ATOM_TOT.setDescription("A top-level Download Service Feed, describing update information about published pre-defined datasets.");
-			INSPIRE_DOWNLOAD_ATOM_TOT.setParent(ATOM_TOT);
-			put(INSPIRE_DOWNLOAD_ATOM_ID, INSPIRE_DOWNLOAD_ATOM_TOT);
-		}
-	};
+	public static final EidMap<TestObjectTypeDto> SUI_SUPPORTED_TEST_OBJECT_TYPES = TestObjectTypeDetectorManager.getTypes(
+			// SIMPLE_WEB_SERVICE_TOT
+			"88311f83-818c-46ed-8a9a-cec4f3707365",
+			// WFS_2_0_TOT
+			"9b6ef734-981e-4d60-aa81-d6730a1c6389",
+			// INSPIRE_DOWNLOAD_DIRECT_TOT
+			"dd83316d-7c30-49ad-8cc9-e5b73e501faa",
+			// ATOM_TOT
+			"49d881ae-b115-4b91-aabe-31d5791bce52",
+			// INSPIRE_DOWNLOAD_ATOM_TOT
+			"9c5bd10c-8311-4f0b-9633-b867028cacd6");
 }
