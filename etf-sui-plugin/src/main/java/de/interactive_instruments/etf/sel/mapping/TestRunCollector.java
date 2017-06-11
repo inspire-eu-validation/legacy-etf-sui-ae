@@ -37,17 +37,17 @@ import com.eviware.soapui.model.testsuite.*;
 import com.eviware.soapui.model.testsuite.AssertionError;
 import com.eviware.soapui.plugins.ListenerConfiguration;
 
-import de.interactive_instruments.SUtils;
-import de.interactive_instruments.UriUtils;
-import de.interactive_instruments.exceptions.ExcUtils;
 import org.apache.commons.io.IOUtils;
 
 import de.interactive_instruments.IFile;
+import de.interactive_instruments.SUtils;
+import de.interactive_instruments.UriUtils;
 import de.interactive_instruments.etf.sel.Utils;
 import de.interactive_instruments.etf.testdriver.TestResultCollector;
+import de.interactive_instruments.exceptions.ExcUtils;
 
 /**
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 @ListenerConfiguration
 public class TestRunCollector implements TestRunListener {
@@ -59,29 +59,30 @@ public class TestRunCollector implements TestRunListener {
 	 * @see de.interactive_instruments.etf.dal.dto.result.TestResultStatus
 	 */
 	private enum TestResultStatus {
-		PASSED(0),
-		FAILED(1),
-		PASSED_MANUAL(7);
+		PASSED(0), FAILED(1), PASSED_MANUAL(7);
 		public final int value;
+
 		TestResultStatus(final int value) {
-			this.value=value;
+			this.value = value;
 		}
 	}
+
 	private TestResultStatus testAssertionStatus = TestResultStatus.PASSED;
 	private TestResultStatus testStepStatus = TestResultStatus.PASSED;
 
 	private void setManualOrError(final boolean manual) {
-		if(manual) {
-			testAssertionStatus=TestResultStatus.PASSED_MANUAL;
-			if(testStepStatus!=TestResultStatus.FAILED) {
-				testStepStatus=TestResultStatus.PASSED_MANUAL;
+		if (manual) {
+			testAssertionStatus = TestResultStatus.PASSED_MANUAL;
+			if (testStepStatus != TestResultStatus.FAILED) {
+				testStepStatus = TestResultStatus.PASSED_MANUAL;
 			}
-		}else{
+		} else {
 			setFailed();
 		}
 	}
+
 	private void setFailed() {
-		testAssertionStatus=TestResultStatus.FAILED;
+		testAssertionStatus = TestResultStatus.FAILED;
 		testStepStatus = TestResultStatus.FAILED;
 	}
 
@@ -110,7 +111,7 @@ public class TestRunCollector implements TestRunListener {
 				collector = new DummyCollector();
 			}
 		}
-		testAssertionStatus=TestResultStatus.PASSED;
+		testAssertionStatus = TestResultStatus.PASSED;
 		testStepStatus = TestResultStatus.PASSED;
 		collector.startTestCase(testCaseRunner.getTestCase().getId());
 	}
@@ -139,7 +140,7 @@ public class TestRunCollector implements TestRunListener {
 			final HttpRequestTestStep testRequest = (HttpRequestTestStep) testStep;
 			if (testRequest.getHttpRequest() instanceof AbstractHttpRequest) {
 				final AbstractHttpRequest httpRequest = testRequest.getHttpRequest();
-				final IFile dumpFile = new IFile(collector.getTempDir(), "dumpFile-"+UUID.randomUUID().toString());
+				final IFile dumpFile = new IFile(collector.getTempDir(), "dumpFile-" + UUID.randomUUID().toString());
 				httpRequest.setDumpFile(dumpFile.getAbsolutePath());
 				// 2GB
 				httpRequest.setMaxSize(2147483648L);
@@ -156,17 +157,16 @@ public class TestRunCollector implements TestRunListener {
 
 		if (startIndex != -1) {
 			final int wi = message.indexOf("what='", startIndex + 14);
-			final boolean singleQ=wi>-1;
+			final boolean singleQ = wi > -1;
 			final int whatIndex = singleQ ? wi : message.indexOf("what=\"", startIndex + 14);
-
 
 			if (whatIndex != -1) {
 				final int endWhatIndex = message.indexOf(singleQ ? "'" : "\"", whatIndex + 6);
 				if (whatIndex < endWhatIndex) {
 					final String t = message.substring(whatIndex + 6, endWhatIndex);
-					final String translationTemplate = t.startsWith("TR.") ? t : "TR."+t;
+					final String translationTemplate = t.startsWith("TR.") ? t : "TR." + t;
 					final boolean manual = translationTemplate.startsWith("TR.manual.");
-					if(endIndex>0) {
+					if (endIndex > 0) {
 						// Check that are no >s in what
 						final int messagesIndex = message.indexOf(">", startIndex + 1);
 						if (whatIndex < messagesIndex && messagesIndex < endIndex) {
@@ -188,7 +188,7 @@ public class TestRunCollector implements TestRunListener {
 							}
 							return manual;
 						}
-					}else{
+					} else {
 						collector.addMessage(translationTemplate);
 						return manual;
 					}
@@ -198,7 +198,11 @@ public class TestRunCollector implements TestRunListener {
 
 		try {
 			// TODO temporary fallback
-			final Map<String, String> map = new HashMap<String, String>() {{ put("INFO", message); }};
+			final Map<String, String> map = new HashMap<String, String>() {
+				{
+					put("INFO", message);
+				}
+			};
 			collector.addMessage("TR.fallbackInfo", map);
 			collector.saveAttachment(IOUtils.toInputStream(message, "UTF-8"), "Error." + i, "text/plain", "Error");
 		} catch (IOException e) {
@@ -217,15 +221,15 @@ public class TestRunCollector implements TestRunListener {
 	 * @param maxIndex
 	 * @param tokenArguments
 	 */
-	private static void parseRec(final String message, final int parseIndex, final int maxIndex, final Map<String,String> tokenArguments) {
+	private static void parseRec(final String message, final int parseIndex, final int maxIndex, final Map<String, String> tokenArguments) {
 		final int startIndex = message.indexOf("<", parseIndex);
-		if(startIndex!=-1) {
-			final int closingTagSignIndex = message.indexOf(">", startIndex+2);
-			if(closingTagSignIndex!=-1 && message.charAt(closingTagSignIndex - 1) != '/') {
+		if (startIndex != -1) {
+			final int closingTagSignIndex = message.indexOf(">", startIndex + 2);
+			if (closingTagSignIndex != -1 && message.charAt(closingTagSignIndex - 1) != '/') {
 				final int firstAttributeInTag = message.indexOf(" ", startIndex + 2);
-				final int tokenNameEndIndex = firstAttributeInTag>startIndex && firstAttributeInTag < closingTagSignIndex? firstAttributeInTag : closingTagSignIndex;
+				final int tokenNameEndIndex = firstAttributeInTag > startIndex && firstAttributeInTag < closingTagSignIndex ? firstAttributeInTag : closingTagSignIndex;
 				final String token = message.substring(startIndex + 1, tokenNameEndIndex);
-				if(!SUtils.isNullOrEmpty(token) && !token.equals("PASS") && !token.equals("FAIL")) {
+				if (!SUtils.isNullOrEmpty(token) && !token.equals("PASS") && !token.equals("FAIL")) {
 					// Argument ends with the token
 					final int argumentEndIndex = message.indexOf("</" + token + ">", closingTagSignIndex);
 					if (tokenNameEndIndex < argumentEndIndex) {
@@ -233,16 +237,16 @@ public class TestRunCollector implements TestRunListener {
 						final String argument = message.substring(closingTagSignIndex + 1, argumentEndIndex);
 						// Support listing, by appending an argument to a token that already exists
 						final String existingArgument = tokenArguments.get(token);
-						if(existingArgument!=null) {
+						if (existingArgument != null) {
 							// there is already an existing argument. Append non null, unique argument
-							if(!SUtils.isNullOrEmpty(argument) && !argument.equals(existingArgument)) {
+							if (!SUtils.isNullOrEmpty(argument) && !argument.equals(existingArgument)) {
 								tokenArguments.put(token, argument + ", " + existingArgument);
 							}
-						}else{
+						} else {
 							// Add non empty argument or write the string "[not found in response]"
-							if(!SUtils.isNullOrEmpty(argument)) {
+							if (!SUtils.isNullOrEmpty(argument)) {
 								tokenArguments.put(token, argument);
-							}else{
+							} else {
 								tokenArguments.put(token, "[ empty value (invalid response?) ]");
 							}
 						}
@@ -283,25 +287,25 @@ public class TestRunCollector implements TestRunListener {
 				} catch (IOException e) {
 					collector.internalError(e);
 				}
-			}else{
+			} else {
 				endpoint = null;
 			}
 
 			if (httpRequest != null) {
-				if(httpRequest.getDumpFile() != null) {
+				if (httpRequest.getDumpFile() != null) {
 					final IFile file = new IFile(PathUtils.resolveResourcePath(httpRequest.getDumpFile(), httpRequest));
 					if (file.exists() && file.length() > 0) {
 						try {
 							final IFile copied = file.copyTo(
-									tmpDir.secureExpandPathDown("response-"+testStepResult.getTestStep().getId()).toString());
+									tmpDir.secureExpandPathDown("response-" + testStepResult.getTestStep().getId()).toString());
 							collector.markAttachment(copied.getName(), "Service Response", "UTF-8", null, "ServiceResponse");
 						} catch (IOException e) {
 							collector.internalError(e);
 						}
-					}else{
+					} else {
 						// collector.getLogger().info("Received empty response");
 					}
-				}else{
+				} else {
 					try {
 						collector.saveAttachment(httpRequest.getResponse().getContentAsString(), "Service Response", null, "ServiceResponse");
 					} catch (final IOException e) {
@@ -329,7 +333,7 @@ public class TestRunCollector implements TestRunListener {
 							addRequestInfo + testRequest.getProperty("Request").getValue());
 					try {
 						collector.saveAttachment(IOUtils.toInputStream(expandedProperties, "UTF-8"),
-								"Request Parameter", null, "PostParameter");
+								"Request Parameter", null, "PostRequest");
 					} catch (final IOException e) {
 						ExcUtils.suppress(e);
 					}
@@ -342,7 +346,7 @@ public class TestRunCollector implements TestRunListener {
 					}
 					final String query = UriUtils.withQueryParameters(endpoint, parameterMap, true);
 
-					if(!SUtils.isNullOrEmpty(query)) {
+					if (!SUtils.isNullOrEmpty(query)) {
 						try {
 							collector.saveAttachment(
 									PropertyExpander.expandProperties(testRequest, query),
@@ -356,7 +360,6 @@ public class TestRunCollector implements TestRunListener {
 				}
 			}
 
-
 			final List<TestAssertion> assertionList = testRequest.getTestRequest().getAssertionList();
 			for (int i1 = 0, assertionListSize = assertionList.size(); i1 < assertionListSize; i1++) {
 				final TestAssertion assertion = assertionList.get(i1);
@@ -368,7 +371,7 @@ public class TestRunCollector implements TestRunListener {
 					for (int i2 = 0, errorsLength = errors.length; i2 < errorsLength; i2++) {
 						final AssertionError error = errors[i2];
 						collector.error(error.getMessage());
-						if(assertion instanceof XQueryContainsAssertion) {
+						if (assertion instanceof XQueryContainsAssertion) {
 							final XQueryContainsAssertion xqueryAssertion = (XQueryContainsAssertion) assertion;
 							// OK, this is very tricky:
 							// we need to call selectFromCurrent() to get the whole message
@@ -377,28 +380,28 @@ public class TestRunCollector implements TestRunListener {
 							final String expectedContent = xqueryAssertion.getExpectedContent();
 							xqueryAssertion.selectFromCurrent();
 							final String translation = xqueryAssertion.getExpectedContent();
-							if(translation.contains("<etfTranslate")) {
-								setManualOrError( addMessage(translation, collector, i++) );
-							}else{
-								setManualOrError( addMessage(error.getMessage(), collector, i++) );
+							if (translation.contains("<etfTranslate")) {
+								setManualOrError(addMessage(translation, collector, i++));
+							} else {
+								setManualOrError(addMessage(error.getMessage(), collector, i++));
 							}
 							xqueryAssertion.setExpectedContent(expectedContent);
-						}else{
-							setManualOrError( addMessage(error.getMessage(), collector, i++));
+						} else {
+							setManualOrError(addMessage(error.getMessage(), collector, i++));
 						}
 					}
 				}
 				collector.end(assertion.getId(), testAssertionStatus.value);
 			}
-		}else{
-			if(testStepResult.getStatus()==TestStepResult.TestStepStatus.FAILED) {
-				if(testStepResult.getTestStep() instanceof WsdlRunTestCaseTestStep) {
-					status=2;
-				}else{
-					status=1;
+		} else {
+			if (testStepResult.getStatus() == TestStepResult.TestStepStatus.FAILED) {
+				if (testStepResult.getTestStep() instanceof WsdlRunTestCaseTestStep) {
+					status = 2;
+				} else {
+					status = 1;
 				}
-			}else{
-				status=0;
+			} else {
+				status = 0;
 			}
 
 			// Add messages
@@ -407,10 +410,10 @@ public class TestRunCollector implements TestRunListener {
 				for (int i = 0, messagesLength = messages.length; i < messagesLength; i++) {
 					final String message = messages[i];
 					try {
-						if(message.contains("<etfTranslate")) {
+						if (message.contains("<etfTranslate")) {
 							addMessage(message, collector, i + 1);
-						}else{
-							collector.saveAttachment(IOUtils.toInputStream(message, "UTF-8"), "Message." + (i+1), "text/plain", "Message");
+						} else {
+							collector.saveAttachment(IOUtils.toInputStream(message, "UTF-8"), "Message." + (i + 1), "text/plain", "Message");
 						}
 					} catch (IOException e) {
 						collector.internalError(e);
@@ -419,10 +422,10 @@ public class TestRunCollector implements TestRunListener {
 			}
 		}
 
-		if(status==-1) {
+		if (status == -1) {
 			// auto determine
 			collector.end(testStepResult.getTestStep().getId(), testStepResult.getTimeStamp() + testStepResult.getTimeTaken());
-		}else{
+		} else {
 			collector.end(testStepResult.getTestStep().getId(), status, testStepResult.getTimeStamp() + testStepResult.getTimeTaken());
 		}
 	}
