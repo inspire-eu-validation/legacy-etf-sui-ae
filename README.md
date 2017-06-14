@@ -1,7 +1,7 @@
 # SUI adapter and extensions
 
 [![Apache License 2.0](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
-[![owsgtl groovydoc](http://img.shields.io/badge/groovydoc-owsgtl-green.svg)](http://interactive-instruments.github.io/etf-sui-ae/etf-sui-owsgtl/doc/)
+[![owsgtl groovydoc](http://img.shields.io/badge/groovydoc-owsgtl-green.svg)](http://interactive-instruments.github.io/etf-sui-ae/groovydoc/index.html?de/interactive_instruments/etf/suim/Assert.html)
 [![Build Status](https://services.interactive-instruments.de/etfdev-ci/buildStatus/icon?job=etf-bsx-ae)](https://services.interactive-instruments.de/etfdev-ci/job/etf-bsx-ae/)
 [![Latest version](http://img.shields.io/badge/latest%20version-1.3.8-blue.svg)](https://services.interactive-instruments.de/etfdev-af/etf-public-releases/de/interactive-instruments/etf/etf-owsgtl-1.3.8.zip)
 
