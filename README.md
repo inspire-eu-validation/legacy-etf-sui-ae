@@ -23,12 +23,12 @@ reporting [issues](https://github.com/interactive-instruments/etf-webapp/issues)
 ## Develop SoapUI based Executable Test Suites
 
 ### Prerequisites
-- Windows OS (may work on Linux -but not tested but known to not work under OSX)
+- Windows OS (may work on Linux but known to not work under OSX)
 - Java 1.8
 - SoapUI 5.3.0 installed
 
 ### Installation
-To develop test suites with the SoapUI GUI under Windows, download [this ZIP file](https://services.interactive-instruments.de/etfdev-af/etf-public-dev/de/interactive_instruments/etf/suim/SoapUI ETF.zip) (using etf-public-dev as user and password), extract the ZIP file
+To develop test suites with the SoapUI GUI under Windows, download [this ZIP file](https://services.interactive-instruments.de/etfdev-af/etf-public-dev/de/interactive_instruments/etf/suim/SoapUI%20ETF.zip) (using etf-public-dev as user and password), extract the ZIP file
 in any directory, run 'install-plugins.bat' and run 'SoapUI 5.3.0.bat' afterwards.
 
 To load the plugins, SoapUI must always be started with the 'SoapUI 5.3.0.bat' file
