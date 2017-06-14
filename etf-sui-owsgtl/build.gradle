@@ -40,3 +40,7 @@ sourceSets {
         }
     }
 }
+
+groovydoc {
+    destinationDir = file("$rootProject.projectDir/docs/groovydoc")
+}

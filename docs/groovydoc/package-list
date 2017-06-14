@@ -1,0 +1,9 @@
+com.eviware.soapui.impl.actions
+com.eviware.soapui.plugins
+com.eviware.soapui.plugins.auto.factories
+de.interactive_instruments
+de.interactive_instruments.etf.suim
+de.interactive_instruments.xtf
+de.interactive_instruments.xtf.exceptions
+de.interactive_instruments.xtf.wfs
+de.interactive_instruments.xtf.wms
