@@ -113,11 +113,11 @@ public class EtsMapper {
 		etsDto.setLocalPath(project.getPath());
 		final File projectFile = new File(project.getPath());
 		try {
-			final byte[] hash = UriUtils.hashFromTimestampOrContent(projectFile.toURI()).getBytes(StandardCharsets.UTF_8);
+			final String hash = UriUtils.hashFromTimestampOrContent(projectFile.toURI());
 			etsDto.setItemHash(hash);
 		} catch (IOException e) {
 			ExcUtils.suppress(e);
-			etsDto.setItemHash(new byte[]{0});
+			etsDto.setItemHash("0");
 		}
 
 		if (project.hasProperty(ETF_SUPPORTED_TESTOBJECT_TYPE_IDS_PK)) {
