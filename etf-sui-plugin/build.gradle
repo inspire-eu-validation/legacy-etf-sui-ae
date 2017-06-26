@@ -22,6 +22,7 @@ jar {
 	classifier = 'plugin'
 }
 
+
 task installSoapUiPlugin << {
 	delete fileTree("${System.env.HOME}/.soapuios/plugins") {
 		include 'etf-sel*plugin-*.jar'

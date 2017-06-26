@@ -17,13 +17,11 @@ package de.interactive_instruments.etf.sel.teststeps;
 
 import com.eviware.soapui.model.testsuite.TestCase;
 import com.eviware.soapui.model.testsuite.TestStep;
-import de.interactive_instruments.etf.model.FlatDependencyHolder;
-import de.interactive_instruments.etf.model.NestedDependencyHolder;
 
 /**
  * A Test Step that references a TestCase
  *
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 public interface TestCaseDependencyTestStepDef extends TestStep {
 

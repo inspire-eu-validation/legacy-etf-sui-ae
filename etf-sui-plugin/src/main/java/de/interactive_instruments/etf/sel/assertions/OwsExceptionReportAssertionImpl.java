@@ -15,9 +15,7 @@
  */
 package de.interactive_instruments.etf.sel.assertions;
 
-import static de.interactive_instruments.etf.sel.assertions.OwsExceptionReportAssertionImpl.DESCRIPTION;
-import static de.interactive_instruments.etf.sel.assertions.OwsExceptionReportAssertionImpl.ID;
-import static de.interactive_instruments.etf.sel.assertions.OwsExceptionReportAssertionImpl.LABEL;
+import static de.interactive_instruments.etf.sel.assertions.OwsExceptionReportAssertionImpl.*;
 
 import com.eviware.soapui.config.TestAssertionConfig;
 import com.eviware.soapui.impl.wsdl.panels.assertions.AssertionCategoryMapping;
@@ -39,7 +37,7 @@ import org.apache.xmlbeans.XmlObject;
 /**
  * Checks if a response contains an OWS exception report
  *
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 @PluginTestAssertion(id = ID, label = LABEL, description = DESCRIPTION, category = AssertionCategoryMapping.VALIDATE_RESPONSE_CONTENT_CATEGORY)
 public class OwsExceptionReportAssertionImpl extends WsdlMessageAssertion implements OwsExceptionReportAssertion, ResponseAssertion {

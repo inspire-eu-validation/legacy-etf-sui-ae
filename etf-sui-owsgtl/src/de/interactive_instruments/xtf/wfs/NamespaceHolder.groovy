@@ -13,26 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.interactive_instruments.xtf.wfs;
+package de.interactive_instruments.xtf.wfs
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.HashSet;
+import com.eviware.soapui.support.XmlHolder
+import de.interactive_instruments.xtf.exceptions.NamespaceHolderException
+import org.apache.xerces.xs.StringList
 
-import org.apache.xerces.xs.StringList;
-
-import de.interactive_instruments.xtf.exceptions.NamespaceHolderException;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlID;
-
-import com.eviware.soapui.support.XmlHolder;
+import javax.xml.bind.annotation.*
+import java.util.Map.Entry
 
 @XmlAccessorType( XmlAccessType.FIELD )
 @XmlRootElement

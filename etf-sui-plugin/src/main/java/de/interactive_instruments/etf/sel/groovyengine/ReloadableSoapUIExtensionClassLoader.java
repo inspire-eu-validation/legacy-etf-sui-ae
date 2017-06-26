@@ -18,12 +18,9 @@ package de.interactive_instruments.etf.sel.groovyengine;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Collection;
 import java.util.Enumeration;
-import java.util.jar.JarFile;
 
 import com.eviware.soapui.SoapUIExtensionClassLoader;
 
@@ -32,7 +29,7 @@ import de.interactive_instruments.CLUtils;
 /**
  * An SoapUIExtensionClassLoader which can reload objects from external achieves
  *
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  *
  */
 public final class ReloadableSoapUIExtensionClassLoader extends SoapUIExtensionClassLoader {

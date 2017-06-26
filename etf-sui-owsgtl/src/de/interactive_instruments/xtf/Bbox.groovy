@@ -13,18 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.interactive_instruments.xtf;
+package de.interactive_instruments.xtf
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
+import com.eviware.soapui.support.XmlHolder
+import de.interactive_instruments.xtf.exceptions.InvalidProjectParameterException
+import de.interactive_instruments.xtf.exceptions.RequiredDomNodeNotFoundException
 
-import javax.xml.namespace.QName;
-
-import com.eviware.soapui.support.XmlHolder;
-
-import de.interactive_instruments.xtf.exceptions.InvalidProjectParameterException;
-import de.interactive_instruments.xtf.exceptions.RequiredDomNodeNotFoundException;
+import javax.xml.bind.annotation.XmlAccessType
+import javax.xml.bind.annotation.XmlAccessorType
+import javax.xml.bind.annotation.XmlRootElement
+import javax.xml.namespace.QName
 
 @XmlAccessorType( XmlAccessType.FIELD )
 @XmlRootElement

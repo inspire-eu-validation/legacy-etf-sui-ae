@@ -19,16 +19,14 @@ import java.util.Objects;
 
 import com.eviware.soapui.impl.wsdl.WsdlProject;
 import com.eviware.soapui.model.testsuite.*;
-import com.eviware.soapui.plugins.ListenerConfiguration;
 
-import de.interactive_instruments.etf.sel.Utils;
 import de.interactive_instruments.etf.testdriver.TestResultCollector;
 
 /**
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 
-@ListenerConfiguration
+// @ListenerConfiguration
 public class ProjectRunCollector implements ProjectRunListener {
 
 	private TestResultCollector collector;

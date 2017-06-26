@@ -16,12 +16,11 @@
 package de.interactive_instruments
 
 import de.interactive_instruments.xtf.SOAPUI_I
-import de.interactive_instruments.xtf.exceptions.InvalidProjectParameterException;
 
 /**
  * Proxy for previous versions
  *
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 class Util {
     public static void updateCredentials(def testRunner) {

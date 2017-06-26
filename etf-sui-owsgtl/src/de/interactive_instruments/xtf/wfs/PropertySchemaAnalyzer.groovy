@@ -13,39 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.interactive_instruments.xtf.wfs;
+package de.interactive_instruments.xtf.wfs
 
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.HashSet;
+import de.interactive_instruments.xtf.OutputFormat
+import de.interactive_instruments.xtf.exceptions.MaxDepthExceededException
+import de.interactive_instruments.xtf.exceptions.NamespaceHolderException
+import de.interactive_instruments.xtf.exceptions.SchemaAnalysisException
+import org.apache.log4j.Logger
+import org.apache.xerces.impl.xs.XSWildcardDecl
+import org.apache.xerces.xs.*
+import org.w3c.dom.bootstrap.DOMImplementationRegistry
+import org.w3c.dom.ls.DOMImplementationLS
+import org.w3c.dom.ls.LSInput
 
-import javax.xml.namespace.QName;
-
-import org.w3c.dom.bootstrap.DOMImplementationRegistry;
-import org.w3c.dom.ls.DOMImplementationLS;
-import org.w3c.dom.ls.LSInput;
-import org.apache.xerces.impl.xs.XSWildcardDecl;
-import org.apache.xerces.xs.XSAttributeGroupDefinition;
-import org.apache.xerces.xs.XSAttributeUse;
-import org.apache.xerces.xs.XSComplexTypeDefinition;
-import org.apache.xerces.xs.XSElementDeclaration;
-import org.apache.xerces.xs.XSImplementation;
-import org.apache.xerces.xs.XSLoader;
-import org.apache.xerces.xs.XSModel;
-import org.apache.xerces.xs.XSModelGroup;
-import org.apache.xerces.xs.XSObjectList;
-import org.apache.xerces.xs.XSParticle;
-import org.apache.xerces.xs.XSSimpleTypeDefinition;
-import org.apache.xerces.xs.XSTerm;
-import org.apache.xerces.xs.XSTypeDefinition;
-
-import org.apache.log4j.*;
-
-import de.interactive_instruments.xtf.exceptions.*;
-import de.interactive_instruments.xtf.*;
+import javax.xml.namespace.QName
 
 public class PropertySchemaAnalyzer {
 

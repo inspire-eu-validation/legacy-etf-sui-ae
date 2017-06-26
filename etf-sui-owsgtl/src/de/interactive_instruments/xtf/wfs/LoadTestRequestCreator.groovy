@@ -13,21 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.interactive_instruments.xtf.wfs;  
+package de.interactive_instruments.xtf.wfs
 
-import org.apache.xpath.XPathAPI;
-import com.eviware.soapui.model.testsuite.TestRunContext;
-import com.eviware.soapui.model.testsuite.TestRunner;
-import com.eviware.soapui.model.testsuite.TestRunner.Status;
-import com.eviware.soapui.model.testsuite.TestStepResult;
-import com.eviware.soapui.impl.support.http.HttpRequest;
 import com.eviware.soapui.impl.wsdl.teststeps.WsdlGroovyScriptTestStep
 import de.interactive_instruments.xtf.Bbox
 import de.interactive_instruments.xtf.ProjectHelper
 import de.interactive_instruments.xtf.SOAPUI_I
 import de.interactive_instruments.xtf.Util
 
- 
 class LoadTestRequestCreator extends SOAPUI_I {
 
 	static String internal_version =  "1.1_20121213";

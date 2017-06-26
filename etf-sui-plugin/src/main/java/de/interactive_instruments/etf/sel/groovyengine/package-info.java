@@ -3,6 +3,6 @@
  * loading them directly into the SoapUI Core for rapid development.
  * (which is a SoapUI Pro feature...)
  *
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 package de.interactive_instruments.etf.sel.groovyengine;

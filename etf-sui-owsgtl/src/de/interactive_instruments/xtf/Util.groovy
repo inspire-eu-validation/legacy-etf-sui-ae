@@ -15,21 +15,21 @@
  */
 package de.interactive_instruments.xtf
 
+import com.eviware.soapui.impl.rest.RestRequestInterface.HttpMethod
 import com.eviware.soapui.impl.support.http.HttpRequestTestStep
-import com.eviware.soapui.model.propertyexpansion.PropertyExpander
-import de.interactive_instruments.UriUtils;
-
-import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
-
 import com.eviware.soapui.impl.wsdl.testcase.WsdlTestCase
-import com.eviware.soapui.impl.wsdl.teststeps.*;
+import com.eviware.soapui.impl.wsdl.teststeps.HttpTestRequestStep
+import com.eviware.soapui.impl.wsdl.teststeps.RestTestRequestStep
+import com.eviware.soapui.impl.wsdl.teststeps.WsdlTestStep
 import com.eviware.soapui.model.iface.MessageExchange
+import com.eviware.soapui.model.propertyexpansion.PropertyExpander
 import com.eviware.soapui.support.types.StringToStringMap
-import com.eviware.soapui.support.types.StringToStringsMap;
-import com.eviware.soapui.impl.rest.RestRequestInterface.HttpMethod;
+import com.eviware.soapui.support.types.StringToStringsMap
+import de.interactive_instruments.UriUtils
+import de.interactive_instruments.xtf.exceptions.InvalidProjectParameterException
 
-import de.interactive_instruments.xtf.exceptions.*;
+import javax.imageio.ImageIO
+import java.awt.image.BufferedImage
 
 class Util {
 

@@ -21,15 +21,34 @@ import de.interactive_instruments.etf.LocalizableError;
 import java.util.Map;
 
 /**
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 public class TranslatableAssertionError extends LocalizableError {
 
+	/**
+	 * An Assertion error that references a Translation Template name and may possess one or multiple translation arguments
+	 *
+	 * @param translationTemplate Translation Template name
+	 * @param translations parameter translations as String array with an even number of translation arguments
+	 */
 	public TranslatableAssertionError(final String translationTemplate, final String... translations) {
 		super(translationTemplate, translations);
 	}
 
-	@Override public String getMessage() {
+	/**
+	 * Translates the message into the internal format
+	 *
+	 * Example:
+	 * <pre>
+	 *     <etfTranslate what='translationTemplateId'>
+	 *         <xpath>/element</xpath>
+	 *         <argument2>value2</argument>
+	 *     </etfTranslate>
+	 * </pre>
+	 * @return
+	 */
+	@Override
+	public String getMessage() {
 		if(this.arguments!=null && !arguments.isEmpty()) {
 			final StringBuilder builder = new StringBuilder("<etfTranslate what='"+this.id+"'>");
 			for (final Map.Entry<String, Object> stringObjectEntry : this.arguments.entrySet()) {

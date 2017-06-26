@@ -13,19 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.interactive_instruments.xtf.wfs;
- 
-import com.eviware.soapui.support.XmlHolder; 
+package de.interactive_instruments.xtf.wfs
 
+import com.eviware.soapui.support.XmlHolder
 import de.interactive_instruments.xtf.Bbox
 import de.interactive_instruments.xtf.HttpRequest
-import de.interactive_instruments.xtf.wfs.FeatureType;
-
-import groovyx.net.http.HTTPBuilder
-import groovy.util.XmlSlurper;
-import static groovyx.net.http.Method.*
-import static groovyx.net.http.ContentType.*
-import java.io.ByteArrayOutputStream
 
 class GetFeatureRequest extends HttpRequest{
 	

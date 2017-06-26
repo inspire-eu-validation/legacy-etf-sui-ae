@@ -22,7 +22,7 @@ import java.security.Provider;
 /**
  * Bypass SoapUI Open Source signature validation of plugins
  *
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 public final class ProductBodyguard extends Provider {
 

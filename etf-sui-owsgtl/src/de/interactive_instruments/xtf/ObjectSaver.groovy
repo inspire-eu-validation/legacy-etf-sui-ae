@@ -13,17 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.interactive_instruments.xtf;
- 
-import javax.xml.bind.JAXB;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
+package de.interactive_instruments.xtf
 
+import com.eviware.soapui.impl.wsdl.teststeps.WsdlTestStep
 import de.interactive_instruments.xtf.exceptions.FatalInternalException
 import de.interactive_instruments.xtf.exceptions.NullObjectLoadingException
 
-import com.eviware.soapui.impl.wsdl.teststeps.WsdlTestStep;
+import javax.xml.bind.JAXBContext
+import javax.xml.bind.Marshaller
+import javax.xml.bind.Unmarshaller
 
 /**
  * Used to persist Java objects as XML in the test project.

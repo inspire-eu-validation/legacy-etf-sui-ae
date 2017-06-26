@@ -17,9 +17,7 @@ package de.interactive_instruments.etf.sel.mapping;
 
 import static de.interactive_instruments.etf.dal.dto.result.TestResultStatus.UNDEFINED;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.*;
 
 import com.eviware.soapui.impl.support.AbstractHttpRequest;
@@ -35,21 +33,19 @@ import com.eviware.soapui.model.project.Project;
 import com.eviware.soapui.model.propertyexpansion.PropertyExpander;
 import com.eviware.soapui.model.testsuite.*;
 import com.eviware.soapui.model.testsuite.AssertionError;
-import com.eviware.soapui.plugins.ListenerConfiguration;
 
 import org.apache.commons.io.IOUtils;
 
 import de.interactive_instruments.IFile;
 import de.interactive_instruments.SUtils;
 import de.interactive_instruments.UriUtils;
-import de.interactive_instruments.etf.sel.Utils;
 import de.interactive_instruments.etf.testdriver.TestResultCollector;
 import de.interactive_instruments.exceptions.ExcUtils;
 
 /**
  * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
-@ListenerConfiguration
+// @ListenerConfiguration
 public class TestRunCollector implements TestRunListener {
 
 	private TestResultCollector collector;
@@ -333,7 +329,7 @@ public class TestRunCollector implements TestRunListener {
 							addRequestInfo + testRequest.getProperty("Request").getValue());
 					try {
 						collector.saveAttachment(IOUtils.toInputStream(expandedProperties, "UTF-8"),
-								"Request Parameter", null, "PostRequest");
+								"Request Parameter", null, "PostData");
 					} catch (final IOException e) {
 						ExcUtils.suppress(e);
 					}

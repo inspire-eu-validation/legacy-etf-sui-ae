@@ -27,7 +27,7 @@ import java.util.jar.JarFile;
 /**
  * A Classloader which can reload objects from external achieves
  *
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  *
  */
 public final class ReloadableClassLoader extends URLClassLoader {

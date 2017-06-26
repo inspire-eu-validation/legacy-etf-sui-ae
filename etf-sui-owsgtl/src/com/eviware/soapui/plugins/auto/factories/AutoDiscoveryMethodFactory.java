@@ -21,7 +21,7 @@ import com.eviware.soapui.impl.actions.DiscoveryMethodFactory;
 import com.eviware.soapui.plugins.auto.PluginDiscoveryMethod;
 
 /**
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 public class AutoDiscoveryMethodFactory extends AbstractSoapUIFactory implements DiscoveryMethodFactory {
 

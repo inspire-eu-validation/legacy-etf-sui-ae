@@ -15,11 +15,19 @@
  */
 package de.interactive_instruments.xtf.wfs
 
-import javax.xml.bind.annotation.*;
-import javax.xml.namespace.QName
+import de.interactive_instruments.xtf.Bbox
+import de.interactive_instruments.xtf.OutputFormat
+import de.interactive_instruments.xtf.ProjectHelper
+import de.interactive_instruments.xtf.TransferableRequestParameter
+import de.interactive_instruments.xtf.exceptions.FatalInternalException
+import de.interactive_instruments.xtf.exceptions.MaxDepthExceededException
+import de.interactive_instruments.xtf.exceptions.SchemaAnalysisException
 
-import de.interactive_instruments.xtf.*;
-import de.interactive_instruments.xtf.exceptions.*;
+import javax.xml.bind.annotation.XmlAccessType
+import javax.xml.bind.annotation.XmlAccessorType
+import javax.xml.bind.annotation.XmlRootElement
+import javax.xml.bind.annotation.XmlTransient
+import javax.xml.namespace.QName
 
 @XmlAccessorType( XmlAccessType.FIELD )
 @XmlRootElement

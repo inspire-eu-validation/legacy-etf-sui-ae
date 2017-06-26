@@ -18,7 +18,10 @@ package de.interactive_instruments.etf.sel.groovyengine;
 import java.io.File;
 import java.net.URL;
 
-import com.eviware.soapui.*;
+import com.eviware.soapui.SoapUI;
+import com.eviware.soapui.SoapUICore;
+import com.eviware.soapui.SoapUIExtensionClassLoader;
+import com.eviware.soapui.StandaloneSoapUICore;
 import com.eviware.soapui.model.settings.Settings;
 import com.eviware.soapui.monitor.MockEngine;
 import com.eviware.soapui.security.registry.SecurityScanRegistry;
@@ -31,7 +34,7 @@ import com.eviware.soapui.support.listener.SoapUIListenerRegistry;
  * a StandaloneSoapUICore (used in the GUI version).
  * It exchanges the SoapUIExtensionClassLoader.
  *
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 public class ReloadableClStandaloneSoapUICore extends StandaloneSoapUICore {
 

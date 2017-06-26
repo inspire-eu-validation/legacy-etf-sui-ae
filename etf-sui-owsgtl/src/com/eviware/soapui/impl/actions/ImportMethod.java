@@ -21,7 +21,7 @@ import com.eviware.soapui.model.workspace.Workspace;
 import java.util.List;
 
 /**
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 public interface ImportMethod extends Labeled {
 

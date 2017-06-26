@@ -13,21 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.interactive_instruments.xtf.wfs;
+package de.interactive_instruments.xtf.wfs
 
-import java.util.Map;
+import com.eviware.soapui.support.XmlHolder
+import de.interactive_instruments.xtf.*
+import de.interactive_instruments.xtf.exceptions.FatalInternalException
+import de.interactive_instruments.xtf.exceptions.RequiredDomNodeNotFoundException
 
-import de.interactive_instruments.xtf.*;
-import de.interactive_instruments.xtf.exceptions.*;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlElement;
-
-import com.eviware.soapui.support.XmlHolder;
+import javax.xml.bind.annotation.XmlAccessType
+import javax.xml.bind.annotation.XmlAccessorType
+import javax.xml.bind.annotation.XmlRootElement
+import javax.xml.bind.annotation.XmlTransient
 
 @XmlAccessorType( XmlAccessType.FIELD )
 @XmlRootElement

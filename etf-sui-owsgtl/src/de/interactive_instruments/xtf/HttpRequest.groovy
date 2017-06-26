@@ -13,16 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.interactive_instruments.xtf;
- 
-import com.eviware.soapui.support.XmlHolder; 
+package de.interactive_instruments.xtf
 
+import com.eviware.soapui.support.XmlHolder
 import groovyx.net.http.HTTPBuilder
-import groovy.util.XmlSlurper;
-import static groovyx.net.http.Method.*
-import static groovyx.net.http.ContentType.*
-import java.io.ByteArrayOutputStream
-import org.apache.log4j.Logger;
+import org.apache.log4j.Logger
+
+import static groovyx.net.http.ContentType.TEXT
+import static groovyx.net.http.Method.POST;
 
 class HttpRequest extends SOAPUI_I{
 	

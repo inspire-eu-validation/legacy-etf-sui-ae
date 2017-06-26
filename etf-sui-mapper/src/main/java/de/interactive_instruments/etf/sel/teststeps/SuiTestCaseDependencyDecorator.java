@@ -31,7 +31,7 @@ import com.eviware.soapui.security.SecurityTest;
 import com.eviware.soapui.support.types.StringToObjectMap;
 
 /**
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 public class SuiTestCaseDependencyDecorator implements TestCaseDependency, Comparable<SuiTestCaseDependencyDecorator> {
 
@@ -44,10 +44,10 @@ public class SuiTestCaseDependencyDecorator implements TestCaseDependency, Compa
 
 	@Override
 	public Collection<TestCaseDependency> getDependencies() {
-		if(dependencies==null) {
-			dependencies=getDependencies(this.testCase);
-			if(dependencies==null) {
-				dependencies=Collections.EMPTY_LIST;
+		if (dependencies == null) {
+			dependencies = getDependencies(this.testCase);
+			if (dependencies == null) {
+				dependencies = Collections.EMPTY_LIST;
 			}
 		}
 		return dependencies;
@@ -72,19 +72,16 @@ public class SuiTestCaseDependencyDecorator implements TestCaseDependency, Compa
 	public static Collection<TestCaseDependency> getDependencies(final TestCase testCase) {
 		final List deps = new ArrayList<>();
 		for (final TestStep testStep : testCase.getTestStepList()) {
-			if(testStep instanceof WsdlRunTestCaseTestStep) {
+			if (testStep instanceof WsdlRunTestCaseTestStep) {
 				deps.add(testStep);
-			}else if(testStep instanceof TestCaseDependencyTestStepDef) {
+			} else if (testStep instanceof TestCaseDependencyTestStepDef) {
 				deps.add(testStep);
 			}
 		}
 		if (!deps.isEmpty()) {
 			return (Collection<TestCaseDependency>) deps.stream().map(step -> new SuiTestCaseDependencyDecorator(
-					(step instanceof WsdlRunTestCaseTestStep) ?
-							((WsdlRunTestCaseTestStep)step).getTargetTestCase() :
-							((TestCaseDependencyTestStepDef)step).getTargetTestCase())
-			).collect(
-					Collectors.toCollection(TreeSet::new));
+					(step instanceof WsdlRunTestCaseTestStep) ? ((WsdlRunTestCaseTestStep) step).getTargetTestCase() : ((TestCaseDependencyTestStepDef) step).getTargetTestCase())).collect(
+							Collectors.toCollection(TreeSet::new));
 		}
 		return null;
 	}
@@ -355,7 +352,8 @@ public class SuiTestCaseDependencyDecorator implements TestCaseDependency, Compa
 		return testCase.getPropertiesLabel();
 	}
 
-	@Override public int compareTo(final SuiTestCaseDependencyDecorator o) {
+	@Override
+	public int compareTo(final SuiTestCaseDependencyDecorator o) {
 		return this.getId().compareTo(o.getId());
 	}
 }

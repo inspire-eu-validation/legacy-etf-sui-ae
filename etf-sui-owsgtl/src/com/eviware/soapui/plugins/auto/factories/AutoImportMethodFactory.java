@@ -21,11 +21,15 @@ import com.eviware.soapui.impl.actions.ImportMethodFactory;
 import com.eviware.soapui.plugins.auto.PluginDiscoveryMethod;
 
 /**
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 public class AutoImportMethodFactory extends AbstractSoapUIFactory implements ImportMethodFactory {
 
-	protected AutoImportMethodFactory(PluginDiscoveryMethod annotation, Class<ImportMethod> methodClass) {
+	public AutoImportMethodFactory(final Class factoryType) {
+		super(factoryType);
+	}
+
+	public AutoImportMethodFactory(PluginDiscoveryMethod annotation, Class<ImportMethod> methodClass) {
 		super(ImportMethodFactory.class);
 	}
 

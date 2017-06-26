@@ -26,9 +26,10 @@ import de.interactive_instruments.etf.dal.dto.result.TestResultStatus;
 import de.interactive_instruments.etf.sel.Utils;
 import de.interactive_instruments.etf.testdriver.TestResultCollector;
 import de.interactive_instruments.etf.testdriver.TestRunLogger;
+import de.interactive_instruments.etf.testdriver.TestTaskEndListener;
 
 /**
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 public class DummyCollector implements TestResultCollector {
 
@@ -64,7 +65,8 @@ public class DummyCollector implements TestResultCollector {
 		return false;
 	}
 
-	@Override public boolean isErrorLimitExceeded() {
+	@Override
+	public boolean isErrorLimitExceeded() {
 		return false;
 	}
 
@@ -119,6 +121,11 @@ public class DummyCollector implements TestResultCollector {
 	}
 
 	@Override
+	public String internalError(final String errorMessage, final byte[] bytes, final String mimeType) {
+		return dummyUUID;
+	}
+
+	@Override
 	public void info(final String message) {
 		Utils.log(message);
 	}
@@ -168,13 +175,19 @@ public class DummyCollector implements TestResultCollector {
 		return dummyUUID;
 	}
 
-	@Override public String end(final String s, final long l) throws IllegalArgumentException, IllegalStateException {
+	@Override
+	public String end(final String s, final long l) throws IllegalArgumentException, IllegalStateException {
 		return dummyUUID;
 	}
 
 	@Override
 	public int currentModelType() {
 		return -1;
+	}
+
+	@Override
+	public void registerTestTaskEndListener(final TestTaskEndListener listener) {
+
 	}
 
 	@Override

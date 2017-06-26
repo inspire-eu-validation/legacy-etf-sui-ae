@@ -34,7 +34,7 @@ import de.interactive_instruments.SUtils;
 /**
  * Utility functions used in the SEL
  *
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  *
  */
 final public class Utils {
@@ -58,11 +58,11 @@ final public class Utils {
 
 	public static int translateStatus(final boolean manual, final TestStepResult.TestStepStatus status) {
 		switch (status) {
-			case OK:
-				// PASSED
-				return 0;
+		case OK:
+			// PASSED
+			return 0;
 		}
-		if(manual) {
+		if (manual) {
 			return 7;
 		}
 		// FAILED
@@ -71,11 +71,11 @@ final public class Utils {
 
 	public static int translateStatus(final boolean manual, final Assertable.AssertionStatus status) {
 		switch (status) {
-			case VALID:
-				// PASSED
-				return 0;
+		case VALID:
+			// PASSED
+			return 0;
 		}
-		if(manual) {
+		if (manual) {
 			return 7;
 		}
 		// FAILED

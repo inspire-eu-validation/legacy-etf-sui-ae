@@ -23,17 +23,14 @@ import com.eviware.soapui.impl.wsdl.teststeps.WsdlMessageExchangeTestStepResult;
 import com.eviware.soapui.impl.wsdl.teststeps.WsdlRunTestCaseTestStep;
 import com.eviware.soapui.model.testsuite.*;
 import com.eviware.soapui.model.testsuite.TestStepResult.TestStepStatus;
-
 import com.eviware.soapui.plugins.auto.PluginTestStep;
+
 import de.interactive_instruments.exceptions.ExcUtils;
 
 /**
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
-@PluginTestStep(typeName = TestCaseDependencyStepFactory.STEP_ID,
-		name = TestCaseDependencyStepFactory.NAME,
-		description = TestCaseDependencyStepFactory.DESCRIPTION,
-		iconPath = TestCaseDependencyStepFactory.ICON)
+@PluginTestStep(typeName = TestCaseDependencyStepFactory.STEP_ID, name = TestCaseDependencyStepFactory.NAME, description = TestCaseDependencyStepFactory.DESCRIPTION, iconPath = TestCaseDependencyStepFactory.ICON)
 public class TestCaseDependencyStep extends WsdlRunTestCaseTestStep implements TestCaseDependencyTestStepDef {
 
 	public TestCaseDependencyStep(WsdlTestCase testCase, TestStepConfig config, boolean forLoadTest) {
@@ -52,7 +49,7 @@ public class TestCaseDependencyStep extends WsdlRunTestCaseTestStep implements T
 					if (testSuiteRunner.getTestSuite().getId().equals(testSuiteId)) {
 						for (final TestCaseRunner caseRunner : testSuiteRunner.getResults()) {
 							if (caseRunner.getTestCase().getId().equals(getTargetTestCase().getId())) {
-								if(caseRunner.getStatus() == TestRunner.Status.RUNNING) {
+								if (caseRunner.getStatus() == TestRunner.Status.RUNNING) {
 									caseRunner.waitUntilFinished();
 								}
 								final WsdlMessageExchangeTestStepResult result = new WsdlMessageExchangeTestStepResult(this);

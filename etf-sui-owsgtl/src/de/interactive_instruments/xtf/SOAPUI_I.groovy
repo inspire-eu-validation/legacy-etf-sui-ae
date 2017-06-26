@@ -15,11 +15,10 @@
  */
 package de.interactive_instruments.xtf
 
-import com.eviware.soapui.model.testsuite.TestRunContext
-import org.apache.log4j.Logger
 import com.eviware.soapui.model.iface.MessageExchange
-
+import com.eviware.soapui.model.testsuite.TestRunContext
 import de.interactive_instruments.xtf.exceptions.FatalInternalException
+import org.apache.log4j.Logger
 
 class SOAPUI_I {
 	protected Logger log

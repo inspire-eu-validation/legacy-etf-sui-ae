@@ -39,6 +39,8 @@ import com.eviware.soapui.security.assertion.InvalidHttpStatusCodesAssertion;
 import com.eviware.soapui.security.assertion.ValidHttpStatusCodesAssertion;
 import com.eviware.soapui.support.xml.XmlObjectConfigurationReader;
 
+import org.slf4j.LoggerFactory;
+
 import de.interactive_instruments.LogUtils;
 import de.interactive_instruments.SUtils;
 import de.interactive_instruments.TimeUtils;
@@ -55,10 +57,9 @@ import de.interactive_instruments.etf.sel.assertions.SchemaAssertion;
 import de.interactive_instruments.etf.sel.teststeps.SuiTestCaseDependencyDecorator;
 import de.interactive_instruments.etf.sel.teststeps.TestCaseDependency;
 import de.interactive_instruments.exceptions.ExcUtils;
-import org.slf4j.LoggerFactory;
 
 /**
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 public class EtsMapper {
 
@@ -123,22 +124,22 @@ public class EtsMapper {
 			final String[] ids = project.getPropertyValue(ETF_SUPPORTED_TESTOBJECT_TYPE_IDS_PK).split(",");
 			for (int i = 0; i < ids.length; i++) {
 				final EID eid = EidFactory.getDefault().createUUID(ids[i].trim());
-				final TestObjectTypeDto testObjectTypeDto = TEST_OBJECT_TYPES.get(eid);
-				if(testObjectTypeDto==null) {
+				final TestObjectTypeDto testObjectTypeDto = SUI_SUPPORTED_TEST_OBJECT_TYPES.get(eid);
+				if (testObjectTypeDto == null) {
 					LoggerFactory.getLogger(EtsMapper.class).error(
 							LogUtils.FATAL_MESSAGE, "Could not load Test Object Type  {} for Executable Test Suite {}",
 							eid, etsDto.getId());
-				}else {
+				} else {
 					etsDto.addSupportedTestObjectType(testObjectTypeDto);
 				}
 			}
 		} else {
-			etsDto.addSupportedTestObjectType(SIMPLE_WEB_SERVICE_TOT);
+			// SIMPLE_WEB_SERVICE_TOT
+			etsDto.addSupportedTestObjectType(SUI_SUPPORTED_TEST_OBJECT_TYPES.get("88311f83-818c-46ed-8a9a-cec4f3707365"));
 		}
 
 		final Map<String, TestCaseDto> allTestCases = new HashMap<>();
 		final List<Pair<TestCaseDto, Collection<TestCaseDependency>>> testCasesRequiringDeps = new ArrayList<>();
-
 
 		if (project.getTestSuiteList() != null) {
 			for (int tsi = 0; tsi < project.getTestSuiteCount(); tsi++) {
@@ -154,7 +155,7 @@ public class EtsMapper {
 						testModuleDto.addTestCase(testCaseDto);
 						allTestCases.put(testCase.getId(), testCaseDto);
 						final Collection<TestCaseDependency> deps = SuiTestCaseDependencyDecorator.getDependencies(testCase);
-						if(deps!=null) {
+						if (deps != null) {
 							testCasesRequiringDeps.add(new Pair<>(testCaseDto, deps));
 						}
 					}
@@ -166,12 +167,11 @@ public class EtsMapper {
 			final Collection<TestCaseDependency> deps = testCasePair.getRight();
 			for (final TestCaseDependency dep : deps) {
 				final TestCaseDto testCaseDto = allTestCases.get(dep.getId());
-				if(testCaseDto!=null) {
+				if (testCaseDto != null) {
 					testCasePair.getLeft().addDependency(testCaseDto);
 				}
 			}
 		}
-
 
 		return etsDto;
 	}

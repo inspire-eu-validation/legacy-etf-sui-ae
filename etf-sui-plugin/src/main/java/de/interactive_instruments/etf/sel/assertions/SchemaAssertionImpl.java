@@ -15,36 +15,19 @@
  */
 package de.interactive_instruments.etf.sel.assertions;
 
-import static de.interactive_instruments.etf.sel.assertions.SchemaAssertionImpl.DESCRIPTION;
-import static de.interactive_instruments.etf.sel.assertions.SchemaAssertionImpl.ID;
-import static de.interactive_instruments.etf.sel.assertions.SchemaAssertionImpl.LABEL;
+import static de.interactive_instruments.etf.sel.assertions.SchemaAssertionImpl.*;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.StringReader;
 import java.net.URL;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
-import javax.swing.AbstractAction;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.ValidatorHandler;
 
-import com.eviware.soapui.SoapUI;
-import com.eviware.soapui.SoapUIExtensionClassLoader;
 import com.eviware.soapui.config.TestAssertionConfig;
-import com.eviware.soapui.impl.support.actions.ShowOnlineHelpAction;
 import com.eviware.soapui.impl.wsdl.panels.assertions.AssertionCategoryMapping;
 import com.eviware.soapui.impl.wsdl.teststeps.WsdlMessageAssertion;
 import com.eviware.soapui.model.TestPropertyHolder;
@@ -63,10 +46,6 @@ import com.eviware.x.form.XForm;
 import com.eviware.x.form.XFormDialog;
 import com.eviware.x.form.XFormDialogBuilder;
 import com.eviware.x.form.XFormFactory;
-import com.eviware.x.form.support.ADialogBuilder;
-import com.eviware.x.form.support.AField;
-import com.eviware.x.form.support.AForm;
-import com.jgoodies.forms.builder.ButtonBarBuilder;
 
 import org.apache.xmlbeans.XmlObject;
 import org.xml.sax.InputSource;
@@ -80,7 +59,7 @@ import de.interactive_instruments.etf.sel.Utils;
 /**
  * A simple Assertion for validating xml responses agains schemas
  *
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 
 @PluginTestAssertion(id = ID, label = LABEL, description = DESCRIPTION, category = AssertionCategoryMapping.VALIDATE_RESPONSE_CONTENT_CATEGORY)

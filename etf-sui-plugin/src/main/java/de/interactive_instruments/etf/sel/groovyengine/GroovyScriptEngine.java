@@ -36,7 +36,7 @@ import de.interactive_instruments.etf.sel.Utils;
  * A Groovy script engine which (re-)compiles Groovy classes
  * from a source directory to an temporary jar and calls the
  *
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 final public class GroovyScriptEngine {
 

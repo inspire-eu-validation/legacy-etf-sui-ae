@@ -15,15 +15,11 @@
  */
 package de.interactive_instruments.etf.sel.teststeps;
 
-import com.eviware.soapui.impl.EmptyPanelBuilder;
-import com.eviware.soapui.impl.wsdl.panels.teststeps.WsdlRunTestCaseStepDesktopPanel;
 import com.eviware.soapui.model.PanelBuilder;
 import com.eviware.soapui.model.util.PanelBuilderFactory;
-import com.eviware.soapui.plugins.auto.PluginPanelBuilder;
-import com.eviware.soapui.ui.desktop.DesktopPanel;
 
 /**
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 public class TestCaseDependencyStepPanelBuilderFactory implements PanelBuilderFactory {
 	@Override

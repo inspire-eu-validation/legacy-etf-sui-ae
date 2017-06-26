@@ -36,7 +36,7 @@ import org.mortbay.log.Log;
 /**
  * The class adds a button in the SoapUI Project menu to recompile the Groovy scripts.
  *
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  *
  */
 public class GroovyScriptEngineLoader extends AbstractSoapUIAction implements ProjectListener {

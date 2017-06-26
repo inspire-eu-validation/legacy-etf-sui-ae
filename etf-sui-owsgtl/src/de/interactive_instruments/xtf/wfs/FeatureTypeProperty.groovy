@@ -13,26 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.interactive_instruments.xtf.wfs;
+package de.interactive_instruments.xtf.wfs
 
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlIDREF;
+import de.interactive_instruments.xtf.ProjectHelper
+import de.interactive_instruments.xtf.TransferableRequestParameter
+import de.interactive_instruments.xtf.exceptions.MaxDepthExceededException
+import de.interactive_instruments.xtf.exceptions.SchemaAnalysisException
+import org.apache.log4j.Logger
+import org.apache.xerces.impl.dv.xs.XSSimpleTypeDecl
+import org.apache.xerces.impl.xs.XSComplexTypeDecl
+import org.apache.xerces.xs.*
 
-import org.apache.log4j.Logger;
-import org.apache.xerces.xs.*;
-import org.apache.xerces.impl.dv.xs.XSSimpleTypeDecl;
-import org.apache.xerces.impl.xs.*;
-
-import de.interactive_instruments.xtf.ProjectHelper;
-import de.interactive_instruments.xtf.TransferableRequestParameter;
-import de.interactive_instruments.xtf.exceptions.MaxDepthExceededException;
-import de.interactive_instruments.xtf.exceptions.SchemaAnalysisException;
-
+import javax.xml.bind.annotation.*
 
 @XmlAccessorType( XmlAccessType.NONE )
 @XmlRootElement

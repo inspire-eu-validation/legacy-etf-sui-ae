@@ -13,16 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.interactive_instruments.xtf;
+package de.interactive_instruments.xtf
 
 import de.interactive_instruments.IFile
-import java.io.File;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.net.JarURLConnection;
-import java.net.URLClassLoader;
-import java.net.URL;
-import java.util.jar.Attributes;
+
+import java.lang.reflect.Method
+import java.lang.reflect.Modifier
+import java.util.jar.Attributes
 
 public class JarLoader extends URLClassLoader {
 	

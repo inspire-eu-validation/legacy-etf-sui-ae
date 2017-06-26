@@ -13,24 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.interactive_instruments.xtf.wms;
-
-import java.util.List;
-
-import javax.xml.bind.annotation.XmlRootElement;
+package de.interactive_instruments.xtf.wms
 
 import com.eviware.soapui.support.XmlHolder
-
 import de.interactive_instruments.xtf.Bbox
 import de.interactive_instruments.xtf.ProjectHelper
-import de.interactive_instruments.xtf.wfs.FeatureType;
-import de.interactive_instruments.xtf.TransferableRequestParameter;
+import de.interactive_instruments.xtf.TransferableRequestParameter
 
 import javax.xml.bind.Unmarshaller
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlAccessType
+import javax.xml.bind.annotation.XmlAccessorType
+import javax.xml.bind.annotation.XmlRootElement
+import javax.xml.bind.annotation.XmlTransient
 
 @XmlAccessorType( XmlAccessType.FIELD )
 @XmlRootElement

@@ -17,7 +17,7 @@
 package com.eviware.soapui.impl.actions;
 
 /**
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 public interface ImportMethodFactory {
 	ImportMethod createNewDiscoveryMethod();

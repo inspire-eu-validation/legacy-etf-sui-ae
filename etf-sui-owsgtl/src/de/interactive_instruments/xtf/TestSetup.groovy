@@ -15,13 +15,10 @@
  */
 package de.interactive_instruments.xtf
 
+import com.eviware.soapui.SoapUI
 import com.eviware.soapui.support.log.Log4JMonitor
-import de.interactive_instruments.II_Constants;
-import org.apache.log4j.*
-import com.eviware.soapui.SoapUI;
-import com.eviware.soapui.impl.wsdl.teststeps.HttpTestRequestStep
-import com.eviware.soapui.model.propertyexpansion.PropertyExpansionUtils;
 import de.interactive_instruments.xtf.exceptions.InvalidProjectParameterException
+import org.apache.log4j.Level
 
 class TestSetup {
 

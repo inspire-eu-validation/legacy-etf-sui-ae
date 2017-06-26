@@ -25,7 +25,7 @@ import de.interactive_instruments.etf.testdriver.TestResultCollector;
 import de.interactive_instruments.etf.testdriver.TestResultCollectorInjector;
 
 /**
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 public final class CollectorInjectionAdapter implements Environment, TestResultCollectorInjector {
 
