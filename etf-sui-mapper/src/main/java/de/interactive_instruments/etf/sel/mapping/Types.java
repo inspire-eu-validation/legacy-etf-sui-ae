@@ -24,7 +24,7 @@ import de.interactive_instruments.etf.model.EidFactory;
 import de.interactive_instruments.etf.model.EidMap;
 
 /**
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 public class Types {
 
@@ -121,12 +121,10 @@ public class Types {
 	public static final EidMap<TestObjectTypeDto> SUI_SUPPORTED_TEST_OBJECT_TYPES = TestObjectTypeDetectorManager.getTypes(
 			// SIMPLE_WEB_SERVICE_TOT
 			"88311f83-818c-46ed-8a9a-cec4f3707365",
+			// OGC Web Feature Service
+			"88311f83-818c-46ed-8a9a-cec4f3707365",
 			// WFS_2_0_TOT
 			"9b6ef734-981e-4d60-aa81-d6730a1c6389",
-			// INSPIRE_DOWNLOAD_DIRECT_TOT
-			"dd83316d-7c30-49ad-8cc9-e5b73e501faa",
 			// ATOM_TOT
-			"49d881ae-b115-4b91-aabe-31d5791bce52",
-			// INSPIRE_DOWNLOAD_ATOM_TOT
-			"9c5bd10c-8311-4f0b-9633-b867028cacd6");
+			"49d881ae-b115-4b91-aabe-31d5791bce52");
 }
