@@ -24,6 +24,7 @@ import com.eviware.soapui.impl.support.AbstractHttpRequest;
 import com.eviware.soapui.impl.support.http.HttpRequestTestStep;
 import com.eviware.soapui.impl.wsdl.WsdlProject;
 import com.eviware.soapui.impl.wsdl.support.PathUtils;
+import com.eviware.soapui.impl.wsdl.teststeps.HttpTestRequest;
 import com.eviware.soapui.impl.wsdl.teststeps.HttpTestRequestStep;
 import com.eviware.soapui.impl.wsdl.teststeps.RestTestRequestStep;
 import com.eviware.soapui.impl.wsdl.teststeps.WsdlRunTestCaseTestStep;
@@ -298,12 +299,19 @@ public class TestRunCollector implements TestRunListener {
 						} catch (IOException e) {
 							collector.internalError(e);
 						}
-					} else {
+					} else if (httpRequest.getResponse() != null && !SUtils.isNullOrEmpty(httpRequest.getResponse().getContentAsString())) {
 						// collector.getLogger().info("Received empty response");
+						try {
+							collector.saveAttachment(IOUtils.toInputStream(httpRequest.getResponse().getContentAsString(), "UTF-8"),
+									"Service Response", null, "ServiceResponse");
+						} catch (final IOException e) {
+							collector.internalError(e);
+						}
 					}
-				} else {
+				} else if (httpRequest.getResponse() != null && !SUtils.isNullOrEmpty(httpRequest.getResponse().getContentAsString())) {
 					try {
-						collector.saveAttachment(httpRequest.getResponse().getContentAsString(), "Service Response", null, "ServiceResponse");
+						collector.saveAttachment(IOUtils.toInputStream(httpRequest.getResponse().getContentAsString(), "UTF-8"),
+								"Service Response", null, "ServiceResponse");
 					} catch (final IOException e) {
 						collector.internalError(e);
 					}
@@ -338,9 +346,18 @@ public class TestRunCollector implements TestRunListener {
 					final List<TestProperty> propertyList = ((TestPropertyHolder) httpRequest).getPropertyList();
 					final Map<String, String> parameterMap = new HashMap<>();
 					for (final TestProperty testProperty : propertyList) {
-						parameterMap.put(testProperty.getName(), testProperty.getValue());
+						if (!testProperty.getName().startsWith("Transfer_Properties")) {
+							parameterMap.put(testProperty.getName(), testProperty.getValue());
+						}
 					}
-					final String query = UriUtils.withQueryParameters(endpoint, parameterMap, true);
+
+					final String query;
+					if (httpRequest.getResponse() != null &&
+							!SUtils.isNullOrEmpty(httpRequest.getResponse().getURL().toString())) {
+						query = UriUtils.withQueryParameters(httpRequest.getResponse().getURL().toString(), parameterMap, true);
+					} else {
+						query = UriUtils.withQueryParameters(endpoint, parameterMap, true);
+					}
 
 					if (!SUtils.isNullOrEmpty(query)) {
 						try {
