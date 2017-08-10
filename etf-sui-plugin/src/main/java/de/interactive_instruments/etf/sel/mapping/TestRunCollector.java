@@ -347,7 +347,8 @@ public class TestRunCollector implements TestRunListener {
 					final Map<String, String> parameterMap = new HashMap<>();
 					for (final TestProperty testProperty : propertyList) {
 						if (!testProperty.getName().startsWith("Transfer_Properties")) {
-							parameterMap.put(testProperty.getName(), testProperty.getValue());
+							parameterMap.put(testProperty.getName(),
+									PropertyExpander.expandProperties(testRequest,testProperty.getValue()));
 						}
 					}
 
