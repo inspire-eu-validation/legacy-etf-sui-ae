@@ -147,6 +147,7 @@ public class TestRunCollector implements TestRunListener {
 
 	/**
 	 * Returns true if message is a manual test instruction
+	 * Errors are passed to the logger of the collector
 	 */
 	private static boolean addMessage(final String message, final TestResultCollector collector, final int i) {
 		final int startIndex = message.indexOf("<etfTranslate ");
@@ -161,8 +162,8 @@ public class TestRunCollector implements TestRunListener {
 				final int endWhatIndex = message.indexOf(singleQ ? "'" : "\"", whatIndex + 6);
 				if (whatIndex < endWhatIndex) {
 					final String t = message.substring(whatIndex + 6, endWhatIndex);
-					final String translationTemplate = t.startsWith("TR.") ? t : "TR." + t;
-					final boolean manual = translationTemplate.startsWith("TR.manual.");
+					final String translationTemplateId = t.startsWith("TR.") ? t : "TR." + t;
+					final boolean manual = translationTemplateId.startsWith("TR.manual.");
 					if (endIndex > 0) {
 						// Check that are no >s in what
 						final int messagesIndex = message.indexOf(">", startIndex + 1);
@@ -175,18 +176,26 @@ public class TestRunCollector implements TestRunListener {
 								if (tokenArguments.size() == 1 && tokenArguments.containsKey("INFO")) {
 									// Add message with INFO message
 									collector.addMessage("TR.fallbackInfo", tokenArguments);
+									// Log Assertion info message
+									collector.info(tokenArguments.get("INFO"));
 								} else {
 									// Add message with token/arguments
-									collector.addMessage(translationTemplate, tokenArguments);
+									collector.addMessage(translationTemplateId, tokenArguments);
 								}
 							} else {
 								// Add message without tokenArguments
-								collector.addMessage(translationTemplate);
+								collector.addMessage(translationTemplateId);
+							}
+							if(!manual) {
+								collector.error("Assertion failed with error '"+translationTemplateId+"'");
 							}
 							return manual;
 						}
 					} else {
-						collector.addMessage(translationTemplate);
+						collector.addMessage(translationTemplateId);
+						if(!manual) {
+							collector.error("Assertion failed with error '"+translationTemplateId+"'");
+						}
 						return manual;
 					}
 				}
@@ -194,12 +203,13 @@ public class TestRunCollector implements TestRunListener {
 		}
 
 		try {
-			// TODO temporary fallback
+			// TODO use TR.fallbackInfo as temporary fallback for errors
 			final Map<String, String> map = new HashMap<String, String>() {
 				{
 					put("INFO", message);
 				}
 			};
+			collector.error(message);
 			collector.addMessage("TR.fallbackInfo", map);
 			collector.saveAttachment(IOUtils.toInputStream(message, "UTF-8"), "Error." + i, "text/plain", "Error");
 		} catch (IOException e) {
@@ -384,7 +394,6 @@ public class TestRunCollector implements TestRunListener {
 					final AssertionError[] errors = assertion.getErrors();
 					for (int i2 = 0, errorsLength = errors.length; i2 < errorsLength; i2++) {
 						final AssertionError error = errors[i2];
-						collector.error(error.getMessage());
 						if (assertion instanceof XQueryContainsAssertion) {
 							final XQueryContainsAssertion xqueryAssertion = (XQueryContainsAssertion) assertion;
 							// OK, this is very tricky:
