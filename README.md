@@ -1,6 +1,7 @@
 # ETF SoapUI Adapters & Extensions
 
 [![European Union Public Licence 1.2](https://img.shields.io/badge/license-EUPL%201.2-blue.svg)](https://joinup.ec.europa.eu/software/page/eupl)
+[![owsgtl groovydoc](http://img.shields.io/badge/groovydoc-owsgtl-green.svg)](http://interactive-instruments.github.io/etf-sui-ae/groovydoc/index.html?de/interactive_instruments/etf/suim/Assert.html)
 
 The etf-sui-owsgtl bundles groovy scripts for testing geo services
 and manipulating the SoapUI project and the testing sequence - from within
