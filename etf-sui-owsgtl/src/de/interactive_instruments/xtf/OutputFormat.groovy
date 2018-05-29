@@ -59,11 +59,11 @@ public class OutputFormat implements Comparable<OutputFormat> {
 	
 	public boolean isParsable() {
 		// JSON is parsable as XML in SoapUI
-		return (type==FormatType.XML || FormatType.JSON);
+		return (type==FormatType.XML || type==FormatType.JSON);
 	}
 	
 	public boolean isText() {
-		return (type==FORMAT.TEXT);
+		return (type==FormatType.TEXT);
 	}
 
 	@Override

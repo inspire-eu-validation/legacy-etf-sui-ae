@@ -267,13 +267,13 @@ public class Capabilities {
 				OutputFormat oFormat = new OutputFormat(of); 
 				boolean found=false;
 				for( a in this.schemaAnalyzers) {
-					if(a.getOutputFormat() == oFormat) {
+					if(a.getOutputFormat().equals(oFormat)) {
 						schAnalyzers.add(a);
 						found=true;
 						break;
 					}
 				}
-				if(!found) {
+				if(!found && oFormat.isParsable()) {
 					log.info("Initializing an additional SchemaAnalyzer for FeatureType "+
 						featureType.getPrefixAndName());
 					getAndAddSchema(oFormat);
