@@ -13,21 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.interactive_instruments.xtf.exceptions;
+package de.interactive_instruments.xtf.exceptions
 
+import de.interactive_instruments.etf.suim.TranslatableAssertionError;
 import de.interactive_instruments.xtf.wfs.PropertySchemaAnalyzer
 
-public class SchemaAnalysisException extends Exception {
+public class SchemaAnalysisException extends TranslatableAssertionError {
 
 	private static final long serialVersionUID = 1L;
 
 	public SchemaAnalysisException(String msg)
 	{
-		super(msg);
+		super("TR.invalidApplicationSchema", "message", msg);
 	}
   	
 	public SchemaAnalysisException(PropertySchemaAnalyzer analyzer, String msg)
 	{
-		super("SchemaAnalyzer ["+analyzer.getOutputFormat()+"] : "+msg);
+        super("TR.invalidApplicationSchema.outputFormat", ["message", msg, "format", analyzer.getOutputFormat().getFormat()] );
 	}
 }
