@@ -46,3 +46,4 @@ subprojects {
 
 jar.enabled = false
 uploadArchives.enabled = false
+install.enabled = false
