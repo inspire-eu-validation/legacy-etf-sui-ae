@@ -1,5 +1,5 @@
 /**
- * Copyright 2010-2016 interactive instruments GmbH
+ * Copyright 2010-2019 interactive instruments GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -135,12 +135,14 @@ public class SchemaAssertionImpl extends WsdlMessageAssertion implements SchemaA
 			public errHandler() {}
 
 			public void error(SAXParseException e) throws SAXException {
-				Utils.logError(e, "ERROR in line " + e.getLineNumber() + " column " + e.getColumnNumber() + " : " + e.toString());
+				Utils.logError(e,
+						"ERROR in line " + e.getLineNumber() + " column " + e.getColumnNumber() + " : " + e.toString());
 				throw new SAXException("Fatal error: " + e.toString());
 			}
 
 			public void fatalError(SAXParseException e) throws SAXException {
-				Utils.logError(e, "FATAL ERROR in line " + e.getLineNumber() + " column " + e.getColumnNumber() + " : " + e.toString());
+				Utils.logError(e,
+						"FATAL ERROR in line " + e.getLineNumber() + " column " + e.getColumnNumber() + " : " + e.toString());
 				throw new SAXException("Fatal error: " + e.toString());
 			}
 
@@ -174,7 +176,8 @@ public class SchemaAssertionImpl extends WsdlMessageAssertion implements SchemaA
 											+ " /*/@xsi:schemaLocation");
 					// Namespace + schemaLocation holen
 					if (schemaLocFragment != null && schemaLocFragment[0] != null &&
-							schemaLocFragment[0].getDomNode() != null && !SUtils.isNullOrEmpty(schemaLocFragment[0].getDomNode().getNodeValue())) {
+							schemaLocFragment[0].getDomNode() != null
+							&& !SUtils.isNullOrEmpty(schemaLocFragment[0].getDomNode().getNodeValue())) {
 						schemaLocation = schemaLocFragment[0].getDomNode().getNodeValue().trim();
 					} else {
 						throw new IllegalArgumentException("Missing xsi:schemaLocation attribute in the response");
@@ -242,7 +245,8 @@ public class SchemaAssertionImpl extends WsdlMessageAssertion implements SchemaA
 		mainForm.addTextField(SCHEMA_LOCATION_FIELD, "Schema Location", XForm.FieldType.URL).setWidth(40);
 
 		configurationDialog = builder.buildDialog(builder.buildOkCancelActions(),
-				"Set a custom schema location or leave empty to use the xsi:schemaLocation attribute found in the response", UISupport.OPTIONS_ICON);
+				"Set a custom schema location or leave empty to use the xsi:schemaLocation attribute found in the response",
+				UISupport.OPTIONS_ICON);
 	}
 
 	public XmlObject createConfiguration() {
@@ -254,7 +258,7 @@ public class SchemaAssertionImpl extends WsdlMessageAssertion implements SchemaA
 	@Override
 	protected String internalAssertProperty(TestPropertyHolder arg0,
 			String arg1, MessageExchange arg2, SubmitContext arg3)
-					throws AssertionException {
+			throws AssertionException {
 		// TODO Auto-generated method stub
 		return null;
 	}

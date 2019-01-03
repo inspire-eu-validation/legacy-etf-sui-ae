@@ -1,5 +1,5 @@
 /**
- * Copyright 2010-2016 interactive instruments GmbH
+ * Copyright 2010-2019 interactive instruments GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -80,7 +80,9 @@ public class SuiTestCaseDependencyDecorator implements TestCaseDependency, Compa
 		}
 		if (!deps.isEmpty()) {
 			return (Collection<TestCaseDependency>) deps.stream().map(step -> new SuiTestCaseDependencyDecorator(
-					(step instanceof WsdlRunTestCaseTestStep) ? ((WsdlRunTestCaseTestStep) step).getTargetTestCase() : ((TestCaseDependencyTestStepDef) step).getTargetTestCase())).collect(
+					(step instanceof WsdlRunTestCaseTestStep) ? ((WsdlRunTestCaseTestStep) step).getTargetTestCase()
+							: ((TestCaseDependencyTestStepDef) step).getTargetTestCase()))
+					.collect(
 							Collectors.toCollection(TreeSet::new));
 		}
 		return null;

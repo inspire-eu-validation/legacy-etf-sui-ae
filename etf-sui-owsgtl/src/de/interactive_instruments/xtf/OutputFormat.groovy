@@ -1,5 +1,5 @@
 /**
- * Copyright 2010-2016 interactive instruments GmbH
+ * Copyright 2010-2019 interactive instruments GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,11 +59,11 @@ public class OutputFormat implements Comparable<OutputFormat> {
 	
 	public boolean isParsable() {
 		// JSON is parsable as XML in SoapUI
-		return (type==FormatType.XML || type==FormatType.JSON);
+		return (type==FormatType.XML || FormatType.JSON);
 	}
 	
 	public boolean isText() {
-		return (type==FormatType.TEXT);
+		return (type==FORMAT.TEXT);
 	}
 
 	@Override
