@@ -1,5 +1,5 @@
 /**
- * Copyright 2010-2016 interactive instruments GmbH
+ * Copyright 2010-2019 interactive instruments GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,8 @@ public class TestCaseDependencyStepFactory extends WsdlTestStepFactory {
 	}
 
 	@Override
-	public WsdlTestStep buildTestStep(final WsdlTestCase wsdlTestCase, final TestStepConfig testStepConfig, final boolean forLoadTest) {
+	public WsdlTestStep buildTestStep(final WsdlTestCase wsdlTestCase, final TestStepConfig testStepConfig,
+			final boolean forLoadTest) {
 		return new TestCaseDependencyStep(wsdlTestCase, testStepConfig, forLoadTest);
 	}
 

@@ -1,5 +1,5 @@
 /**
- * Copyright 2010-2016 interactive instruments GmbH
+ * Copyright 2010-2019 interactive instruments GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -86,11 +86,14 @@ final public class Utils {
 
 	public static final String SEL_VERSION = Utils.class.getPackage().getImplementationVersion();
 
-	public final static IFile SEL_DS_DIR = System.getProperty("etf_sel_ds_dir") != null ? new IFile(System.getProperty("etf_sel_ds_dir")) : null;
+	public final static IFile SEL_DS_DIR = System.getProperty("etf_sel_ds_dir") != null
+			? new IFile(System.getProperty("etf_sel_ds_dir")) : null;
 
-	public final static IFile SEL_REPORT_DIR = System.getProperty("etf_sel_report_dir") != null ? new IFile(System.getProperty("etf_sel_report_dir")) : null;
+	public final static IFile SEL_REPORT_DIR = System.getProperty("etf_sel_report_dir") != null
+			? new IFile(System.getProperty("etf_sel_report_dir")) : null;
 
-	public final static IFile SEL_STYLING_DIR = System.getProperty("etf_sel_styling_dir") != null ? new IFile(System.getProperty("etf_sel_styling_dir")) : null;
+	public final static IFile SEL_STYLING_DIR = System.getProperty("etf_sel_styling_dir") != null
+			? new IFile(System.getProperty("etf_sel_styling_dir")) : null;
 
 	private final static String GROOVY_DIR_ENV_VAR = "ETF_SEL_GROOVY";
 

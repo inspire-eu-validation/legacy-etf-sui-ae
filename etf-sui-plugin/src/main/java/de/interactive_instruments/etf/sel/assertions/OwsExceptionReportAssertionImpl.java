@@ -1,5 +1,5 @@
 /**
- * Copyright 2010-2016 interactive instruments GmbH
+ * Copyright 2010-2019 interactive instruments GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +40,8 @@ import org.apache.xmlbeans.XmlObject;
  * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 @PluginTestAssertion(id = ID, label = LABEL, description = DESCRIPTION, category = AssertionCategoryMapping.VALIDATE_RESPONSE_CONTENT_CATEGORY)
-public class OwsExceptionReportAssertionImpl extends WsdlMessageAssertion implements OwsExceptionReportAssertion, ResponseAssertion {
+public class OwsExceptionReportAssertionImpl extends WsdlMessageAssertion
+		implements OwsExceptionReportAssertion, ResponseAssertion {
 	public static final String ID = "OwsExceptionReportAssertion";
 	public static final String LABEL = "Fail if service returns OWS Exception Report";
 	public static final String DESCRIPTION = "Check for exceptions returned by an Open Web Service";
@@ -102,7 +103,7 @@ public class OwsExceptionReportAssertionImpl extends WsdlMessageAssertion implem
 	@Override
 	protected String internalAssertProperty(TestPropertyHolder arg0,
 			String arg1, MessageExchange arg2, SubmitContext arg3)
-					throws AssertionException {
+			throws AssertionException {
 		return null;
 	}
 }
