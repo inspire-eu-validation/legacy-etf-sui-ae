@@ -13,13 +13,15 @@ configurations {
 	extraLibs
 }
 
-task installExtensions << {
-	copy {
-		description = 'Copies the sui-mapper to the configured SoapUI ext folder'
-		from jar
-		into "${System.env.HOME}/.soapuios/ext"
+task installExtensions {
+	doLast {
+		copy {
+			description = 'Copies the sui-mapper to the configured SoapUI ext folder'
+			from jar
+			into "${System.env.HOME}/.soapuios/ext"
+		}
+		println "Copied plugin to ${System.env.HOME}/.soapuios/ext"
 	}
-	println "Copied plugin to ${System.env.HOME}/.soapuios/ext"
 }
 
 install {

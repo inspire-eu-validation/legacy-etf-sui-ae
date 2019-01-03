@@ -13,20 +13,21 @@ apply from: "$rootProject.projectDir/gradle/soapuiDependencies.gradle"
 apply plugin: 'groovy'
 
 dependencies {
-	// compile 'org.codehaus.groovy:groovy-all:2.4.6'
     compileOnly 'org.codehaus.groovy:groovy-all:2.1.7'
 	compile('org.codehaus.groovy.modules.http-builder:http-builder:0.7.1') {
         exclude group: 'org.codehaus.groovy'
     }
 }
 
-task installExtensions << {
-    copy {
-        description = 'Copies the sui-owsgtl to the configured SoapUI ext folder'
-        from jar
-        into "${System.env.HOME}/.soapuios/ext"
+task installExtensions {
+    doLast {
+        copy {
+            description = 'Copies the sui-owsgtl to the configured SoapUI ext folder'
+            from jar
+            into "${System.env.HOME}/.soapuios/ext"
+        }
+        println "Copied plugin to ${System.env.HOME}/.soapuios/ext"
     }
-    println "Copied plugin to ${System.env.HOME}/.soapuios/ext"
 }
 
 install {
