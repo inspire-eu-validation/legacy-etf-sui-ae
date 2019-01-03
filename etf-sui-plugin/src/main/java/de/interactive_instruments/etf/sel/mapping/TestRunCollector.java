@@ -1,5 +1,5 @@
 /**
- * Copyright 2010-2016 interactive instruments GmbH
+ * Copyright 2010-2019 interactive instruments GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -96,8 +96,10 @@ public class TestRunCollector implements TestRunListener {
 	public void beforeRun(final TestCaseRunner testCaseRunner, final TestCaseRunContext testCaseRunContext) {
 		if (collector == null) {
 			final Project project = testCaseRunner.getTestCase().getTestSuite().getProject();
-			if (project instanceof WsdlProject && ((WsdlProject) project).getActiveEnvironment() instanceof CollectorInjectionAdapter) {
-				collector = ((CollectorInjectionAdapter) ((WsdlProject) project).getActiveEnvironment()).getTestResultCollector();
+			if (project instanceof WsdlProject
+					&& ((WsdlProject) project).getActiveEnvironment() instanceof CollectorInjectionAdapter) {
+				collector = ((CollectorInjectionAdapter) ((WsdlProject) project).getActiveEnvironment())
+						.getTestResultCollector();
 				this.tmpDir = new IFile(collector.getTempDir());
 				try {
 					this.tmpDir = IFile.createTempDir("sel");
@@ -130,7 +132,8 @@ public class TestRunCollector implements TestRunListener {
 	}
 
 	@Override
-	public void beforeStep(final TestCaseRunner testCaseRunner, final TestCaseRunContext testCaseRunContext, final TestStep testStep) {
+	public void beforeStep(final TestCaseRunner testCaseRunner, final TestCaseRunContext testCaseRunContext,
+			final TestStep testStep) {
 		Objects.requireNonNull(collector, "Collector not initialized before test step").startTestStep(testStep.getId());
 
 		if (testStep instanceof HttpTestRequestStep || testStep instanceof RestTestRequestStep) {
@@ -186,15 +189,15 @@ public class TestRunCollector implements TestRunListener {
 								// Add message without tokenArguments
 								collector.addMessage(translationTemplateId);
 							}
-							if(!manual) {
-								collector.error("Assertion failed with error '"+translationTemplateId+"'");
+							if (!manual) {
+								collector.error("Assertion failed with error '" + translationTemplateId + "'");
 							}
 							return manual;
 						}
 					} else {
 						collector.addMessage(translationTemplateId);
-						if(!manual) {
-							collector.error("Assertion failed with error '"+translationTemplateId+"'");
+						if (!manual) {
+							collector.error("Assertion failed with error '" + translationTemplateId + "'");
 						}
 						return manual;
 					}
@@ -228,13 +231,15 @@ public class TestRunCollector implements TestRunListener {
 	 * @param maxIndex
 	 * @param tokenArguments
 	 */
-	private static void parseRec(final String message, final int parseIndex, final int maxIndex, final Map<String, String> tokenArguments) {
+	private static void parseRec(final String message, final int parseIndex, final int maxIndex,
+			final Map<String, String> tokenArguments) {
 		final int startIndex = message.indexOf("<", parseIndex);
 		if (startIndex != -1) {
 			final int closingTagSignIndex = message.indexOf(">", startIndex + 2);
 			if (closingTagSignIndex != -1 && message.charAt(closingTagSignIndex - 1) != '/') {
 				final int firstAttributeInTag = message.indexOf(" ", startIndex + 2);
-				final int tokenNameEndIndex = firstAttributeInTag > startIndex && firstAttributeInTag < closingTagSignIndex ? firstAttributeInTag : closingTagSignIndex;
+				final int tokenNameEndIndex = firstAttributeInTag > startIndex && firstAttributeInTag < closingTagSignIndex
+						? firstAttributeInTag : closingTagSignIndex;
 				final String token = message.substring(startIndex + 1, tokenNameEndIndex);
 				if (!SUtils.isNullOrEmpty(token) && !token.equals("PASS") && !token.equals("FAIL")) {
 					// Argument ends with the token
@@ -268,12 +273,14 @@ public class TestRunCollector implements TestRunListener {
 	}
 
 	@Override
-	public void afterStep(final TestCaseRunner testCaseRunner, final TestCaseRunContext testCaseRunContext, final TestStepResult testStepResult) {
+	public void afterStep(final TestCaseRunner testCaseRunner, final TestCaseRunContext testCaseRunContext,
+			final TestStepResult testStepResult) {
 		Objects.requireNonNull(collector, "Collector not initialized after test step");
 		testStepStatus = TestResultStatus.PASSED;
 
 		int status = -1;
-		if (testStepResult.getTestStep() instanceof HttpTestRequestStep || testStepResult.getTestStep() instanceof RestTestRequestStep) {
+		if (testStepResult.getTestStep() instanceof HttpTestRequestStep
+				|| testStepResult.getTestStep() instanceof RestTestRequestStep) {
 
 			final HttpRequestTestStep testRequest = (HttpRequestTestStep) testStepResult.getTestStep();
 			final AbstractHttpRequest httpRequest;
@@ -309,16 +316,19 @@ public class TestRunCollector implements TestRunListener {
 						} catch (IOException e) {
 							collector.internalError(e);
 						}
-					} else if (httpRequest.getResponse() != null && !SUtils.isNullOrEmpty(httpRequest.getResponse().getContentAsString())) {
+					} else if (httpRequest.getResponse() != null
+							&& !SUtils.isNullOrEmpty(httpRequest.getResponse().getContentAsString())) {
 						// collector.getLogger().info("Received empty response");
 						try {
-							collector.saveAttachment(IOUtils.toInputStream(httpRequest.getResponse().getContentAsString(), "UTF-8"),
+							collector.saveAttachment(
+									IOUtils.toInputStream(httpRequest.getResponse().getContentAsString(), "UTF-8"),
 									"Service Response", null, "ServiceResponse");
 						} catch (final IOException e) {
 							collector.internalError(e);
 						}
 					}
-				} else if (httpRequest.getResponse() != null && !SUtils.isNullOrEmpty(httpRequest.getResponse().getContentAsString())) {
+				} else if (httpRequest.getResponse() != null
+						&& !SUtils.isNullOrEmpty(httpRequest.getResponse().getContentAsString())) {
 					try {
 						collector.saveAttachment(IOUtils.toInputStream(httpRequest.getResponse().getContentAsString(), "UTF-8"),
 								"Service Response", null, "ServiceResponse");
@@ -335,7 +345,8 @@ public class TestRunCollector implements TestRunListener {
 				if (!testRequest.getProperty("Request").getValue().isEmpty()) {
 					// POST
 					final String endpointText = !SUtils.isNullOrEmpty(endpoint) ? "Endpoint: "
-							+ SUtils.ENDL + PropertyExpander.expandProperties(testRequest, testRequest.getPropertyValue("Endpoint"))
+							+ SUtils.ENDL
+							+ PropertyExpander.expandProperties(testRequest, testRequest.getPropertyValue("Endpoint"))
 							+ SUtils.ENDL : "";
 					final String addRequestInfo = PropertyExpander.expandProperties(testRequest, "<!-- " + SUtils.ENDL +
 							endpointText +
@@ -358,7 +369,7 @@ public class TestRunCollector implements TestRunListener {
 					for (final TestProperty testProperty : propertyList) {
 						if (!testProperty.getName().startsWith("Transfer_Properties")) {
 							parameterMap.put(testProperty.getName(),
-									PropertyExpander.expandProperties(testRequest,testProperty.getValue()));
+									PropertyExpander.expandProperties(testRequest, testProperty.getValue()));
 						}
 					}
 
@@ -436,7 +447,8 @@ public class TestRunCollector implements TestRunListener {
 						if (message.contains("<etfTranslate")) {
 							addMessage(message, collector, i + 1);
 						} else {
-							collector.saveAttachment(IOUtils.toInputStream(message, "UTF-8"), "Message." + (i + 1), "text/plain", "Message");
+							collector.saveAttachment(IOUtils.toInputStream(message, "UTF-8"), "Message." + (i + 1),
+									"text/plain", "Message");
 						}
 					} catch (IOException e) {
 						collector.internalError(e);
@@ -449,7 +461,8 @@ public class TestRunCollector implements TestRunListener {
 			// auto determine
 			collector.end(testStepResult.getTestStep().getId(), testStepResult.getTimeStamp() + testStepResult.getTimeTaken());
 		} else {
-			collector.end(testStepResult.getTestStep().getId(), status, testStepResult.getTimeStamp() + testStepResult.getTimeTaken());
+			collector.end(testStepResult.getTestStep().getId(), status,
+					testStepResult.getTimeStamp() + testStepResult.getTimeTaken());
 		}
 	}
 }
