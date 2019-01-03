@@ -30,7 +30,6 @@ description = "ETF adapters and extensions for SoapUI"
 
 
 subprojects {
-
 	dependencies {
 		compile group: 'de.interactive_instruments', name: 'ii-commons-util', version:'3.0.0'+project.snapshotSuffix
 		compileOnly group: 'org.slf4j', name: 'slf4j-api', version: etf_slf4jApiVersion
@@ -43,5 +42,6 @@ subprojects {
 	apply from: "$rootProject.projectDir/gradle/soapuiDependencies.gradle"
 
 	version = rootProject.version
-
 }
+
+jar.enabled = false
