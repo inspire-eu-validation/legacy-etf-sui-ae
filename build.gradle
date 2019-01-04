@@ -28,6 +28,15 @@ apply from: "build/gradle/ii-bda.gradle"
 group = 'de.interactive_instruments.etf.suim'
 description = "ETF adapters and extensions for SoapUI"
 
+allprojects {
+	if (project.name.startsWith("etf-sui-ae")) {
+		task release(overwrite: true, dependsOn: [
+				':etf-sui-mapper:release',
+				':etf-sui-owsgtl:release',
+				':etf-sui-plugin:release'
+		]) {}
+	}
+}
 
 subprojects {
 
@@ -44,4 +53,9 @@ subprojects {
 
 	version = rootProject.version
 
+}
+
+release {
+	failOnUnversionedFiles = false
+	failOnUpdateNeeded = false
 }
