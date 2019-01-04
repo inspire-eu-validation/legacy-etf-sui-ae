@@ -30,20 +30,18 @@ description = "ETF adapters and extensions for SoapUI"
 
 allprojects {
 	if (project.name.startsWith("etf-sui-ae")) {
-		task release(overwrite: true, dependsOn: [
-				':etf-sui-mapper:release',
-				':etf-sui-owsgtl:release',
-				':etf-sui-plugin:release'
-		]) {}
-	}
-
-	if (project.name.contains("etf-sui-mapper") || project.name.contains("etf-sui-owsgtl")) {
+		project.tasks.release.mustRunAfter(project.tasks.getByPath(':etf-sui-mapper:release'))
+		project.tasks.release.mustRunAfter(project.tasks.getByPath(':etf-sui-owsgtl:release'))
+		project.tasks.release.mustRunAfter(project.tasks.getByPath(':etf-sui-plugin:release'))
+	}else{
 		task preTagCommit(overwrite: true) {}
 		task createReleaseTag(overwrite: true) {}
 		task updateVersion(overwrite: true) {}
 		task commitNewVersion(overwrite: true) {}
+		task unSnapshotVersion(overwrite: true) {}
+		task updateVersion(overwrite: true) {}
+		task commitNewVersion(overwrite: true) {}
 	}
-	task unSnapshotVersion(overwrite: true) {}
 }
 
 subprojects {
