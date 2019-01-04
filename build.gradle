@@ -39,7 +39,6 @@ allprojects {
 }
 
 subprojects {
-
 	dependencies {
 		compile group: 'de.interactive_instruments', name: 'ii-commons-util', version:'3.0.0'+project.snapshotSuffix
 		compileOnly group: 'org.slf4j', name: 'slf4j-api', version: etf_slf4jApiVersion
@@ -53,3 +52,7 @@ subprojects {
 
 	version = rootProject.version
 }
+
+jar.enabled = false
+uploadArchives.enabled = false
+install.enabled = false
