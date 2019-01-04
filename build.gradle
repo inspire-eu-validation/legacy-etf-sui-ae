@@ -36,17 +36,6 @@ allprojects {
 				':etf-sui-plugin:release'
 		]) {}
 	}
-}
-
-
-allprojects {
-	if (project.name.startsWith("etf-sui-ae")) {
-		task release(overwrite: true, dependsOn: [
-				':etf-sui-mapper:release',
-				':etf-sui-owsgtl:release',
-				':etf-sui-plugin:release'
-		]) {}
-	}
 
 	if (project.name.contains("etf-sui-mapper") || project.name.contains("etf-sui-owsgtl")) {
 		task preTagCommit(overwrite: true) {}
@@ -54,6 +43,7 @@ allprojects {
 		task updateVersion(overwrite: true) {}
 		task commitNewVersion(overwrite: true) {}
 	}
+	task unSnapshotVersion(overwrite: true) {}
 }
 
 subprojects {
