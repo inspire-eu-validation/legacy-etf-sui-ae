@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Fallback configuration for the Test Driver which does not execute the SoapUI plugin manager -->
+<soapui-factories xmlns="http://eviware.com/soapui/config">
+
+    <factory id="SchemaValidatorAssertionImpl" factoryType="com.eviware.soapui.impl.wsdl.teststeps.assertions.TestAssertionFactory"
+             factoryClass="de.interactive_instruments.etf.sel.assertions.SchemaValidationFactory"/>
+
+    <factory id="OwsExceptionReportAssertionImpl" factoryType="com.eviware.soapui.impl.wsdl.teststeps.assertions.TestAssertionFactory"
+             factoryClass="de.interactive_instruments.etf.sel.assertions.OwsExceptionReportFactory"/>
+
+    <factory id="TestCaseDependencyStep" factoryType="com.eviware.soapui.impl.wsdl.teststeps.registry.WsdlTestStepFactory"
+                 factoryClass="de.interactive_instruments.etf.sel.teststeps.TestCaseDependencyStepFactory"/>
+
+    <factory id="TestCaseDependencyStepPanelBuilder" factoryType="com.eviware.soapui.model.util.PanelBuilderFactory"
+                 factoryClass="de.interactive_instruments.etf.sel.teststeps.TestCaseDependencyStepPanelBuilderFactory"/>
+
+</soapui-factories>

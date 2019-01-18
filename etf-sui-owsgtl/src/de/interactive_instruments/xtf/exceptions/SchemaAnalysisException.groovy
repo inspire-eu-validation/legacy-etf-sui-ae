@@ -1,5 +1,5 @@
 /**
- * Copyright 2010-2016 interactive instruments GmbH
+ * Copyright 2010-2019 interactive instruments GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,22 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.interactive_instruments.xtf.exceptions
+package de.interactive_instruments.xtf.exceptions;
 
-import de.interactive_instruments.etf.suim.TranslatableAssertionError;
 import de.interactive_instruments.xtf.wfs.PropertySchemaAnalyzer
 
-public class SchemaAnalysisException extends TranslatableAssertionError {
+public class SchemaAnalysisException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
 	public SchemaAnalysisException(String msg)
 	{
-		super("TR.invalidApplicationSchema", "message", msg);
+		super(msg);
 	}
   	
 	public SchemaAnalysisException(PropertySchemaAnalyzer analyzer, String msg)
 	{
-        super("TR.invalidApplicationSchema.outputFormat", ["message", msg, "format", analyzer.getOutputFormat().getFormat()] );
+		super("SchemaAnalyzer ["+analyzer.getOutputFormat()+"] : "+msg);
 	}
 }

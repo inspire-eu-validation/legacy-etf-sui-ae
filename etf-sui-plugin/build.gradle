@@ -23,17 +23,19 @@ jar {
 }
 
 
-task installSoapUiPlugin << {
-	delete fileTree("${System.env.HOME}/.soapuios/plugins") {
-		include 'etf-sel*plugin-*.jar'
+task installSoapUiPlugin {
+	doLast {
+		delete fileTree("${System.env.HOME}/.soapuios/plugins") {
+			include 'etf-sel*plugin-*.jar'
+		}
+		copy {
+			description = 'Copies the sui-plugin to the configured SoapUI home plugin folder'
+			// from project(':etf-sui-plugin').files('build/libs')
+			from jar
+			into "${System.env.HOME}/.soapuios/plugins"
+		}
+		println "Copied plugin to ${System.env.HOME}/.soapuios/plugins"
 	}
-	copy {
-		description = 'Copies the sui-plugin to the configured SoapUI home plugin folder'
-		// from project(':etf-sui-plugin').files('build/libs')
-		from jar
-		into "${System.env.HOME}/.soapuios/plugins"
-	}
-	println "Copied plugin to ${System.env.HOME}/.soapuios/plugins"
 }
 
 install {

@@ -7,20 +7,21 @@
 buildscript {
 	repositories {
 		maven {
-			url "http://services.interactive-instruments.de/etfdev-af/plugins-releases-local"
+			url "https://services.interactive-instruments.de/etfdev-af/plugins-releases-local"
 			credentials {
+				// Our repository requires authenticating
 				username 'ii-bda'
-				password '6ozhS683'
+				password 'AP7mb4WA6F1ckdZkaE8Qx8GSowt'
 			}}
 	}
 	dependencies {
-		classpath group: 'de.interactive_instruments.bda', name: 'etf-bda', version:'1.0.22'
+		classpath group: 'de.interactive_instruments.bda', name: 'etf-bda', version: '[1.0.30,1.0.99]'
 	}
 	dependencies {
 		ant.unjar src: configurations.classpath.files.find {it.path.contains('etf')}, dest: 'build/gradle'
 	}
 }
-apply from: 'build/gradle/ii-bda.gradle'
+apply from: "build/gradle/ii-bda.gradle"
 
 ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -28,13 +29,30 @@ group = 'de.interactive_instruments.etf.suim'
 description = "ETF adapters and extensions for SoapUI"
 
 
-subprojects {
 
+allprojects {
+	if (project.name.startsWith("etf-sui-ae")) {
+		task release(overwrite: true, dependsOn: [
+				':etf-sui-mapper:release',
+				':etf-sui-owsgtl:release',
+				':etf-sui-plugin:release'
+		]) {}
+	}
+
+	if (project.name.contains("etf-sui-mapper") || project.name.contains("etf-sui-owsgtl")) {
+		task preTagCommit(overwrite: true) {}
+		task createReleaseTag(overwrite: true) {}
+		task updateVersion(overwrite: true) {}
+		task commitNewVersion(overwrite: true) {}
+	}
+}
+
+subprojects {
 	dependencies {
-		compile group: 'de.interactive_instruments', name: 'ii-commons-util', version:'2.0.0'+project.snapshotSuffix
+		compile group: 'de.interactive_instruments', name: 'ii-commons-util', version:'3.0.0'+project.snapshotSuffix
 		compileOnly group: 'org.slf4j', name: 'slf4j-api', version: etf_slf4jApiVersion
 		compileOnly group: 'log4j', name: 'log4j', version: '1.2.17'
-		compileOnly group: 'de.interactive_instruments.etf', name: 'etf-core', version:'1.0.0'+project.snapshotSuffix
+		compileOnly group: 'de.interactive_instruments.etf', name: 'etf-core', version:'1.1.0'+project.snapshotSuffix
 	}
 
 	apply plugin: 'java'
@@ -42,5 +60,8 @@ subprojects {
 	apply from: "$rootProject.projectDir/gradle/soapuiDependencies.gradle"
 
 	version = rootProject.version
-
 }
+
+jar.enabled = false
+uploadArchives.enabled = false
+install.enabled = false

@@ -1,5 +1,5 @@
 /**
- * Copyright 2010-2016 interactive instruments GmbH
+ * Copyright 2010-2019 interactive instruments GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,7 +51,8 @@ public class DummyCollector implements TestResultCollector {
 	}
 
 	@Override
-	public boolean endWithSkippedIfTestCasesFailed(final String... strings) throws IllegalArgumentException, IllegalStateException {
+	public boolean endWithSkippedIfTestCasesFailed(final String... strings)
+			throws IllegalArgumentException, IllegalStateException {
 		return false;
 	}
 
@@ -86,7 +87,8 @@ public class DummyCollector implements TestResultCollector {
 	}
 
 	@Override
-	public String markAttachment(final String s, final String s1, final String s2, final String s3, final String s4) throws IOException {
+	public String markAttachment(final String s, final String s1, final String s2, final String s3, final String s4)
+			throws IOException {
 		return dummyUUID;
 	}
 
@@ -96,7 +98,8 @@ public class DummyCollector implements TestResultCollector {
 	}
 
 	@Override
-	public String saveAttachment(final InputStream inputStream, final String s, final String s1, final String s2) throws IOException {
+	public String saveAttachment(final InputStream inputStream, final String s, final String s1, final String s2)
+			throws IOException {
 		return dummyUUID;
 	}
 

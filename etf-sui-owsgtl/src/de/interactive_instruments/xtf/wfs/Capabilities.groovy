@@ -1,5 +1,5 @@
 /**
- * Copyright 2010-2016 interactive instruments GmbH
+ * Copyright 2010-2019 interactive instruments GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -267,13 +267,13 @@ public class Capabilities {
 				OutputFormat oFormat = new OutputFormat(of); 
 				boolean found=false;
 				for( a in this.schemaAnalyzers) {
-					if(a.getOutputFormat().equals(oFormat)) {
+					if(a.getOutputFormat() == oFormat) {
 						schAnalyzers.add(a);
 						found=true;
 						break;
 					}
 				}
-				if(!found && oFormat.isParsable()) {
+				if(!found) {
 					log.info("Initializing an additional SchemaAnalyzer for FeatureType "+
 						featureType.getPrefixAndName());
 					getAndAddSchema(oFormat);
