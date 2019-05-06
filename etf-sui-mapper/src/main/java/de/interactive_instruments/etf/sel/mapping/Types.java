@@ -143,5 +143,9 @@ public class Types {
 			// WFS_2_0_TOT
 			"9b6ef734-981e-4d60-aa81-d6730a1c6389",
 			// ATOM_TOT
-			"49d881ae-b115-4b91-aabe-31d5791bce52");
+			"49d881ae-b115-4b91-aabe-31d5791bce52",
+			// WCS 1.0
+            "dac58b52-3ffd-4eb5-96e3-64723d8f0f51",
+            // SOS 2.0
+            "f897f313-55f0-4e51-928a-0e9869f5a1d6");
 }
