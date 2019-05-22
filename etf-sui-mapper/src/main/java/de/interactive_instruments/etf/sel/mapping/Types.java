@@ -147,5 +147,11 @@ public class Types {
 			// WCS 1.0
             "dac58b52-3ffd-4eb5-96e3-64723d8f0f51",
             // SOS 2.0
-            "f897f313-55f0-4e51-928a-0e9869f5a1d6");
+            "f897f313-55f0-4e51-928a-0e9869f5a1d6",
+			// WMS 1.3
+			"9981e87e-d642-43b3-ad5f-e77469075e74",
+			//WMTS 1.0
+			"380b969c-215e-46f8-a4e9-16f002f7d6c3",
+			"ae35f7cd-86d9-475a-aa3a-e0bfbda2bb5f");
+
 }
