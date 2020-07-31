@@ -1,5 +1,5 @@
 /**
- * Copyright 2010-2019 interactive instruments GmbH
+ * Copyright 2010-2020 interactive instruments GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,13 +22,13 @@ import com.eviware.soapui.model.util.PanelBuilderFactory;
  * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 public class TestCaseDependencyStepPanelBuilderFactory implements PanelBuilderFactory {
-	@Override
-	public PanelBuilder createPanelBuilder() {
-		return new TestCaseDependencyStepPanelBuilder();
-	}
+    @Override
+    public PanelBuilder createPanelBuilder() {
+        return new TestCaseDependencyStepPanelBuilder();
+    }
 
-	@Override
-	public Class getTargetModelItem() {
-		return TestCaseDependencyStep.class;
-	}
+    @Override
+    public Class getTargetModelItem() {
+        return TestCaseDependencyStep.class;
+    }
 }

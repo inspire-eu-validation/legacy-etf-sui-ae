@@ -1,5 +1,5 @@
 /**
- * Copyright 2010-2019 interactive instruments GmbH
+ * Copyright 2010-2020 interactive instruments GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,22 +23,22 @@ import javax.xml.bind.annotation.XmlRootElement
 @XmlRootElement
 public class FeatureTypeMapping {
 
-	private String name;
-	private String[] constantValueTargets;
-	
-	void setName(String name) {
-		this.name = name;
-	}
-	
-	String getName() {
-		return this.name;
-	}
-	
-	void setConstantValueTargets(String[] constantValueTargets) {
-		this.constantValueTargets=constantValueTargets;
-	}
-	
-	String[] getConstantValueTargets() {
-		return this.constantValueTargets;
-	}
+    private String name;
+    private String[] constantValueTargets;
+
+    void setName(String name) {
+        this.name = name;
+    }
+
+    String getName() {
+        return this.name;
+    }
+
+    void setConstantValueTargets(String[] constantValueTargets) {
+        this.constantValueTargets=constantValueTargets;
+    }
+
+    String[] getConstantValueTargets() {
+        return this.constantValueTargets;
+    }
 }

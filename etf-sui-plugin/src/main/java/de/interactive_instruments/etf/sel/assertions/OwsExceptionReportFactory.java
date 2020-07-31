@@ -1,5 +1,5 @@
 /**
- * Copyright 2010-2019 interactive instruments GmbH
+ * Copyright 2010-2020 interactive instruments GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,46 +29,46 @@ import com.eviware.soapui.model.testsuite.TestAssertion;
  */
 public class OwsExceptionReportFactory implements TestAssertionFactory {
 
-	@Override
-	public TestAssertion buildAssertion(TestAssertionConfig config,
-			Assertable modelItem) {
-		return new OwsExceptionReportAssertionImpl(config, modelItem);
-	}
+    @Override
+    public TestAssertion buildAssertion(TestAssertionConfig config,
+            Assertable modelItem) {
+        return new OwsExceptionReportAssertionImpl(config, modelItem);
+    }
 
-	@Override
-	public Class<? extends WsdlMessageAssertion> getAssertionClassType() {
-		return OwsExceptionReportAssertionImpl.class;
-	}
+    @Override
+    public Class<? extends WsdlMessageAssertion> getAssertionClassType() {
+        return OwsExceptionReportAssertionImpl.class;
+    }
 
-	@Override
-	public String getAssertionId() {
-		return OwsExceptionReportAssertionImpl.ID;
-	}
+    @Override
+    public String getAssertionId() {
+        return OwsExceptionReportAssertionImpl.ID;
+    }
 
-	@Override
-	public String getAssertionLabel() {
-		return OwsExceptionReportAssertionImpl.LABEL;
-	}
+    @Override
+    public String getAssertionLabel() {
+        return OwsExceptionReportAssertionImpl.LABEL;
+    }
 
-	@Override
-	public AssertionListEntry getAssertionListEntry() {
-		return new AssertionListEntry(OwsExceptionReportAssertionImpl.ID,
-				OwsExceptionReportAssertionImpl.LABEL,
-				OwsExceptionReportAssertionImpl.DESCRIPTION);
-	}
+    @Override
+    public AssertionListEntry getAssertionListEntry() {
+        return new AssertionListEntry(OwsExceptionReportAssertionImpl.ID,
+                OwsExceptionReportAssertionImpl.LABEL,
+                OwsExceptionReportAssertionImpl.DESCRIPTION);
+    }
 
-	@Override
-	public String getCategory() {
-		return AssertionCategoryMapping.VALIDATE_RESPONSE_CONTENT_CATEGORY;
-	}
+    @Override
+    public String getCategory() {
+        return AssertionCategoryMapping.VALIDATE_RESPONSE_CONTENT_CATEGORY;
+    }
 
-	@Override
-	public boolean canAssert(Assertable arg0) {
-		return true;
-	}
+    @Override
+    public boolean canAssert(Assertable arg0) {
+        return true;
+    }
 
-	@Override
-	public boolean canAssert(TestPropertyHolder arg0, String arg1) {
-		return true;
-	}
+    @Override
+    public boolean canAssert(TestPropertyHolder arg0, String arg1) {
+        return true;
+    }
 }

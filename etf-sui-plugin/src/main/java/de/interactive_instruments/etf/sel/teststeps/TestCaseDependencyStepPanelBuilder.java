@@ -1,5 +1,5 @@
 /**
- * Copyright 2010-2019 interactive instruments GmbH
+ * Copyright 2010-2020 interactive instruments GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,12 +26,12 @@ import com.eviware.soapui.ui.desktop.DesktopPanel;
 @PluginPanelBuilder(targetModelItem = TestCaseDependencyStep.class)
 public class TestCaseDependencyStepPanelBuilder extends EmptyPanelBuilder<TestCaseDependencyStep> {
 
-	@Override
-	public DesktopPanel buildDesktopPanel(TestCaseDependencyStep testStep) {
-		return new WsdlRunTestCaseStepDesktopPanel(testStep);
-	}
+    @Override
+    public DesktopPanel buildDesktopPanel(TestCaseDependencyStep testStep) {
+        return new WsdlRunTestCaseStepDesktopPanel(testStep);
+    }
 
-	public boolean hasDesktopPanel() {
-		return true;
-	}
+    public boolean hasDesktopPanel() {
+        return true;
+    }
 }

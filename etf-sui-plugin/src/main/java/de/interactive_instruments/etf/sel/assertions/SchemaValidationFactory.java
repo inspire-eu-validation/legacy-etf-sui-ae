@@ -1,5 +1,5 @@
 /**
- * Copyright 2010-2019 interactive instruments GmbH
+ * Copyright 2010-2020 interactive instruments GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,45 +29,45 @@ import com.eviware.soapui.model.testsuite.TestAssertion;
  */
 public class SchemaValidationFactory implements TestAssertionFactory {
 
-	@Override
-	public TestAssertion buildAssertion(TestAssertionConfig config,
-			Assertable modelItem) {
-		return new SchemaAssertionImpl(config, modelItem);
-	}
+    @Override
+    public TestAssertion buildAssertion(TestAssertionConfig config,
+            Assertable modelItem) {
+        return new SchemaAssertionImpl(config, modelItem);
+    }
 
-	@Override
-	public Class<? extends WsdlMessageAssertion> getAssertionClassType() {
-		return SchemaAssertionImpl.class;
-	}
+    @Override
+    public Class<? extends WsdlMessageAssertion> getAssertionClassType() {
+        return SchemaAssertionImpl.class;
+    }
 
-	@Override
-	public String getAssertionId() {
-		return SchemaAssertionImpl.ID;
-	}
+    @Override
+    public String getAssertionId() {
+        return SchemaAssertionImpl.ID;
+    }
 
-	@Override
-	public String getAssertionLabel() {
-		return SchemaAssertionImpl.LABEL;
-	}
+    @Override
+    public String getAssertionLabel() {
+        return SchemaAssertionImpl.LABEL;
+    }
 
-	@Override
-	public AssertionListEntry getAssertionListEntry() {
-		return new AssertionListEntry(SchemaAssertionImpl.ID,
-				SchemaAssertionImpl.LABEL, SchemaAssertionImpl.DESCRIPTION);
-	}
+    @Override
+    public AssertionListEntry getAssertionListEntry() {
+        return new AssertionListEntry(SchemaAssertionImpl.ID,
+                SchemaAssertionImpl.LABEL, SchemaAssertionImpl.DESCRIPTION);
+    }
 
-	@Override
-	public String getCategory() {
-		return AssertionCategoryMapping.VALIDATE_RESPONSE_CONTENT_CATEGORY;
-	}
+    @Override
+    public String getCategory() {
+        return AssertionCategoryMapping.VALIDATE_RESPONSE_CONTENT_CATEGORY;
+    }
 
-	@Override
-	public boolean canAssert(Assertable arg0) {
-		return true;
-	}
+    @Override
+    public boolean canAssert(Assertable arg0) {
+        return true;
+    }
 
-	@Override
-	public boolean canAssert(TestPropertyHolder arg0, String arg1) {
-		return true;
-	}
+    @Override
+    public boolean canAssert(TestPropertyHolder arg0, String arg1) {
+        return true;
+    }
 }

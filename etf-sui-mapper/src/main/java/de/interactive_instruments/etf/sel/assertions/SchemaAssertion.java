@@ -1,5 +1,5 @@
 /**
- * Copyright 2010-2019 interactive instruments GmbH
+ * Copyright 2010-2020 interactive instruments GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,5 +16,5 @@
 package de.interactive_instruments.etf.sel.assertions;
 
 public interface SchemaAssertion {
-	String getPathToXSD();
+    String getPathToXSD();
 }

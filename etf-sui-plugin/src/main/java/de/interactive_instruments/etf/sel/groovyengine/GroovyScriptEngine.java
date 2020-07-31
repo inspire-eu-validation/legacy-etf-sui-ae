@@ -1,5 +1,5 @@
 /**
- * Copyright 2010-2019 interactive instruments GmbH
+ * Copyright 2010-2020 interactive instruments GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,155 +33,154 @@ import de.interactive_instruments.IFile;
 import de.interactive_instruments.etf.sel.Utils;
 
 /**
- * A Groovy script engine which (re-)compiles Groovy classes
- * from a source directory to an temporary jar and calls the
+ * A Groovy script engine which (re-)compiles Groovy classes from a source directory to an temporary jar and calls the
  *
  * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 final public class GroovyScriptEngine {
 
-	private IFile groovyScriptSourcesDir;
-	private final CompilerConfiguration config = new CompilerConfiguration();
-	private IFile tmpFile;
-	private boolean initialized;
-	private ReloadableClStandaloneSoapUICore exchangedCore;
+    private IFile groovyScriptSourcesDir;
+    private final CompilerConfiguration config = new CompilerConfiguration();
+    private IFile tmpFile;
+    private boolean initialized;
+    private ReloadableClStandaloneSoapUICore exchangedCore;
 
-	private static GroovyScriptEngine instance = new GroovyScriptEngine();
+    private static GroovyScriptEngine instance = new GroovyScriptEngine();
 
-	private GroovyScriptEngine() {
+    private GroovyScriptEngine() {
 
-		initialized = false;
-		groovyScriptSourcesDir = Utils.SEL_GROOVY_DIR;
-		if (groovyScriptSourcesDir == null) {
-			Utils.log("Deactivating Compilation Unit.");
-			return;
-		}
+        initialized = false;
+        groovyScriptSourcesDir = Utils.SEL_GROOVY_DIR;
+        if (groovyScriptSourcesDir == null) {
+            Utils.log("Deactivating Compilation Unit.");
+            return;
+        }
 
-		Utils.log("Searching directory " + groovyScriptSourcesDir.getPath() + " for groovy source files");
-		if (groovyScriptSourcesDir != null) {
-			config.setDebug(true);
-			config.setVerbose(true);
+        Utils.log("Searching directory " + groovyScriptSourcesDir.getPath() + " for groovy source files");
+        if (groovyScriptSourcesDir != null) {
+            config.setDebug(true);
+            config.setVerbose(true);
 
-			try {
-				groovyScriptSourcesDir.expectDirIsReadable();
+            try {
+                groovyScriptSourcesDir.expectDirIsReadable();
 
-				final List<String> classPaths = new ArrayList<String>();
-				classPaths.add(groovyScriptSourcesDir.getPath());
+                final List<String> classPaths = new ArrayList<String>();
+                classPaths.add(groovyScriptSourcesDir.getPath());
 
-				if (!(SoapUI.getSoapUICore() instanceof DefaultSoapUICore)) {
-					final ReloadableClStandaloneSoapUICore newCore = new ReloadableClStandaloneSoapUICore(
-							SoapUI.getSoapUICore());
-					exchangedCore = newCore;
-					SoapUI.setSoapUICore(exchangedCore);
-					for (URL url : newCore.getExtLibUrls()) {
-						classPaths.add(url.getPath());
-					}
-				}
+                if (!(SoapUI.getSoapUICore() instanceof DefaultSoapUICore)) {
+                    final ReloadableClStandaloneSoapUICore newCore = new ReloadableClStandaloneSoapUICore(
+                            SoapUI.getSoapUICore());
+                    exchangedCore = newCore;
+                    SoapUI.setSoapUICore(exchangedCore);
+                    for (URL url : newCore.getExtLibUrls()) {
+                        classPaths.add(url.getPath());
+                    }
+                }
 
-				config.setClasspathList(classPaths);
+                config.setClasspathList(classPaths);
 
-				initialized = true;
-				tmpFile = null;
-				Utils.log("Starting initial compiling of groovy source files");
-				compile();
-			} catch (Exception e) {
-				initialized = false;
-				Utils.log("Compilation Unit failed to initialize");
-				Utils.logError(e);
-				e.printStackTrace();
-				return;
-			}
-			Utils.log("Compilation Unit successfully initialized");
-		}
-	}
+                initialized = true;
+                tmpFile = null;
+                Utils.log("Starting initial compiling of groovy source files");
+                compile();
+            } catch (Exception e) {
+                initialized = false;
+                Utils.log("Compilation Unit failed to initialize");
+                Utils.logError(e);
+                e.printStackTrace();
+                return;
+            }
+            Utils.log("Compilation Unit successfully initialized");
+        }
+    }
 
-	public boolean isInitialized() {
-		return initialized;
-	}
+    public boolean isInitialized() {
+        return initialized;
+    }
 
-	public static GroovyScriptEngine getInstance() {
-		return instance;
-	}
+    public static GroovyScriptEngine getInstance() {
+        return instance;
+    }
 
-	public void compile() throws Exception {
-		if (!initialized) {
-			Utils.log("Compilation call skipped due to " +
-					"uninitialized Compilation unit!");
-			return;
-		}
+    public void compile() throws Exception {
+        if (!initialized) {
+            Utils.log("Compilation call skipped due to " +
+                    "uninitialized Compilation unit!");
+            return;
+        }
 
-		CompilationUnit compUnit = new CompilationUnit(config);
+        CompilationUnit compUnit = new CompilationUnit(config);
 
-		groovyScriptSourcesDir.expectDirIsReadable();
+        groovyScriptSourcesDir.expectDirIsReadable();
 
-		List<? extends IFile> sourceFiles = groovyScriptSourcesDir.getFilesInDirRecursiveByRegex(
-				IFile.getRegexForExtension("groovy"), 15, false);
+        List<? extends IFile> sourceFiles = groovyScriptSourcesDir.getFilesInDirRecursiveByRegex(
+                IFile.getRegexForExtension("groovy"), 15, false);
 
-		if (sourceFiles != null) {
-			final File[] files = (File[]) sourceFiles.toArray(new File[0]);
-			compUnit.addSources(files);
-		} else {
-			Utils.log("Compilation skipped: No source files found!");
-			return;
-		}
+        if (sourceFiles != null) {
+            final File[] files = (File[]) sourceFiles.toArray(new File[0]);
+            compUnit.addSources(files);
+        } else {
+            Utils.log("Compilation skipped: No source files found!");
+            return;
+        }
 
-		if (tmpFile != null) {
-			tmpFile.delete();
-		}
-		tmpFile = IFile.createTempDir("etf_sel_groovy");
-		tmpFile.setIdentifier("temporary compilation");
-		tmpFile.deleteOnExit();
-		config.setTargetDirectory(tmpFile.getPath());
+        if (tmpFile != null) {
+            tmpFile.delete();
+        }
+        tmpFile = IFile.createTempDir("etf_sel_groovy");
+        tmpFile.setIdentifier("temporary compilation");
+        tmpFile.deleteOnExit();
+        config.setTargetDirectory(tmpFile.getPath());
 
-		try {
-			compUnit.compile();
-		} catch (CompilationFailedException e) {
-			Utils.log("Compilation failed!");
-			Utils.logError(e);
-			return;
-		}
+        try {
+            compUnit.compile();
+        } catch (CompilationFailedException e) {
+            Utils.log("Compilation failed!");
+            Utils.logError(e);
+            return;
+        }
 
-		for (Object o : compUnit.getClasses()) {
-			Utils.log("Compiled class: " + ((GroovyClass) o).getName());
-		}
+        for (Object o : compUnit.getClasses()) {
+            Utils.log("Compiled class: " + ((GroovyClass) o).getName());
+        }
 
-		boolean coreNeedsReset = !(SoapUI.getSoapUICore() instanceof DefaultSoapUICore);
+        boolean coreNeedsReset = !(SoapUI.getSoapUICore() instanceof DefaultSoapUICore);
 
-		if (coreNeedsReset) {
-			if (!(SoapUI.getSoapUICore() instanceof ReloadableClStandaloneSoapUICore)) {
-				throw new Exception("Modified SoapUI Core not accessible");
-			}
-			((ReloadableClStandaloneSoapUICore) SoapUI.getSoapUICore()).reset();
-		}
+        if (coreNeedsReset) {
+            if (!(SoapUI.getSoapUICore() instanceof ReloadableClStandaloneSoapUICore)) {
+                throw new Exception("Modified SoapUI Core not accessible");
+            }
+            ((ReloadableClStandaloneSoapUICore) SoapUI.getSoapUICore()).reset();
+        }
 
-		SoapUI.getSoapUICore().getExtensionClassLoader().addFile(tmpFile);
+        SoapUI.getSoapUICore().getExtensionClassLoader().addFile(tmpFile);
 
-		if (coreNeedsReset) {
-			// Selftest
-			boolean found = false;
-			for (URL url : SoapUI.getSoapUICore().getExtensionClassLoader().getURLs()) {
-				if (url.getPath().equals(tmpFile.toURI().toURL().getPath())) {
-					found = true;
-					break;
-				}
-			}
-			Utils.log("Lib " + tmpFile + " to ClassLoader " +
-					SoapUI.getSoapUICore().getExtensionClassLoader() +
-					" added. Selftest OK: " + found);
-		}
-	}
+        if (coreNeedsReset) {
+            // Selftest
+            boolean found = false;
+            for (URL url : SoapUI.getSoapUICore().getExtensionClassLoader().getURLs()) {
+                if (url.getPath().equals(tmpFile.toURI().toURL().getPath())) {
+                    found = true;
+                    break;
+                }
+            }
+            Utils.log("Lib " + tmpFile + " to ClassLoader " +
+                    SoapUI.getSoapUICore().getExtensionClassLoader() +
+                    " added. Selftest OK: " + found);
+        }
+    }
 
-	@SuppressWarnings("unused")
-	private void printClassPaths(final ClassLoader loader) {
-		Utils.log(loader.toString());
-		if (loader instanceof URLClassLoader) {
-			for (URL url : ((URLClassLoader) loader).getURLs()) {
-				Utils.log(" -" + url);
-			}
-		}
-		if (loader.getParent() != null) {
-			printClassPaths(loader.getParent());
-		}
-	}
+    @SuppressWarnings("unused")
+    private void printClassPaths(final ClassLoader loader) {
+        Utils.log(loader.toString());
+        if (loader instanceof URLClassLoader) {
+            for (URL url : ((URLClassLoader) loader).getURLs()) {
+                Utils.log(" -" + url);
+            }
+        }
+        if (loader.getParent() != null) {
+            printClassPaths(loader.getParent());
+        }
+    }
 
 }

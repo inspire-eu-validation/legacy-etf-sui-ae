@@ -1,5 +1,5 @@
 /**
- * Copyright 2010-2019 interactive instruments GmbH
+ * Copyright 2010-2020 interactive instruments GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,82 +29,82 @@ import de.interactive_instruments.etf.testdriver.TestResultCollectorInjector;
  */
 public final class CollectorInjectionAdapter implements Environment, TestResultCollectorInjector {
 
-	private Project project;
-	private TestResultCollector collector;
+    private Project project;
+    private TestResultCollector collector;
 
-	public CollectorInjectionAdapter(final Project project, final TestResultCollector collector) {
-		this.project = project;
-		this.collector = collector;
-	}
+    public CollectorInjectionAdapter(final Project project, final TestResultCollector collector) {
+        this.project = project;
+        this.collector = collector;
+    }
 
-	public CollectorInjectionAdapter() {}
+    public CollectorInjectionAdapter() {}
 
-	@Override
-	public void setProject(final Project project) {
-		this.project = project;
-	}
+    @Override
+    public void setProject(final Project project) {
+        this.project = project;
+    }
 
-	@Override
-	public Project getProject() {
-		return project;
-	}
+    @Override
+    public Project getProject() {
+        return project;
+    }
 
-	@Override
-	public String getName() {
-		return getClass().getName() + "." + this.hashCode();
-	}
+    @Override
+    public String getName() {
+        return getClass().getName() + "." + this.hashCode();
+    }
 
-	public TestResultCollector getTestResultCollector() {
-		return collector;
-	}
+    public TestResultCollector getTestResultCollector() {
+        return collector;
+    }
 
-	@Override
-	public void setTestResultCollector(final TestResultCollector testResultCollector) {
-		collector = testResultCollector;
-	}
+    @Override
+    public void setTestResultCollector(final TestResultCollector testResultCollector) {
+        collector = testResultCollector;
+    }
 
-	///////////////////////////////////////////////
-	// DUMMIES
-	///////////////////////////////////////////////
+    ///////////////////////////////////////////////
+    // DUMMIES
+    ///////////////////////////////////////////////
 
-	@Override
-	public Service addNewService(final String s, final ServiceConfig.Type.Enum anEnum) {
-		return null;
-	}
+    @Override
+    public Service addNewService(final String s, final ServiceConfig.Type.Enum anEnum) {
+        return null;
+    }
 
-	@Override
-	public void removeService(final Service service) {
+    @Override
+    public void removeService(final Service service) {
 
-	}
+    }
 
-	@Override
-	public Property addNewProperty(final String s, final String s1) {
-		return null;
-	}
+    @Override
+    public Property addNewProperty(final String s, final String s1) {
+        return null;
+    }
 
-	@Override
-	public void removeProperty(final Property property) {
+    @Override
+    public void removeProperty(final Property property) {
 
-	}
+    }
 
-	@Override
-	public void changePropertyName(final String s, final String s1) {
+    @Override
+    public void changePropertyName(final String s, final String s1) {
 
-	}
+    }
 
-	@Override
-	public void moveProperty(final String s, final int i) {
+    @Override
+    public void moveProperty(final String s, final int i) {
 
-	}
+    }
 
-	@Override
-	public void setName(final String s) {
+    @Override
+    public void setName(final String s) {
 
-	}
+    }
 
-	@Override
-	public void release() {
+    @Override
+    public void release() {
 
-	}
+    }
 
 }

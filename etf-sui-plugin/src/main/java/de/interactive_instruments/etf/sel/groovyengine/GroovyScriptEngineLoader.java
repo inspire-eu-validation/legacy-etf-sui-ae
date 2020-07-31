@@ -1,5 +1,5 @@
 /**
- * Copyright 2010-2019 interactive instruments GmbH
+ * Copyright 2010-2020 interactive instruments GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,83 +41,84 @@ import org.mortbay.log.Log;
  */
 public class GroovyScriptEngineLoader extends AbstractSoapUIAction implements ProjectListener {
 
-	public GroovyScriptEngineLoader() {
-		super("Rebuild scripts", "Rebuilds the external groovy script classes");
-	}
+    public GroovyScriptEngineLoader() {
+        super("Rebuild scripts", "Rebuilds the external groovy script classes");
+    }
 
-	/**
-	 * Initializes the ScriptEngine by injecting the ReloadableSoapUIExtensionClassLoader
-	 */
-	@Override
-	public void afterLoad(Project project) {
-		GroovyScriptEngine.getInstance();
-		reloadTestCases(project);
-	}
+    /**
+     * Initializes the ScriptEngine by injecting the ReloadableSoapUIExtensionClassLoader
+     */
+    @Override
+    public void afterLoad(Project project) {
+        GroovyScriptEngine.getInstance();
+        reloadTestCases(project);
+    }
 
-	@Override
-	public void perform(ModelItem target, Object param) {
-		try {
-			GroovyScriptEngine.getInstance().compile();
-			reloadTestCases((Project) target);
-		} catch (Exception e) {
-			UISupport.showErrorMessage(e.getMessage());
-		}
-	}
+    @Override
+    public void perform(ModelItem target, Object param) {
+        try {
+            GroovyScriptEngine.getInstance().compile();
+            reloadTestCases((Project) target);
+        } catch (Exception e) {
+            UISupport.showErrorMessage(e.getMessage());
+        }
+    }
 
-	/**
-	 * Reload the Testcases by copying them
-	 * @param project
-	 */
-	private void reloadTestCases(Project project) {
-		if (GroovyScriptEngine.getInstance().isInitialized()) {
-			Log.debug("Reloading all TestCases for using the exchanged ClassLoader");
-			for (TestSuite ts : ((WsdlProject) project).getTestSuiteList()) {
-				final WsdlTestSuite wts = (WsdlTestSuite) ts;
-				for (TestCase tc : wts.getTestCaseList()) {
-					final WsdlTestCase wtc = (WsdlTestCase) tc;
-					XmlObject config = wtc.getConfig().copy();
-					wts.replace(wtc, ((TestCaseConfig) config));
-				}
-			}
-		}
-	}
+    /**
+     * Reload the Testcases by copying them
+     *
+     * @param project
+     */
+    private void reloadTestCases(Project project) {
+        if (GroovyScriptEngine.getInstance().isInitialized()) {
+            Log.debug("Reloading all TestCases for using the exchanged ClassLoader");
+            for (TestSuite ts : ((WsdlProject) project).getTestSuiteList()) {
+                final WsdlTestSuite wts = (WsdlTestSuite) ts;
+                for (TestCase tc : wts.getTestCaseList()) {
+                    final WsdlTestCase wtc = (WsdlTestCase) tc;
+                    XmlObject config = wtc.getConfig().copy();
+                    wts.replace(wtc, ((TestCaseConfig) config));
+                }
+            }
+        }
+    }
 
-	@Override
-	public void beforeSave(Project project) {}
+    @Override
+    public void beforeSave(Project project) {}
 
-	@Override
-	public void environmentAdded(Environment arg0) {}
+    @Override
+    public void environmentAdded(Environment arg0) {}
 
-	@Override
-	public void environmentRemoved(Environment arg0, int arg1) {}
+    @Override
+    public void environmentRemoved(Environment arg0, int arg1) {}
 
-	@Override
-	public void environmentRenamed(Environment arg0, String arg1, String arg2) {}
+    @Override
+    public void environmentRenamed(Environment arg0, String arg1, String arg2) {}
 
-	@Override
-	public void environmentSwitched(Environment arg0) {}
+    @Override
+    public void environmentSwitched(Environment arg0) {}
 
-	@Override
-	public void interfaceAdded(Interface arg0) {}
+    @Override
+    public void interfaceAdded(Interface arg0) {}
 
-	@Override
-	public void interfaceRemoved(Interface arg0) {}
+    @Override
+    public void interfaceRemoved(Interface arg0) {}
 
-	@Override
-	public void interfaceUpdated(Interface arg0) {}
+    @Override
+    public void interfaceUpdated(Interface arg0) {}
 
-	@Override
-	public void mockServiceAdded(MockService arg0) {}
+    @Override
+    public void mockServiceAdded(MockService arg0) {}
 
-	@Override
-	public void mockServiceRemoved(MockService arg0) {}
+    @Override
+    public void mockServiceRemoved(MockService arg0) {}
 
-	@Override
-	public void testSuiteAdded(TestSuite arg0) {}
+    @Override
+    public void testSuiteAdded(TestSuite arg0) {}
 
-	@Override
-	public void testSuiteMoved(TestSuite arg0, int arg1, int arg2) {}
+    @Override
+    public void testSuiteMoved(TestSuite arg0, int arg1, int arg2) {}
 
-	@Override
-	public void testSuiteRemoved(TestSuite arg0) {}
+    @Override
+    public void testSuiteRemoved(TestSuite arg0) {}
 }

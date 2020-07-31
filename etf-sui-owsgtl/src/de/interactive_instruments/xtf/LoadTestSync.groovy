@@ -1,5 +1,5 @@
 /**
- * Copyright 2010-2019 interactive instruments GmbH
+ * Copyright 2010-2020 interactive instruments GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,36 +21,36 @@ package de.interactive_instruments.xtf;
  */
 class LoadTestSync {
 
-	// Call from Setup script of the LoadTest
-	public static LoadTestSetup(def context) {
-		context.monitor = new java.util.concurrent.atomic.AtomicInteger(0);
-	}
-	
-	// Put in TearDown script of LoadTest!
-	public static LoadTestTearDown(def context) {
-		try{
-			synchronized(context) {
-			def monitor = context.monitor
-			context.monitor = null
-			monitor.notifyAll()
-			}
-		}catch(Throwable e) { }
-	}
-	
-	// Put at the end of the test step or in TearDown script
-	public static TestCaseTearDown(def context) {
-		if(context?.LoadTestContext?.monitor != null) {
-		   def monitor = context.LoadTestContext.monitor
-		   def numWaiting = monitor.incrementAndGet()
+    // Call from Setup script of the LoadTest
+    public static LoadTestSetup(def context) {
+        context.monitor = new java.util.concurrent.atomic.AtomicInteger(0);
+    }
 
-		   synchronized(monitor) {
-			  if(numWaiting >= context.LoadTestRunner.runningThreadCount) {
-				 monitor.set(0)
-				 monitor.notifyAll()
-			  } else {
-				 monitor.wait()
-			  }
-		   }
-		}
-	}
+    // Put in TearDown script of LoadTest!
+    public static LoadTestTearDown(def context) {
+        try{
+            synchronized(context) {
+            def monitor = context.monitor
+            context.monitor = null
+            monitor.notifyAll()
+            }
+        }catch(Throwable e) { }
+    }
+
+    // Put at the end of the test step or in TearDown script
+    public static TestCaseTearDown(def context) {
+        if(context?.LoadTestContext?.monitor != null) {
+           def monitor = context.LoadTestContext.monitor
+           def numWaiting = monitor.incrementAndGet()
+
+           synchronized(monitor) {
+              if(numWaiting >= context.LoadTestRunner.runningThreadCount) {
+                 monitor.set(0)
+                 monitor.notifyAll()
+              } else {
+                 monitor.wait()
+              }
+           }
+        }
+    }
 }

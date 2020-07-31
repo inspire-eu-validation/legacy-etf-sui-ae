@@ -1,5 +1,5 @@
 /**
- * Copyright 2010-2019 interactive instruments GmbH
+ * Copyright 2010-2020 interactive instruments GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,128 +34,128 @@ import de.interactive_instruments.CLUtils;
  */
 public final class ReloadableSoapUIExtensionClassLoader extends SoapUIExtensionClassLoader {
 
-	private SoapUIExtensionClassLoader iCL;
-	private final URL[] urls;
+    private SoapUIExtensionClassLoader iCL;
+    private final URL[] urls;
 
-	public ReloadableSoapUIExtensionClassLoader(final URL[] urls, ClassLoader parent) {
-		super(urls, parent);
-		iCL = new SoapUIExtensionClassLoader(urls, parent);
-		this.urls = urls;
-		try {
-			this.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    public ReloadableSoapUIExtensionClassLoader(final URL[] urls, ClassLoader parent) {
+        super(urls, parent);
+        iCL = new SoapUIExtensionClassLoader(urls, parent);
+        this.urls = urls;
+        try {
+            this.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-	public void resetAndLoad(final URL[] urls, ClassLoader parent) {
+    public void resetAndLoad(final URL[] urls, ClassLoader parent) {
 
-		try {
-			iCL.close();
-			CLUtils.forceCloseUcp(iCL);
-		} catch (Exception e) {}
-		iCL = null;
-		final SoapUIExtensionClassLoader newCL = new SoapUIExtensionClassLoader(urls, parent);
-		System.out.println("Replacing ClassLoader " + iCL + " with " + newCL);
-		iCL = newCL;
-	}
+        try {
+            iCL.close();
+            CLUtils.forceCloseUcp(iCL);
+        } catch (Exception e) {}
+        iCL = null;
+        final SoapUIExtensionClassLoader newCL = new SoapUIExtensionClassLoader(urls, parent);
+        System.out.println("Replacing ClassLoader " + iCL + " with " + newCL);
+        iCL = newCL;
+    }
 
-	public void resetAndLoad(final URL[] urls) {
-		try {
-			iCL.close();
-			CLUtils.forceCloseUcp(iCL);
-		} catch (Exception e) {}
-		final SoapUIExtensionClassLoader newCL = new SoapUIExtensionClassLoader(urls, this.getParent());
-		System.out.println("Replacing ClassLoader " + iCL + " with " + newCL);
-		iCL = null;
-		iCL = newCL;
-	}
+    public void resetAndLoad(final URL[] urls) {
+        try {
+            iCL.close();
+            CLUtils.forceCloseUcp(iCL);
+        } catch (Exception e) {}
+        final SoapUIExtensionClassLoader newCL = new SoapUIExtensionClassLoader(urls, this.getParent());
+        System.out.println("Replacing ClassLoader " + iCL + " with " + newCL);
+        iCL = null;
+        iCL = newCL;
+    }
 
-	public void reset() {
-		try {
-			iCL.close();
-			CLUtils.forceCloseUcp(iCL);
-		} catch (Exception e) {}
-		final SoapUIExtensionClassLoader newCL = new SoapUIExtensionClassLoader(this.urls, this.getParent());
-		System.out.println("Replacing ClassLoader " + iCL + " with " + newCL);
-		iCL = null;
-		iCL = newCL;
-	}
+    public void reset() {
+        try {
+            iCL.close();
+            CLUtils.forceCloseUcp(iCL);
+        } catch (Exception e) {}
+        final SoapUIExtensionClassLoader newCL = new SoapUIExtensionClassLoader(this.urls, this.getParent());
+        System.out.println("Replacing ClassLoader " + iCL + " with " + newCL);
+        iCL = null;
+        iCL = newCL;
+    }
 
-	@Override
-	public void addFile(final File file) throws MalformedURLException {
-		iCL.addFile(file);
-	}
+    @Override
+    public void addFile(final File file) throws MalformedURLException {
+        iCL.addFile(file);
+    }
 
-	@Override
-	public void addURL(final URL url) {
-		iCL.addURL(url);
-	}
+    @Override
+    public void addURL(final URL url) {
+        iCL.addURL(url);
+    }
 
-	@Override
-	public URL findResource(final String name) {
-		return iCL.findResource(name);
-	}
+    @Override
+    public URL findResource(final String name) {
+        return iCL.findResource(name);
+    }
 
-	@Override
-	public Enumeration findResources(final String name) throws IOException {
-		return iCL.findResources(name);
-	}
+    @Override
+    public Enumeration findResources(final String name) throws IOException {
+        return iCL.findResources(name);
+    }
 
-	@Override
-	public URL[] getURLs() {
-		return iCL.getURLs();
-	}
+    @Override
+    public URL[] getURLs() {
+        return iCL.getURLs();
+    }
 
-	@Override
-	public void clearAssertionStatus() {
-		iCL.clearAssertionStatus();
-	}
+    @Override
+    public void clearAssertionStatus() {
+        iCL.clearAssertionStatus();
+    }
 
-	@Override
-	public URL getResource(final String name) {
-		return iCL.getResource(name);
-	}
+    @Override
+    public URL getResource(final String name) {
+        return iCL.getResource(name);
+    }
 
-	@Override
-	public InputStream getResourceAsStream(final String name) {
-		return iCL.getResourceAsStream(name);
-	}
+    @Override
+    public InputStream getResourceAsStream(final String name) {
+        return iCL.getResourceAsStream(name);
+    }
 
-	@Override
-	public Enumeration<URL> getResources(final String name) throws IOException {
-		return iCL.getResources(name);
-	}
+    @Override
+    public Enumeration<URL> getResources(final String name) throws IOException {
+        return iCL.getResources(name);
+    }
 
-	@Override
-	public Class<?> loadClass(final String name) throws ClassNotFoundException {
-		return findClass(name);
-		// return iCL.loadClass(name);
-	}
+    @Override
+    public Class<?> loadClass(final String name) throws ClassNotFoundException {
+        return findClass(name);
+        // return iCL.loadClass(name);
+    }
 
-	@Override
-	protected Class<?> loadClass(final String name,
-			boolean resolve) throws ClassNotFoundException {
-		return iCL.loadClass(name);
-	}
+    @Override
+    protected Class<?> loadClass(final String name,
+            boolean resolve) throws ClassNotFoundException {
+        return iCL.loadClass(name);
+    }
 
-	@Override
-	public Class<?> findClass(final String name) throws ClassNotFoundException {
-		return iCL.loadClass(name);
-	}
+    @Override
+    public Class<?> findClass(final String name) throws ClassNotFoundException {
+        return iCL.loadClass(name);
+    }
 
-	@Override
-	public void setClassAssertionStatus(final String className, final boolean enabled) {
-		iCL.setClassAssertionStatus(className, enabled);
-	}
+    @Override
+    public void setClassAssertionStatus(final String className, final boolean enabled) {
+        iCL.setClassAssertionStatus(className, enabled);
+    }
 
-	@Override
-	public void setDefaultAssertionStatus(final boolean enabled) {
-		iCL.setDefaultAssertionStatus(enabled);
-	}
+    @Override
+    public void setDefaultAssertionStatus(final boolean enabled) {
+        iCL.setDefaultAssertionStatus(enabled);
+    }
 
-	@Override
-	public void setPackageAssertionStatus(final String packageName, final boolean enabled) {
-		iCL.setPackageAssertionStatus(packageName, enabled);
-	}
+    @Override
+    public void setPackageAssertionStatus(final String packageName, final boolean enabled) {
+        iCL.setPackageAssertionStatus(packageName, enabled);
+    }
 }

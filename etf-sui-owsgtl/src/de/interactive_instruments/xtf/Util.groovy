@@ -1,5 +1,5 @@
 /**
- * Copyright 2010-2019 interactive instruments GmbH
+ * Copyright 2010-2020 interactive instruments GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,7 +46,7 @@ class Util {
         final String authUser = testRunner.testCase.testSuite.project.getPropertyValue('authUser');
         final String authPwd = testRunner.testCase.testSuite.project.getPropertyValue('authPwd');
         final String authMethod = testRunner.testCase.testSuite.project.getPropertyValue('authMethod');
-		final String authServiceEndpoint = testRunner.testCase.testSuite.project.getPropertyValue('serviceEndpoint');
+        final String authServiceEndpoint = testRunner.testCase.testSuite.project.getPropertyValue('serviceEndpoint');
         assert authServiceEndpoint != null
 
         for( testSuite in testRunner.testCase.testSuite.project.getTestSuiteList() ) {
@@ -64,14 +64,14 @@ class Util {
         }
     }
 
-	/**
-	 * Set basic authentication headers for one single HTTP test requests or just append the
-	 * username and password to the request, depending on the authentication method.
+    /**
+     * Set basic authentication headers for one single HTTP test requests or just append the
+     * username and password to the request, depending on the authentication method.
      * Endpoint variables are expanded and checked!
-	 * Requires that the project variables authUser, authPwd and authMethod are set.
-	 * Possible values for xtf.authMethod: appendCredentials, httpBasic
-	 */
-	public static void updateTestStepCredentials(
+     * Requires that the project variables authUser, authPwd and authMethod are set.
+     * Possible values for xtf.authMethod: appendCredentials, httpBasic
+     */
+    public static void updateTestStepCredentials(
             HttpRequestTestStep testStep,
             def context,
             String authUser = testStep.testCase.testSuite.project.getPropertyValue('authUser'),
@@ -79,9 +79,9 @@ class Util {
             String authMethod = testStep.testCase.testSuite.project.getPropertyValue('authMethod'),
             String authServiceEndpoint = testStep.testCase.testSuite.project.getPropertyValue('serviceEndpoint')
     ) {
-		assert authServiceEndpoint != null
+        assert authServiceEndpoint != null
 
-		if( testStep instanceof HttpTestRequestStep || testStep instanceof RestTestRequestStep) {
+        if( testStep instanceof HttpTestRequestStep || testStep instanceof RestTestRequestStep) {
 
             def propertyExpander = new PropertyExpander(true);
             final String testStepEndpoint = propertyExpander.expandProperties( context,
@@ -91,8 +91,8 @@ class Util {
             }else{
                 removeAuthorization(testStep);
             }
-		}
-	}
+        }
+    }
 
     private static void updateHttpTestStepCredentials(
             HttpRequestTestStep testStep,
@@ -185,241 +185,241 @@ class Util {
         return (domain!=null && domain.startsWith("www.")) ? domain.substring(4) : domain;
     }
 
-	public static void setProjectProperty(def testRunner, String name, String value) {
-		testRunner.getTestCase().getTestSuite().getProject().setPropertyValue(name, value);
-	}
+    public static void setProjectProperty(def testRunner, String name, String value) {
+        testRunner.getTestCase().getTestSuite().getProject().setPropertyValue(name, value);
+    }
 
-	public static String getPropertyValueOrDefault(def modelItem, String name, def defaultValue) {
-		def value = modelItem.getPropertyValue(name);
-		if(value!=null && !value.trim().equals("")) {
-			return value;
-		}
-		return defaultValue;
-	}
+    public static String getPropertyValueOrDefault(def modelItem, String name, def defaultValue) {
+        def value = modelItem.getPropertyValue(name);
+        if(value!=null && !value.trim().equals("")) {
+            return value;
+        }
+        return defaultValue;
+    }
 
-	public static String getProjectPropertyOrNull(String propertyName,
-		def testRunner=SOAPUI_I.getInstance().getTestRunner())
-	{
-		final def proj = testRunner.getTestCase().getTestSuite().getProject();
-		final String property = getPropertyValueOrDefault(proj, propertyName, null);
-		return property;
-	}
+    public static String getProjectPropertyOrNull(String propertyName,
+        def testRunner=SOAPUI_I.getInstance().getTestRunner())
+    {
+        final def proj = testRunner.getTestCase().getTestSuite().getProject();
+        final String property = getPropertyValueOrDefault(proj, propertyName, null);
+        return property;
+    }
 
-	public static String getProjectProperty(String propertyName,
-		def testRunner=SOAPUI_I.getInstance().getTestRunner())
-	{
-		final String property = getProjectPropertyOrNull(propertyName, testRunner);
-		if(property==null) {
-			throw new InvalidProjectParameterException(this,
-				"Project property \""+propertyName+"\" is not set!");
-		}
-		return property;
-	}
+    public static String getProjectProperty(String propertyName,
+        def testRunner=SOAPUI_I.getInstance().getTestRunner())
+    {
+        final String property = getProjectPropertyOrNull(propertyName, testRunner);
+        if(property==null) {
+            throw new InvalidProjectParameterException(this,
+                "Project property \""+propertyName+"\" is not set!");
+        }
+        return property;
+    }
 
-	public static void assertXML_Encoding(def messageExchange, String encoding) {
-		String resp = new String(messageExchange.getRawResponseData());
-		def index = (resp.indexOf("<?xml version=\"1.0\" encoding=\""+encoding.toUpperCase()+"\"?>")) +
-			(resp.indexOf("<?xml version=\"1.0\" encoding=\""+encoding.toLowerCase()+"\"?>")) + 1;
-		if(index<53)
-			throw new Exception("Response encoding does not match "+encoding);
-	}
+    public static void assertXML_Encoding(def messageExchange, String encoding) {
+        String resp = new String(messageExchange.getRawResponseData());
+        def index = (resp.indexOf("<?xml version=\"1.0\" encoding=\""+encoding.toUpperCase()+"\"?>")) +
+            (resp.indexOf("<?xml version=\"1.0\" encoding=\""+encoding.toLowerCase()+"\"?>")) + 1;
+        if(index<53)
+            throw new Exception("Response encoding does not match "+encoding);
+    }
 
-	public static String getResponseHeader(def testStep, String headerName) {
-		try {
-			return testStep.getTestRequest().getResponse().getResponseHeaders().get(headerName,"");
-		}catch(Exception e) {
-			return "";
-		}
-	}
+    public static String getResponseHeader(def testStep, String headerName) {
+        try {
+            return testStep.getTestRequest().getResponse().getResponseHeaders().get(headerName,"");
+        }catch(Exception e) {
+            return "";
+        }
+    }
 
-	public static String cutString(final String str, int maxSize=500) {
-		if( str == null) {
-			return "!!! N U L L !!!";
-		}
-		if(str.size()>maxSize) {
-			return str.substring(0,maxSize)+"[...cutted...]";
-		}else{
-			return str;
-		}
-	}
+    public static String cutString(final String str, int maxSize=500) {
+        if( str == null) {
+            return "!!! N U L L !!!";
+        }
+        if(str.size()>maxSize) {
+            return str.substring(0,maxSize)+"[...cutted...]";
+        }else{
+            return str;
+        }
+    }
 
-	public static boolean isImageWhite(BufferedImage bufImage) {
-		int[] pxl = getNonWhitePixelFromImg(bufImage);
-		if(pxl[0]==-1 && pxl[1]==-1) {
-			return true;
-		}
-		return false;
-	}
+    public static boolean isImageWhite(BufferedImage bufImage) {
+        int[] pxl = getNonWhitePixelFromImg(bufImage);
+        if(pxl[0]==-1 && pxl[1]==-1) {
+            return true;
+        }
+        return false;
+    }
 
-	// Returns the position of the first pixel which is non-white
-	public static int[] getNonWhitePixelFromImg(BufferedImage bufImage) {
-		int[] pxl = new int[2];
-		pxl[0]=-1;
-		pxl[1]=-1;
-		for(int w=0; w < bufImage.getWidth(); w++) {
-			for(int h=0; h < bufImage.getHeight(); h++) {
-				final int pixel = bufImage.getRGB(w, h);
-				final int alpha = (pixel >> 24) & 0xff;
-				final int red = (pixel >> 16) & 0xff;
-				final int green = (pixel >> 8) & 0xff;
-				final int blue = (pixel) & 0xff;
-				if(alpha>0 && (red<255 && green<255 && blue<255)) {
-					pxl[0]=w+1;
-					pxl[1]=h+1;
-					/*
-					SOAPUI_I.getInstance().getLog().info(
-						"Alpha: "+alpha+
-						"Red: "+red+
-						"Green: "+green+
-						"Blue: "+blue);
-					*/
-					return pxl;
-				}
-			}
-		}
-		// Pixel not found, image is white
-		return pxl;
-	}
+    // Returns the position of the first pixel which is non-white
+    public static int[] getNonWhitePixelFromImg(BufferedImage bufImage) {
+        int[] pxl = new int[2];
+        pxl[0]=-1;
+        pxl[1]=-1;
+        for(int w=0; w < bufImage.getWidth(); w++) {
+            for(int h=0; h < bufImage.getHeight(); h++) {
+                final int pixel = bufImage.getRGB(w, h);
+                final int alpha = (pixel >> 24) & 0xff;
+                final int red = (pixel >> 16) & 0xff;
+                final int green = (pixel >> 8) & 0xff;
+                final int blue = (pixel) & 0xff;
+                if(alpha>0 && (red<255 && green<255 && blue<255)) {
+                    pxl[0]=w+1;
+                    pxl[1]=h+1;
+                    /*
+                    SOAPUI_I.getInstance().getLog().info(
+                        "Alpha: "+alpha+
+                        "Red: "+red+
+                        "Green: "+green+
+                        "Blue: "+blue);
+                    */
+                    return pxl;
+                }
+            }
+        }
+        // Pixel not found, image is white
+        return pxl;
+    }
 
-	public static BufferedImage createImage(MessageExchange messageExchange, def log) {
-		URL imageUrl = new URL(messageExchange.getEndpoint());
-		BufferedImage image = ImageIO.read( imageUrl );
-		if(image==null) {
-			throw new Exception("Image is invalid!");
-		}
+    public static BufferedImage createImage(MessageExchange messageExchange, def log) {
+        URL imageUrl = new URL(messageExchange.getEndpoint());
+        BufferedImage image = ImageIO.read( imageUrl );
+        if(image==null) {
+            throw new Exception("Image is invalid!");
+        }
 
-		// Split key value pairs
-		StringToStringMap keyValMap = new StringToStringMap();
-		for(pair in imageUrl.getQuery().split("&")) {
-			String[] tok = pair.split("=");
-			keyValMap.put(tok[0], tok[1]);
-		}
+        // Split key value pairs
+        StringToStringMap keyValMap = new StringToStringMap();
+        for(pair in imageUrl.getQuery().split("&")) {
+            String[] tok = pair.split("=");
+            keyValMap.put(tok[0], tok[1]);
+        }
 
-		int height = Integer.valueOf(keyValMap.get("HEIGHT", 0));
-		int width = Integer.valueOf(keyValMap.get("WIDTH", 0));
+        int height = Integer.valueOf(keyValMap.get("HEIGHT", 0));
+        int width = Integer.valueOf(keyValMap.get("WIDTH", 0));
 
-		if(height!=image.getHeight() || width!=image.getWidth()) {
-			throw new Exception("Requested image with WIDTH x HEIGHT "+
-				width+"x"+ height+
-				" does not match received image "+
-				image.getWidth()+"x"+image.getHeight());
-		}
-		return image;
-	}
+        if(height!=image.getHeight() || width!=image.getWidth()) {
+            throw new Exception("Requested image with WIDTH x HEIGHT "+
+                width+"x"+ height+
+                " does not match received image "+
+                image.getWidth()+"x"+image.getHeight());
+        }
+        return image;
+    }
 
-	public static List<WsdlTestCase> getAllTestTestCases(def testRunner) {
-		List<WsdlTestCase> testCasesList = new ArrayList<WsdlTestCase>();
-		for(testSuite in testRunner.testCase.testSuite.project.getTestSuiteList()) {
-			for(testCase in testSuite.getTestCaseList()) {
-				testCasesList.add(testCase);
-			}
-		}
-		return testCasesList;
-	}
+    public static List<WsdlTestCase> getAllTestTestCases(def testRunner) {
+        List<WsdlTestCase> testCasesList = new ArrayList<WsdlTestCase>();
+        for(testSuite in testRunner.testCase.testSuite.project.getTestSuiteList()) {
+            for(testCase in testSuite.getTestCaseList()) {
+                testCasesList.add(testCase);
+            }
+        }
+        return testCasesList;
+    }
 
-	public static List<WsdlTestStep> getAllTestSteps(def testRunner) {
-		List<WsdlTestStep> testStepList = new ArrayList<WsdlTestStep>();
-		for(testCase in getAllTestTestCases(testRunner)) {
-			for(testStep in testCase.getTestStepList()) {
-				testStepList.add(testStep);
-			}
-		}
-		return testStepList;
-	}
+    public static List<WsdlTestStep> getAllTestSteps(def testRunner) {
+        List<WsdlTestStep> testStepList = new ArrayList<WsdlTestStep>();
+        for(testCase in getAllTestTestCases(testRunner)) {
+            for(testStep in testCase.getTestStepList()) {
+                testStepList.add(testStep);
+            }
+        }
+        return testStepList;
+    }
 
-	public static String getOnlineResourceForOperation(def capabilitesXml, String operationName) {
-		return getHttpGetOnlineResourceForOperation(capabilitesXml, operationName);
-	}
+    public static String getOnlineResourceForOperation(def capabilitesXml, String operationName) {
+        return getHttpGetOnlineResourceForOperation(capabilitesXml, operationName);
+    }
 
-	public static String getHttpGetOnlineResourceForOperation(def capabilitesXml, String operationName) {
-		// WMS 1.1.0
-		String endpt = capabilitesXml.getNodeValue(
-			"/*/*:Capability/*:Request/*:"+operationName+"/*:DCPType/*:HTTP/*:Get/*:OnlineResource/@*:href");
-		if(endpt==null) {
-			// WFS 1.0.0
-			endpt = capabilitesXml.getNodeValue(
-			"/*/*:Capability/*:Request/*:"+operationName+"/*:DCPType/*:HTTP/*:Get/@*:onlineResource");
-		}
-		if(endpt==null) {
-			// WFS 2.0.0
-			endpt = capabilitesXml.getNodeValue(
-				"/*/*:OperationsMetadata/*:Operation[@name='"+operationName+"']/*:DCP/*:HTTP/*:Get/@*:href");
-		}
-		return endpt;
-	}
+    public static String getHttpGetOnlineResourceForOperation(def capabilitesXml, String operationName) {
+        // WMS 1.1.0
+        String endpt = capabilitesXml.getNodeValue(
+            "/*/*:Capability/*:Request/*:"+operationName+"/*:DCPType/*:HTTP/*:Get/*:OnlineResource/@*:href");
+        if(endpt==null) {
+            // WFS 1.0.0
+            endpt = capabilitesXml.getNodeValue(
+            "/*/*:Capability/*:Request/*:"+operationName+"/*:DCPType/*:HTTP/*:Get/@*:onlineResource");
+        }
+        if(endpt==null) {
+            // WFS 2.0.0
+            endpt = capabilitesXml.getNodeValue(
+                "/*/*:OperationsMetadata/*:Operation[@name='"+operationName+"']/*:DCP/*:HTTP/*:Get/@*:href");
+        }
+        return endpt;
+    }
 
-	public static String getHttpPostOnlineResourceForOperation(def capabilitesXml, String operationName) {
-		// WMS 1.1.0
-		String endpt = capabilitesXml.getNodeValue(
-				"/*/*:Capability/*:Request/*:"+operationName+"/*:DCPType/*:HTTP/*:Post/*:OnlineResource/@*:href");
-		if(endpt==null) {
-			// WFS 1.0.0
-			endpt = capabilitesXml.getNodeValue(
-					"/*/*:Capability/*:Request/*:"+operationName+"/*:DCPType/*:HTTP/*:Post/@*:onlineResource");
-		}
-		if(endpt==null) {
-			// WFS 2.0.0
-			endpt = capabilitesXml.getNodeValue(
-					"/*/*:OperationsMetadata/*:Operation[@name='"+operationName+"']/*:DCP/*:HTTP/*:Post/@*:href");
-		}
-		return endpt;
-	}
+    public static String getHttpPostOnlineResourceForOperation(def capabilitesXml, String operationName) {
+        // WMS 1.1.0
+        String endpt = capabilitesXml.getNodeValue(
+                "/*/*:Capability/*:Request/*:"+operationName+"/*:DCPType/*:HTTP/*:Post/*:OnlineResource/@*:href");
+        if(endpt==null) {
+            // WFS 1.0.0
+            endpt = capabilitesXml.getNodeValue(
+                    "/*/*:Capability/*:Request/*:"+operationName+"/*:DCPType/*:HTTP/*:Post/@*:onlineResource");
+        }
+        if(endpt==null) {
+            // WFS 2.0.0
+            endpt = capabilitesXml.getNodeValue(
+                    "/*/*:OperationsMetadata/*:Operation[@name='"+operationName+"']/*:DCP/*:HTTP/*:Post/@*:href");
+        }
+        return endpt;
+    }
 
-	/**
-	 * Takes a List as parameter and returns the first, last, middle and three random elements
-	 * if test is not intensive
-	 **/
-	public static def genRandomTestListOnIntesiveTests(def list, int numberOfRandomElements=3) {
+    /**
+     * Takes a List as parameter and returns the first, last, middle and three random elements
+     * if test is not intensive
+     **/
+    public static def genRandomTestListOnIntesiveTests(def list, int numberOfRandomElements=3) {
 
-		if(list.size() <= 3+numberOfRandomElements ||
-			TestSetup.isTestIntensive())
-		{
-			return list;
-		}
+        if(list.size() <= 3+numberOfRandomElements ||
+            TestSetup.isTestIntensive())
+        {
+            return list;
+        }
 
-		def random = new Random();
-		int midPos = list.size()/2;
+        def random = new Random();
+        int midPos = list.size()/2;
 
-		def testList = [];
-		testList.add(list[0]);
-		testList.add(list[midPos]);
-		testList.add(list.size());
+        def testList = [];
+        testList.add(list[0]);
+        testList.add(list[midPos]);
+        testList.add(list.size());
 
-		while(testList.size()<numberOfRandomElements) {
-			int randomPos = random.nextInt(list.size());
-			if(!testList.contains(randomPos)) {
-				testList.add(randomPos);
-			}
-		}
-		return testList;
-	}
+        while(testList.size()<numberOfRandomElements) {
+            int randomPos = random.nextInt(list.size());
+            if(!testList.contains(randomPos)) {
+                testList.add(randomPos);
+            }
+        }
+        return testList;
+    }
 
-	public static String xpathWithWildcardNamespaces(String xpath) {
-		final String newPath='*:'
-		int i = xpath.indexOf(':')+1
-		if(i!=-1) {
-			int nextPos = xpath.indexOf('/', i+1)
-			for(; i!=-1 && nextPos!=-1;) {
-				println i + " " + nextPos;
-				println xpath.substring(i, nextPos)
-				newPath += xpath.substring(i, nextPos) + '/*:';
-				i = xpath.indexOf(':', i)+1;
-				nextPos = xpath.indexOf('/', nextPos+1);
-			}
-			if(nextPos==-1 && i!=-1) {
-				newPath += xpath.substring(i)
-			}
-			return newPath;
-		}else{
-			return xpath;
-		}
-	}
+    public static String xpathWithWildcardNamespaces(String xpath) {
+        final String newPath='*:'
+        int i = xpath.indexOf(':')+1
+        if(i!=-1) {
+            int nextPos = xpath.indexOf('/', i+1)
+            for(; i!=-1 && nextPos!=-1;) {
+                println i + " " + nextPos;
+                println xpath.substring(i, nextPos)
+                newPath += xpath.substring(i, nextPos) + '/*:';
+                i = xpath.indexOf(':', i)+1;
+                nextPos = xpath.indexOf('/', nextPos+1);
+            }
+            if(nextPos==-1 && i!=-1) {
+                newPath += xpath.substring(i)
+            }
+            return newPath;
+        }else{
+            return xpath;
+        }
+    }
 
 
-	private static int testStringId=1;
+    private static int testStringId=1;
 
-	public static setTestString() {
-		new ProjectHelper().setTransferProperty("TESTSTRING",
-			("XTRASERVER_TESTFRAMEWORK_EXCEPTION_TESTING__"+testStringId+++"__THIS_IS_NOT_A_BUG"));
-	}
+    public static setTestString() {
+        new ProjectHelper().setTransferProperty("TESTSTRING",
+            ("XTRASERVER_TESTFRAMEWORK_EXCEPTION_TESTING__"+testStringId+++"__THIS_IS_NOT_A_BUG"));
+    }
 }

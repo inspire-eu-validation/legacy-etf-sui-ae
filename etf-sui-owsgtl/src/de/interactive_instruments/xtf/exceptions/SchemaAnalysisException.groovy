@@ -1,5 +1,5 @@
 /**
- * Copyright 2010-2019 interactive instruments GmbH
+ * Copyright 2010-2020 interactive instruments GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,15 +19,15 @@ import de.interactive_instruments.xtf.wfs.PropertySchemaAnalyzer
 
 public class SchemaAnalysisException extends Exception {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public SchemaAnalysisException(String msg)
-	{
-		super(msg);
-	}
-  	
-	public SchemaAnalysisException(PropertySchemaAnalyzer analyzer, String msg)
-	{
-		super("SchemaAnalyzer ["+analyzer.getOutputFormat()+"] : "+msg);
-	}
+    public SchemaAnalysisException(String msg)
+    {
+        super(msg);
+    }
+
+    public SchemaAnalysisException(PropertySchemaAnalyzer analyzer, String msg)
+    {
+        super("SchemaAnalyzer ["+analyzer.getOutputFormat()+"] : "+msg);
+    }
 }

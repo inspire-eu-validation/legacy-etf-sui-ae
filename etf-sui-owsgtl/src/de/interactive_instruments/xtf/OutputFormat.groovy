@@ -1,5 +1,5 @@
 /**
- * Copyright 2010-2019 interactive instruments GmbH
+ * Copyright 2010-2020 interactive instruments GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,49 +25,49 @@ enum FormatType { UNKNOWN, TEXT, XML, JSON, IMAGE };
 @XmlRootElement
 public class OutputFormat implements Comparable<OutputFormat> {
 
-	private String outputFormat;
-	private FormatType type;
+    private String outputFormat;
+    private FormatType type;
 
-	public OutputFormat() { }
-	
-	public OutputFormat(String outputFormat) {
-		this.outputFormat = outputFormat;
-		this.type = FormatType.UNKNOWN; 
-		
-		if(outputFormat.indexOf("xml")!=-1 || 
-			outputFormat.indexOf("gml")!=-1)
-		{
-			type=FormatType.XML;
-		}else if(outputFormat.indexOf("json")!=-1) {
-			type=FormatType.JSON;
-		}else if(outputFormat.indexOf("text")!=-1) {
-			type=FormatType.TEXT;
-		}
-	}
-	
-	public boolean equals(OutputFormat outputFormat) {
-		return this.getFormat().equals(outputFormat.getFormat());
-	}
-	
-	public String toString() {
-		return this.outputFormat;
-	}
-	
-	public String getFormat() {
-		return this.outputFormat;
-	}
-	
-	public boolean isParsable() {
-		// JSON is parsable as XML in SoapUI
-		return (type==FormatType.XML || FormatType.JSON);
-	}
-	
-	public boolean isText() {
-		return (type==FORMAT.TEXT);
-	}
+    public OutputFormat() { }
 
-	@Override
-	int compareTo(OutputFormat o) {
-		return outputFormat.compareTo(o.getFormat())
-	}
+    public OutputFormat(String outputFormat) {
+        this.outputFormat = outputFormat;
+        this.type = FormatType.UNKNOWN;
+
+        if(outputFormat.indexOf("xml")!=-1 ||
+            outputFormat.indexOf("gml")!=-1)
+        {
+            type=FormatType.XML;
+        }else if(outputFormat.indexOf("json")!=-1) {
+            type=FormatType.JSON;
+        }else if(outputFormat.indexOf("text")!=-1) {
+            type=FormatType.TEXT;
+        }
+    }
+
+    public boolean equals(OutputFormat outputFormat) {
+        return this.getFormat().equals(outputFormat.getFormat());
+    }
+
+    public String toString() {
+        return this.outputFormat;
+    }
+
+    public String getFormat() {
+        return this.outputFormat;
+    }
+
+    public boolean isParsable() {
+        // JSON is parsable as XML in SoapUI
+        return (type==FormatType.XML || FormatType.JSON);
+    }
+
+    public boolean isText() {
+        return (type==FORMAT.TEXT);
+    }
+
+    @Override
+    int compareTo(OutputFormat o) {
+        return outputFormat.compareTo(o.getFormat())
+    }
 }

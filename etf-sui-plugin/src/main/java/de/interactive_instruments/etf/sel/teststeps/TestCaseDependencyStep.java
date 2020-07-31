@@ -1,5 +1,5 @@
 /**
- * Copyright 2010-2019 interactive instruments GmbH
+ * Copyright 2010-2020 interactive instruments GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,51 +33,51 @@ import de.interactive_instruments.exceptions.ExcUtils;
 @PluginTestStep(typeName = TestCaseDependencyStepFactory.STEP_ID, name = TestCaseDependencyStepFactory.NAME, description = TestCaseDependencyStepFactory.DESCRIPTION, iconPath = TestCaseDependencyStepFactory.ICON)
 public class TestCaseDependencyStep extends WsdlRunTestCaseTestStep implements TestCaseDependencyTestStepDef {
 
-	public TestCaseDependencyStep(WsdlTestCase testCase, TestStepConfig config, boolean forLoadTest) {
-		super(testCase, config, forLoadTest);
-	}
+    public TestCaseDependencyStep(WsdlTestCase testCase, TestStepConfig config, boolean forLoadTest) {
+        super(testCase, config, forLoadTest);
+    }
 
-	public TestStepResult run(TestCaseRunner testRunner, TestCaseRunContext testRunContext) {
-		final Object o = testRunner.getRunContext().getProperty("#ProjectRunner#");
-		if (o != null) {
-			try {
-				final ProjectRunner projectRunner = (ProjectRunner) o;
-				// Check if Test Case has already be run
-				final String testSuiteId = getTargetTestCase().getParent().getId();
-				final List<TestSuiteRunner> results = projectRunner.getResults();
-				for (final TestSuiteRunner testSuiteRunner : results) {
-					if (testSuiteRunner.getTestSuite().getId().equals(testSuiteId)) {
-						for (final TestCaseRunner caseRunner : testSuiteRunner.getResults()) {
-							if (caseRunner.getTestCase().getId().equals(getTargetTestCase().getId())) {
-								if (caseRunner.getStatus() == TestRunner.Status.RUNNING) {
-									caseRunner.waitUntilFinished();
-								}
-								final WsdlMessageExchangeTestStepResult result = new WsdlMessageExchangeTestStepResult(this);
-								result.setTimeStamp(System.currentTimeMillis());
-								result.setTimeTaken(caseRunner.getTimeTaken());
-								result.setStatus(runnerStatusToTestStepStatus(caseRunner));
-								return result;
-							}
-						}
-					}
-				}
-			} catch (final ClassCastException ign) {
-				ExcUtils.suppress(ign);
-			}
-		}
-		return super.run(testRunner, testRunContext);
-	}
+    public TestStepResult run(TestCaseRunner testRunner, TestCaseRunContext testRunContext) {
+        final Object o = testRunner.getRunContext().getProperty("#ProjectRunner#");
+        if (o != null) {
+            try {
+                final ProjectRunner projectRunner = (ProjectRunner) o;
+                // Check if Test Case has already be run
+                final String testSuiteId = getTargetTestCase().getParent().getId();
+                final List<TestSuiteRunner> results = projectRunner.getResults();
+                for (final TestSuiteRunner testSuiteRunner : results) {
+                    if (testSuiteRunner.getTestSuite().getId().equals(testSuiteId)) {
+                        for (final TestCaseRunner caseRunner : testSuiteRunner.getResults()) {
+                            if (caseRunner.getTestCase().getId().equals(getTargetTestCase().getId())) {
+                                if (caseRunner.getStatus() == TestRunner.Status.RUNNING) {
+                                    caseRunner.waitUntilFinished();
+                                }
+                                final WsdlMessageExchangeTestStepResult result = new WsdlMessageExchangeTestStepResult(this);
+                                result.setTimeStamp(System.currentTimeMillis());
+                                result.setTimeTaken(caseRunner.getTimeTaken());
+                                result.setStatus(runnerStatusToTestStepStatus(caseRunner));
+                                return result;
+                            }
+                        }
+                    }
+                }
+            } catch (final ClassCastException ign) {
+                ExcUtils.suppress(ign);
+            }
+        }
+        return super.run(testRunner, testRunContext);
+    }
 
-	private TestStepStatus runnerStatusToTestStepStatus(final TestCaseRunner testCaseRunner) {
-		switch (testCaseRunner.getStatus()) {
-		case CANCELED:
-			return TestStepStatus.CANCELED;
-		case FAILED:
-			return TestStepStatus.FAILED;
-		case FINISHED:
-			return TestStepStatus.OK;
-		default:
-			return TestStepStatus.UNKNOWN;
-		}
-	}
+    private TestStepStatus runnerStatusToTestStepStatus(final TestCaseRunner testCaseRunner) {
+        switch (testCaseRunner.getStatus()) {
+        case CANCELED:
+            return TestStepStatus.CANCELED;
+        case FAILED:
+            return TestStepStatus.FAILED;
+        case FINISHED:
+            return TestStepStatus.OK;
+        default:
+            return TestStepStatus.UNKNOWN;
+        }
+    }
 }
